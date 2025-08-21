@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Category: <%= category.name %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap 5 and FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f7f9fb;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .main-content-area-custom {
+      background: #f7f9fb;
+      min-height: 100vh;
+    }
+    .category-main-flush {
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 34px 1vw 22px 1vw;
+      background: #fff;
+    }
+    .category-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #293149;
+      letter-spacing: 1px;
+    }
+    .category-img-wrap {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto 22px auto;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px #0001;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #eef0fa;
+    }
+    .category-img {
+      width: 100%;
+      min-width: 260px;
+      max-width: 840px;
+      height: 270px;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+    }
+    .category-label {
+      font-weight: 600;
+      color: #425176;
+      font-size: 1.09rem;
+      margin-bottom: 3px;
+      margin-top: 15px;
+    }
+    .category-info {
+      color: #263259;
+      font-size: 1.12rem;
+      margin-bottom: 4px;
+      background: none;
+      border: none;
+      padding-left: 0;
+    }
+    .subcategory-badges {
+      margin-top: 6px;
+      margin-bottom: 4px;
+      white-space: normal;
+    }
+    .subcategory-badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #2936a5;
+      font-size: 1.03rem;
+      padding: 0.38em 1.05em;
+      border-radius: 2em;
+      margin-right: .5em;
+      margin-bottom: 3px;
+      font-weight: 500;
+      letter-spacing: .02em;
+    }
+    .desc-box {
+      width: 100%;
+      border-radius: 6px;
+      border: 1.1px solid #e6e7ef;
+      background: #f4f7fe;
+      color: #545d6d;
+      padding: 0.82em 1.1em;
+      min-height: 48px;
+      font-size: 1.07rem;
+      margin-bottom: 14px;
+      resize: none;
+    }
+    .offer-row {
+      display: flex;
+      gap: 1.3em;
+      margin: 22px 0 8px 0;
+      flex-wrap: wrap;
+    }
+    .offer-col {
+      flex: 1 1 180px;
+      display: flex;
+      flex-direction: column;
+    }
+    .offer-value {
+      font-size: 1.14rem;
+      font-weight: 600;
+      color: #114088;
+      background: #e6f0fa;
+      border-radius: 7px;
+      padding: 0.66em 1em;
+      margin-top: 3px;
+      width: 100%;
+      max-width: 370px;
+      word-break: break-word;
+    }
+    .button-group-center {
+      display: flex;
+      justify-content: center;
+      gap: 1.12em;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .btn-cat {
+      padding: 0.68em 2.2em;
+      font-size: 1.03rem;
+      font-weight: 600;
+      border-radius: 8px;
+      min-width: 120px;
+      letter-spacing: 0.04em;
+    }
+    .btn-edit {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+    }
+    .btn-edit:hover { background:#1d44a9 !important; color: #fff; }
+    .btn-back {
+      background: #e8eaf1;
+      color: #172149;
+      border: none;
+    }
+    .btn-back:hover { background: #cacddc !important; color: #182033; }
+    @media (max-width: 900px) {
+      .category-main-flush {
+        padding: 20px 1vw 18px 1vw;
+      }
+      .category-img-wrap {
+        max-width: 99vw;
+      }
+      .category-img {
+        min-width: 0;
+        width: 100%;
+        max-width: none;
+        height: 180px;
+      }
+    }
+    @media (max-width: 600px) {
+      .category-main-flush { padding: 9px 0 12px 0; }
+      .category-title { font-size: 1.21rem; text-align: center; margin-bottom: 12px; }
+      .category-img-wrap { border-radius: 7px; max-width: 99vw; }
+      .category-img { height: 130px; }
+      .subcategory-badge { font-size: .93rem; }
+      .offer-row { flex-direction: column; gap: 1em; }
+      .button-group-center { flex-direction: column; gap: 0.7em; }
+      .btn-cat { min-width: 80vw; }
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/admin/header') %>
+  <div class="container-fluid px-0 main-content-area-custom">
+    <div class="row gx-0">
+      <%- include('../partials/admin/sidebar') %>
+      <main class="col-md-10 ms-sm-auto col-lg-10 px-1 mb-5">
+        <div class="category-main-flush">
+
+          <div class="category-title">
+            Category: <%= category.name %>
+          </div>
+
+          <% if (category.image) { %>
+            <div class="category-img-wrap mb-2">
+              <img src="<%= category.image %>" alt="Category Image" class="category-img" />
+            </div>
+          <% } %>
+
+          <div class="category-label mt-2">Category Name</div>
+          <div class="category-info"><%= category.name %></div>
+
+          <div class="subcategory-badges">
+              <% if (category.subcategories && category.subcategories.length > 0) { %>
+                <% category.subcategories.forEach(function(subcat) { %>
+                  <span class="subcategory-badge"><%= subcat.name %></span>
+                <% }) %>
+              <% } else { %>
+                <span class="text-muted">No subcategories</span>
+              <% } %>
+            </div>
+
+          <div class="category-label">Description</div>
+          <textarea class="desc-box" rows="2" readonly><%= category.description || "No description" %></textarea>
+
+          <div class="offer-row">
+            <div class="offer-col">
+              <div class="category-label">Offer</div>
+              <div class="offer-value">
+                <%= typeof category.categoryOffer !== "undefined" && category.categoryOffer !== null ? category.categoryOffer : 0 %>%
+              </div>
+            </div>
+            <div class="offer-col">
+              <div class="category-label">Max Redeemable</div>
+              <div class="offer-value">
+                ₹<%= typeof category.maxRedeemable !== "undefined" && category.maxRedeemable !== null ? category.maxRedeemable : 0 %>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group-center">
+            <a href="/admin/category" class="btn btn-back btn-cat">
+              <i class="fas fa-arrow-left me-1"></i> Go Back
+            </a>
+            <a href="/admin/editCategory/<%= category._id %>" class="btn btn-edit btn-cat">
+              <i class="fas fa-edit me-1"></i> Edit Category
+            </a>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Bootstrap Bundle and FontAwesome -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</body>
+</html>

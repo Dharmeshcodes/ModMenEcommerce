@@ -1,0 +1,513 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Management - MODMAN</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Main Layout Container */
+    .layout-container {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Main Content Area - positioned next to sidebar */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 0; /* No fixed margin - flex handles this */
+    }
+
+    /* Content wrapper - starts after header */
+    .content-wrapper {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .breadcrumb {
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #444;
+    }
+    .breadcrumb a {
+      color: #444;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: #007bff;
+    }
+
+    .controls-section {
+      margin-bottom: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 240px;
+    }
+
+    .search-box input {
+      padding: 8px 12px 8px 35px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+    }
+
+    .search-box .clear-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .filters-btn {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .filters-btn.active {
+      background: #e0e0e0;
+    }
+
+    .customer-table-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .table-header,
+    .customer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
+      gap: 12px;
+      align-items: center;
+      padding: 15px 12px;
+    }
+
+    .table-header {
+      background: #2c3e50;
+      color: white;
+      font-weight: 600;
+    }
+
+    .customer-row:hover {
+      background-color: #f8f9fa;
+    }
+
+    .customer-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .customer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #666;
+    }
+
+    .customer-details h4 {
+      font-size: 14px;
+    }
+
+    .customer-details p {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .table-cell {
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .status-badge {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .status-active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-blocked {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .block-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .block-btn:hover {
+      background: #c82333;
+    }
+
+    .unblock-btn {
+      background: #28a745;
+      color: white;
+    }
+
+    .unblock-btn:hover {
+      background: #218838;
+    }
+
+    .settings-btn {
+      background: #6c757d;
+      color: white;
+    }
+
+    .settings-btn:hover {
+      background: #5a6268;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #eee;
+      margin-bottom: 50px;
+    }
+
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .pagination-btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    /* Filter Modal */
+    .filter-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .filter-modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .filter-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .layout-container {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .layout-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout-container">
+    <!-- Sidebar -->
+    <%- include('../partials/admin/sidebar') %>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <%- include('../partials/admin/header') %>
+
+      <!-- Content Wrapper -->
+      <div class="content-wrapper">
+        <div class="page-header">CUSTOMER LIST</div>
+
+        <div class="breadcrumb">
+          <a href="/admin/dashboard">Dashboard</a> &gt; <span>CUSTOMERS</span>
+        </div>
+
+        <div class="controls-section">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search customer..." id="searchInput" value="<%= search || '' %>" />
+            <% if (search) { %>
+              <button class="clear-btn" onclick="clearSearch()">×</button>
+            <% } %>
+          </div>
+          <button class="filters-btn <%= status ? 'active' : '' %>" onclick="toggleFilterModal()">
+            <i class="fas fa-filter"></i> <span>Filters</span>
+          </button>
+        </div>
+
+        <!-- Filter Modal -->
+        <div id="filterModal" class="filter-modal">
+          <div class="filter-modal-content">
+            <div class="filter-modal-header">
+              <h3>Filter Customers</h3>
+              <button class="close-btn" onclick="toggleFilterModal()">×</button>
+            </div>
+            <form id="filterForm" action="/admin/customers" method="GET">
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                  <option value="" <%= !status ? 'selected' : '' %>>All</option>
+                  <option value="active" <%= status === 'active' ? 'selected' : '' %>>Active</option>
+                  <option value="blocked" <%= status === 'blocked' ? 'selected' : '' %>>Blocked</option>
+                </select>
+              </div>
+              <div class="filter-modal-footer">
+                <button type="button" class="clear-filters-btn" onclick="clearFilters()">Clear</button>
+                <button type="submit" class="apply-filters-btn">Apply</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Customer Table -->
+        <div class="customer-table-container">
+          <div class="table-header">
+            <div>Customer Name</div>
+            <div>Email</div>
+            <div>Status</div>
+            <div>Phone</div>
+            <div>Orders</div>
+            <div>Balance</div>
+            <div>Action</div>
+            <div>Settings</div>
+          </div>
+
+          <% if (data && data.length > 0) { %>
+            <% data.forEach(customer => { %>
+              <div class="customer-row">
+                <div class="customer-info">
+                  <div class="customer-avatar">
+                    <%= customer.fullName ? customer.fullName.charAt(0).toUpperCase() : 'U' %>
+                  </div>
+                  <div class="customer-details">
+                    <h4><%= customer.fullName || 'N/A' %></h4>
+                    <p><%= customer.email || 'N/A' %></p>
+                  </div>
+                </div>
+                <div class="table-cell"><%= customer.email || 'N/A' %></div>
+                <div class="table-cell">
+                  <span class="status-badge <%= customer.isBlocked ? 'status-blocked' : 'status-active' %>">
+                    <%= customer.isBlocked ? 'Blocked' : 'Active' %>
+                  </span>
+                </div>
+                <div class="table-cell"><%= customer.mobile || 'N/A' %></div>
+                <div class="table-cell">0</div>
+                <div class="table-cell">$0.00</div>
+                <div class="table-cell">
+                  <% if (customer.isBlocked) { %>
+                    <button class="action-btn unblock-btn" onclick="unblockCustomer('<%= customer._id %>')">Unblock</button>
+                  <% } else { %>
+                    <button class="action-btn block-btn" onclick="blockCustomer('<%= customer._id %>')">Block</button>
+                  <% } %>
+                </div>
+                <div class="table-cell">
+                  <button class="action-btn settings-btn" onclick="showSettings('<%= customer._id %>')">Settings</button>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div style="padding: 40px; text-align: center; color: #666;">
+              <i class="fas fa-users" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+              <p>No customers found</p>
+            </div>
+          <% } %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript (unchanged) -->
+  <script>
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const searchValue = this.value.trim();
+        const url = new URL(window.location.href);
+        if (searchValue) {
+          url.searchParams.set('search', encodeURIComponent(searchValue));
+        } else {
+          url.searchParams.delete('search');
+        }
+        url.searchParams.set('page', '1');
+        window.location.href = url.toString();
+      }
+    });
+
+    function clearSearch() {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('search');
+      url.searchParams.set('page', '1');
+      window.location.href = url.toString();
+    }
+
+    function toggleFilterModal() {
+      const modal = document.getElementById('filterModal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function clearFilters() {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('status');
+      url.searchParams.delete('search');
+      url.searchParams.set('page', '1');
+      window.location.href = url.toString();
+    }
+
+    function blockCustomer(userId) {
+      if (confirm('Are you sure you want to block this customer?')) {
+        fetch(`/admin/blockCustomer?id=${userId}`)
+          .then(res => res.json())
+          .then(data => {
+            alert(data.message || 'Updated');
+            location.reload();
+          });
+      }
+    }
+
+    function unblockCustomer(userId) {
+      if (confirm('Are you sure you want to unblock this customer?')) {
+        fetch(`/admin/unblockCustomer?id=${userId}`)
+          .then(res => res.json())
+          .then(data => {
+            alert(data.message || 'Updated');
+            location.reload();
+          });
+      }
+    }
+
+    function showSettings(userId) {
+      alert(`Settings for user ${userId}`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<header class="header">
+    <style>
+        /* Header specific styles - only for .header, no body/etc. */
+        .header {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            min-height: 60px;
+        }
+        .header-content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #333;
+        }
+        .brand-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ddd;
+        }
+        .admin-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .admin-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .admin-role {
+            font-size: 0.85em;
+            color: #777;
+        }
+        .profile-dropdown { position: relative; }
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #555;
+            margin-left: 10px;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 100;
+            display: none;
+            margin-top: 5px;
+        }
+        .dropdown-menu.show { display: block; }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .dropdown-item i {
+            margin-right: 10px;
+            color: #6a6ee0;
+        }
+        .dropdown-item:hover { background-color: #f5f5f5; }
+    </style>
+    <div class="header-content">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="brand-name">MODMEN</h1>
+        </div>
+        <div class="header-right">
+            <div class="admin-profile">
+                <img src="https://via.placeholder.com/40x40/4f46e5/ffffff?text=D" alt="Admin" class="profile-pic">
+                <div class="admin-info">
+                    <span class="admin-name">DHARMESH</span>
+                    <span class="admin-role">Admin</span>
+                </div>
+                <div class="profile-dropdown">
+                    <button class="dropdown-toggle" id="profileDropdownToggle">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu" id="profileDropdownMenu">
+                        <a href="/admin/account" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Account
+                        </a>
+                        <a href="/admin/logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript for dropdown toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggle = document.getElementById('profileDropdownToggle');
+            const dropdownMenu = document.getElementById('profileDropdownMenu');
+
+            if (dropdownToggle && dropdownMenu) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+                window.addEventListener('click', function(event) {
+                    if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                        if (dropdownMenu.classList.contains('show')) {
+                            dropdownMenu.classList.remove('show');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</header>

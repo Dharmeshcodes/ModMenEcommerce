@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .error-box {
+      background-color: #ffe0e0;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      color: #a94442;
+      font-size: 0.95rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    input {
+      padding: 0.75rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    .password-container {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .password-container input {
+      width: 100%;
+      padding-right: 40px;
+      margin-bottom: 0;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .toggle-password:hover {
+      color: #333;
+    }
+
+    .referral-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .referral-text {
+      font-size: 0.6rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .referral-input-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .referral-code-input {
+      width: 180px;
+      text-align: center;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      margin-bottom: 0;
+    }
+
+    .login-section {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .login-text {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-link {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      padding: 0.75rem;
+      background-color: #000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #333;
+    }
+
+    .or-divider {
+      text-align: center;
+      margin: 1.5rem 0;
+      position: relative;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background-color: #ddd;
+    }
+
+    .or-divider::before {
+      left: 0;
+    }
+
+    .or-divider::after {
+      right: 0;
+    }
+
+    .google-btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .google-btn:hover {
+      background-color: #f8f9fa;
+      border-color: #ccc;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .google-logo {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .login-container {
+        padding: 1.5rem;
+      }
+
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Sign Up</h2>
+
+    <% if (error && error.length > 0) { %>
+      <div class="error-box">
+        <ul>
+          <% error.forEach(err => { %>
+            <li><%= err %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    
+    <form action="/user/signup" method="POST">
+
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Enter your name" required value="<%= formData?.fullName || '' %>" />
+
+      <label for="mobile">Mobile</label>
+      <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile" required value="<%= formData?.mobile || '' %>" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required value="<%= formData?.email || '' %>" />
+
+      <label for="password">Password</label>
+      <div class="password-container">
+        <input type="password" id="password" name="password" required placeholder="Enter your password" />
+        <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+      </div>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-container">
+        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password" />
+        <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
+      </div>
+
+      <div class="referral-section">
+        <div class="referral-text">Anyone has referred You? Claim the reward</div>
+        <div class="referral-input-container">
+          <input type="text" id="referralCode" name="referralCode" class="referral-code-input" placeholder="REFERRAL CODE" value="<%= formData?.referralCode || '' %>" />
+        </div>
+      </div>
+
+      <div class="login-section">
+        <div class="login-text">Already have an account? <a href="/user/login" class="login-link">Log in</a></div>
+      </div>
+
+      <button type="submit" class="login-btn">Sign Up</button>
+    </form>
+
+    <div class="or-divider">Or Register with</div>
+
+    <a href="/user/auth/google" class="google-btn">
+      <img class="google-logo" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+      Google
+    </a>
+  </div>
+
+  <script>
+    function togglePassword(fieldId) {
+      const input = document.getElementById(fieldId);
+      const type = input.getAttribute("type") === "password" ? "text" : "password";
+      input.setAttribute("type", type);
+    }
+
+   function validateForm() {
+  const fullname = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  const fullnameRegex = /^[a-zA-Z ]{3,50}$/;
+  const emailRegex = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
+  const mobileRegex = /^[6-9][0-9]{9}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+
+  if (!fullnameRegex.test(fullname)) {
+    alert("Invalid full name. Only letters and spaces allowed (3–50 chars).");
+    return false;
+  }
+
+  if (!emailRegex.test(email)) {
+    alert("Invalid email format.");
+    return false;
+  }
+
+  if (!mobileRegex.test(mobile)) {
+    alert("Invalid mobile number. Must start with 6–9 and be 10 digits.");
+    return false;
+  }
+
+  if (!passwordRegex.test(password)) {
+    alert("Password must be strong (min 8 chars, include uppercase, lowercase, digit, and symbol).");
+    return false;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return false;
+  }
+
+  return true;
+}
+
+
+  </script>
+</body>
+</html>

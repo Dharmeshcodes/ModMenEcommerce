@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify OTP</title>
+  <!-- SweetAlert CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- jQuery CDN (required for $.ajax) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .otp-container {
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .otp-inputs input {
+      width: 100%;
+      height: 55px;
+      font-size: 1.5rem;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .otp-inputs input:focus {
+      border-color: #000;
+    }
+
+    .timer {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .resend {
+      font-size: 0.9rem;
+      color: #000;
+      margin-bottom: 30px;
+    }
+
+    .resend a {
+      font-weight: 600;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .verify-btn {
+      background-color: #000;
+      color: #fff;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .verify-btn:hover {
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="otp-container">
+    <h2>Verify OTP</h2>
+    <p>We've sent an email with an activation code to your email <strong><%= email %></strong></p>
+
+    <form id="otpForm" onsubmit="return validateotp()">
+      <div class="otp-inputs">
+        <input type="text" id="otp" name="otp" maxlength="6" required>
+      </div>
+
+      <div class="timer">Send code again <span id="countdown">00:30</span></div>
+      <div class="resend">I didn’t receive a code <a onclick="resendotp()">Resend</a></div>
+
+      <button class="verify-btn" type="submit">Verify</button>
+    </form>
+  </div>
+
+  <script>
+    let countdown = 30;
+    const countdownElement = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      countdown--;
+      let seconds = countdown < 10 ? "0" + countdown : countdown;
+      countdownElement.textContent = `00:${seconds}`;
+      if (countdown === 0) clearInterval(interval);
+    }, 1000);
+
+    function validateotp() {
+      const otp = document.getElementById("otp").value.trim();
+
+      $.ajax({
+        type: "POST",
+        url: "/user/verify-otp",
+        contentType: "application/json",
+        data: JSON.stringify({ otp }),
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              icon: "success",
+              title: "OTP Verified Successfully",
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              window.location.href = response.redirectUrl || "/user/dashboard";
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Invalid OTP",
+              text: response.message
+            });
+          }
+        },
+        error: function() {
+          Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Please try again later."
+          });
+        }
+      });
+
+      return false;
+    }
+
+    function resendotp() {
+      countdown = 30;
+      countdownElement.textContent = "00:30";
+      clearInterval(interval);
+
+      $.ajax({
+        type: "POST",
+        url: "/user/resend-otp",
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              icon: "success",
+              title: "OTP Resent Successfully",
+              showConfirmButton: false,
+              timer: 1500
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "An error occurred while resending the OTP."
+            });
+          }
+        },
+        error: function() {
+          Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Failed to resend OTP. Please try again."
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<%- include('../partials/admin/header') %>
+<%- include('../partials/admin/sidebar') %>
+
+<div class="admin-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="mt-5">Error</h1>
+        <p class="lead">Oops! Something went wrong.</p>
+        <% if (typeof error !== 'undefined' && error) { %>
+          <p class="text-danger"><%= error %></p>
+        <% } else { %>
+          <p class="text-muted">Please try again or contact support.</p>
+        <% } %>
+        <a href="/admin/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-content {
+    margin-left: 250px;
+    margin-top: 60px;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+  }
+  @media (max-width: 768px) {
+    .admin-content {
+      margin-left: 0;
+      margin-top: 60px;
+    }
+  }
+</style>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Products - MODMEN Admin</title>
+
+<!-- Bootstrap 5 CSS -->
+ 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  body { background-color: #f8f9fa; }
+  .product-name { font-weight: bold; }
+  .product-variant { font-size: 0.85em; color: #6c757d; display: block; }
+  .list-toggle-btn.list { background-color: #28a745; color: #fff; }
+  .list-toggle-btn.unlist { background-color: #dc3545; color: #fff; }
+  .offer-button.add-offer { background-color: #4f46e5; color: #fff; }
+  .product-img { width: 60px; height: 60px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<%- include('../partials/admin/header') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/admin/sidebar') %>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        
+
+      <div class="mb-3 text-muted">Dashboard &gt; Products</div>
+
+      <!-- Page Header with Search -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div class="d-flex align-items-center gap-3">
+          <h1 class="h3 m-0">Products</h1>
+          <form id="filterForm" class="d-flex ms-3" action="/admin/adminProducts" method="GET">
+            <input type="text" class="form-control form-control-sm" 
+                   name="search" placeholder="Search product..." value="<%= searchQuery %>">
+          </form>
+        </div>
+        <a href="/admin/addProducts" class="btn btn-dark"><i class="fas fa-plus me-1"></i> Add New Product</a>
+      </div>
+
+      <!-- Filters & Sort -->
+
+      <form id="secondaryFilterForm" action="/admin/adminProducts" method="GET" class="bg-white p-3 rounded shadow-sm row g-3 align-items-end">
+        <input type="hidden" name="search" value="<%= searchQuery %>">
+        <input type="hidden" name="page" value="<%= currentPage %>">
+        <input type="hidden" name="sortBy" id="sortByInput" value="<%= sortBy %>">
+        <input type="hidden" name="sortOrder" id="sortOrderInput" value="<%= sortOrder %>">
+
+        <!-- Left filter group -->
+
+        <div class="col-md-8 d-flex flex-wrap gap-3 align-items-end">
+          <div>
+            <label class="form-label fw-bold">Category</label>
+            <select class="form-select" name="category" onchange="document.getElementById('secondaryFilterForm').submit()">
+              <option value="">All Categories</option>
+              <% categories.forEach(function(cat){ %>
+                <option value="<%= cat._id %>" <%= (category === cat._id.toString()) ? 'selected' : '' %>><%= cat.name %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div>
+            <label class="form-label fw-bold">Price Range</label>
+            <select class="form-select" name="priceRange" onchange="document.getElementById('secondaryFilterForm').submit()">
+              <option value="">All Prices</option>
+              <option value="0-500" <%= priceRange === '0-500' ? 'selected' : '' %>>₹0 - ₹500</option>
+              <option value="501-1000" <%= priceRange === '501-1000' ? 'selected' : '' %>>₹501 - ₹1000</option>
+              <option value="1001-2000" <%= priceRange === '1001-2000' ? 'selected' : '' %>>₹1001 - ₹2000</option>
+              <option value="2001-999999" <%= priceRange === '2001-999999' ? 'selected' : '' %>>₹2001+</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Right sort group -->
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+          <label class="form-label fw-bold me-2">Sort:</label>
+          <div class="btn-group">
+            <button type="button" onclick="setSort('variants.variantPrice','asc')" class="btn btn-outline-secondary <%= (sortBy === 'variants.variantPrice' && sortOrder === 'asc') ? 'active' : '' %>">Price Low-High</button>
+            <button type="button" onclick="setSort('variants.variantPrice','desc')" class="btn btn-outline-secondary <%= (sortBy === 'variants.variantPrice' && sortOrder === 'desc') ? 'active' : '' %>">Price High-Low</button>
+            <button type="button" onclick="setSort('createdAt','desc')" class="btn btn-outline-secondary <%= (sortBy === 'createdAt' && sortOrder === 'desc') ? 'active' : '' %>">Newest</button>
+            <button type="button" onclick="setSort('createdAt','asc')" class="btn btn-outline-secondary <%= (sortBy === 'createdAt' && sortOrder === 'asc') ? 'active' : '' %>">Oldest</button>
+          </div>
+        </div>
+      </form>
+
+
+      <!-- Product Table -->
+      <div class="table-responsive bg-white mt-4 p-3 rounded shadow-sm">
+        <table class="table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>List</th>
+              <th>Actions</th>
+              <th>Offer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (products && products.length > 0) { %>
+              <% products.forEach(function(product) { %>
+              <tr>
+                <td>
+                  <% 
+                    var prodImg = '';
+                    if (product.images && product.images.length > 0) {
+                      prodImg = product.images[0].thumbnail ? product.images[0].thumbnail : (product.images[0].url ? product.images[0].url : '');
+                    }
+                  %>
+                  <img src="<%= prodImg ? prodImg : 'https://via.placeholder.com/60' %>" class="product-img" alt="Product Image">
+                </td>
+                <td>
+                  <span class="product-name"><%= product.name %></span>
+                  <% if (product.variants && product.variants.length > 0) { %>
+                    <span class="product-variant">Size: <%= product.variants[0].size %></span>
+                    <span class="product-variant">Color: <%= product.color %></span>
+                  <% } %>
+                </td>
+                <td>
+                  <%= product.categoryId && product.categoryId.name ? product.categoryId.name : 'N/A' %>
+                </td>
+                <td>
+                  ₹
+                  <%= (product.variants && product.variants.length > 0 && typeof product.variants[0].variantPrice === 'number') ?
+                      product.variants[0].variantPrice.toFixed(2)
+                    : 'N/A'
+                  %>
+                </td>
+                <td>
+                  <%= (product.variants && product.variants.length > 0) ?
+                      product.variants.reduce(function(sum, v) { return sum + (v.variantQuantity || 0); }, 0)
+                    : 0
+                  %>
+                </td>
+                <td>
+                  <button class="btn btn-sm list-toggle-btn <%= product.isDeleted ? 'unlist' : 'list' %>" data-product-id="<%= product._id %>">
+                    <%= product.isDeleted ? 'UNLIST' : 'LISTED' %>
+                  </button>
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <button onclick="location.href='/admin/view-product/<%= product._id %>'" class="btn btn-sm btn-outline-info" title="View">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="location.href='/admin/updateProduct/<%= product._id %>'" class="btn btn-sm btn-outline-secondary" title="Edit">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-sm offer-button <%= product.displayOffer && product.displayOffer > 0 ? '' : 'add-offer' %>"
+                    onclick="offerModal('<%= product._id %>')">
+                    <%= product.displayOffer && product.displayOffer > 0 ? product.displayOffer + '% Off (Max: ' + (product.maxRedeem || '') + ')' : 'Add Offer' %>
+                  </button>
+                </td>
+              </tr>
+              <% }); %>
+            <% } else { %>
+              <tr><td colspan="8" class="text-center py-5">No products found.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function setSort(sortByValue, sortOrderValue) {
+  document.getElementById('sortByInput').value = sortByValue;
+  document.getElementById('sortOrderInput').value = sortOrderValue;
+  document.getElementById('secondaryFilterForm').submit();
+}
+
+document.querySelectorAll('.list-toggle-btn').forEach(function(btn) {
+  btn.addEventListener('click', function () {
+    var productId = this.getAttribute('data-product-id');
+    var isUnlisting = !this.classList.contains('list');
+    var actionText = isUnlisting ? 'Unlist Product?' : 'List Product?';
+
+    Swal.fire({
+      title: actionText,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes'
+    }).then(function(result) {
+      if (result.isConfirmed) {
+        fetch('/admin/product/toggle-status/' + productId, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isDeleted: isUnlisting })
+        }).then(function() {
+          location.reload();
+        });
+      }
+    });
+  });
+});
+
+function offerModal(productId) {
+  Swal.fire({
+    title: 'Set Offer',
+    html:
+      '<label>Offer Percentage</label><input id="swal-offer" type="number" min="1" max="100" class="swal2-input" placeholder="Percentage">' +
+      '<label>Max Redeem</label><input id="swal-max" type="number" min="1" class="swal2-input" placeholder="Max Redeem">',
+    focusConfirm: false,
+    preConfirm: () => {
+      const offer = parseInt(document.getElementById('swal-offer').value, 10);
+      const maxRedeem = parseInt(document.getElementById('swal-max').value, 10);
+      if (!offer || offer < 1 || offer > 100) {
+        Swal.showValidationMessage('Enter a valid offer percentage (1-100)');
+        return false;
+      }
+      if (!maxRedeem || maxRedeem < 1) {
+        Swal.showValidationMessage('Max redeem must be at least 1');
+        return false;
+      }
+      return { offer, maxRedeem };
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Set Offer'
+  }).then((result) => {
+    if (result.isConfirmed && result.value) {
+      // TODO: send offer and maxRedeem to server here
+      console.log('Set offer for product:', productId, 'Offer:', result.value.offer, 'Max Redeem:', result.value.maxRedeem);
+    }
+  });
+}
+</script>
+
+</body>
+</html>

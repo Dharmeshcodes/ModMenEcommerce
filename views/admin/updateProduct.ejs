@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Product - MODMEN Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <style>
+    /* Use your existing addProduct styles here */
+  </style>
+</head>
+<body>
+  <%- include('../partials/admin/header') %>
+  <div class="container-fluid-custom">
+    <%- include('../partials/admin/sidebar') %>
+    <div class="main-content">
+
+        console.log("the errors"+ <%=messages %>)
+
+      <% if (messages.success_msg) { %>
+        <div class="alert alert-success"><%= messages.success_msg %></div>
+      <% } %>
+      <% if (messages.error_msg) { %>
+        <div class="alert alert-danger"><%= messages.error_msg %></div>
+      <% } %>
+
+      <form id="updateProductForm" method="POST" enctype="multipart/form-data" action="/admin/updateProduct/<%= product._id %>">
+        <div class="card mb-4">
+          <div class="card-header">General Information</div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="productName" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="productName" name="name" 
+                     placeholder="Type product name here . . ." 
+                     value="<%= product.name %>" required />
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" name="description" rows="4" 
+                        required placeholder="Product description..."><%= product.description %></textarea>
+            </div>
+            <div class="fabric-row mb-3 align-items-center">
+              <span class="form-label me-2">Tags</span>
+              <input type="text" class="form-control me-2" id="tagsInput" name="tags" 
+                     placeholder="Comma separated tags, e.g. cotton,slim-fit,casual"
+                     value="<%= product.tags ? product.tags.join(',') : '' %>" />
+              <div class="badge-container ms-auto">
+                <span id="listStatus" class="badge <%= product.isListed ? 'selected' : '' %>">Listed</span>
+                <span id="unlistStatus" class="badge <%= !product.isListed ? 'selected' : '' %>">Unlisted</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-upload-container mb-4">
+          <div class="fw-bold text-center mb-2">Edit Product Images</div>
+          <div class="main-photo-area" id="mainImageZone">
+            <% const mainImage = product.images.find(img => img.isMain) || product.images[0]; %>
+            <img id="mainImagePreview" 
+                 src="<%= mainImage ? mainImage.url : 'https://dummyimage.com/300x150/ededed/888888.jpg&text=No+Image' %>" 
+                 alt="Main Photo" />
+          </div>
+          <div class="additional-images-row">
+            <% 
+              const additionalImages = product.images.filter(img => !img.isMain);
+              for(let i = 0; i < 2; i++) { 
+            %>
+              <img id="addImagePreview<%= i+1 %>" 
+                   src="<%= additionalImages[i] ? additionalImages[i].url : 'https://dummyimage.com/120x90/ededed/888888.jpg&text=No+Image' %>" 
+                   alt="Additional Image <%= i+1 %>" />
+            <% } %>
+          </div>
+          <input type="file" id="productImagesInput" name="images" multiple accept="image/*" style="display:none;" />
+          <div style="margin-top:10px;">
+            <button type="button" class="img-btn" onclick="document.getElementById('productImagesInput').click();">Change Images</button>
+          </div>
+        </div>
+
+        <div class="card mb-4 pt-3 pb-2">
+          <div class="row g-5 align-items-start">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="categoryId" class="form-label">Select Category</label>
+                <select class="form-select" id="categoryId" name="categoryId" required>
+                  <option value="">-- Select Category --</option>
+                  <% categories.forEach(function(cat) { %>
+                    <option value="<%= cat._id.toString() %>" <%= product.categoryId && product.categoryId.toString() === cat._id.toString() ? 'selected' : '' %>>
+                      <%= cat.name %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="subcategory" class="form-label">Select Subcategory</label>
+                <select class="form-select" id="subcategory" name="subCategoryId" required disabled>
+                  <option value="">-- Select Subcategory --</option>
+                  <% subcategories.forEach(function(sub) { %>
+                    <option value="<%= sub._id.toString() %>" 
+                            data-category-id="<%= sub.category ? sub.category.toString() : '' %>"
+                            <%= product.subcategory && product.subcategory.toString() === sub._id.toString() ? 'selected' : '' %>>
+                      <%= sub.name %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="color" class="form-label">Color</label>
+                <input type="text" class="form-control" id="color" name="color" placeholder="Color" value="<%= product.color %>" required />
+              </div>
+              <div class="mb-3">
+                <label for="sku" class="form-label">SKU (auto-generated)</label>
+                <input type="text" class="form-control" id="sku" name="sku" value="<%= product.variants[0] ? product.variants.sku : '' %>" readonly />
+              </div>
+            </div>
+
+            <div class="col-md-6 pb-2">
+              <label class="form-label d-block mb-3">Size, Qty & Price</label>
+              <% const sizes = ["S", "M", "L", "XL"]; %>
+              <% sizes.forEach(function(size, i) { 
+                  const variant = product.variants[i];
+              %>
+                <div class="variant-row mb-2">
+                  <label class="me-2"><%= size %></label>
+                  <input type="number" name="variantQuantity[]" placeholder="Qty" min="1" 
+                      class="me-2"
+                      value="<%= variant ? variant.variantQuantity : '' %>" required />
+                  <input type="number" name="variantPrice[]" placeholder="Price" min="0.01" step="0.01" 
+                      value="<%= variant ? variant.variantPrice : '' %>" required />
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+
+        <div class="card spec-card mb-4">
+          <div class="card-header">Product Specifications</div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="fitType" class="form-label">Fit type</label>
+              <input type="text" class="form-control" id="fitType" name="fitType" placeholder="Fit type" value="<%= product.FitType || '' %>" required />
+            </div>
+            <div class="mb-3">
+              <label for="washCare" class="form-label">Wash Care</label>
+              <input type="text" class="form-control" id="washCare" name="washCare" value="<%= product.washCare || 'Machine Wash' %>" />
+            </div>
+            <div class="mb-3">
+              <label for="additionalInfo" class="form-label">Additional informations</label>
+              <textarea class="form-control" id="additionalInfo" name="additionalInfo" rows="3" placeholder="Additional Info"><%= product.additionalInfo || '' %></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons mb-4 d-flex justify-content-center gap-3">
+          <button type="submit" class="btn btn-primary">UPDATE PRODUCT</button>
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin/products'">CANCEL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cropper Modal (reuse same as addProduct) -->
+  <div id="cropperModal" class="cropper-modal">
+    <div class="cropper-modal-content position-relative">
+      <span class="cropper-modal-close" id="cropperModalClose">&times;</span>
+      <h4 class="mb-3 text-center">Crop Image</h4>
+      <div style="width:350px; height:350px; position:relative; background:#fafaff; margin:auto; overflow:hidden;">
+        <img id="imageToCrop" style="display:block; max-width:none; position:absolute; left:0; top:0;" />
+        <div id="cropBox"></div>
+      </div>
+      <div class="cropper-controls mt-4 text-center">
+        <button id="cropImageBtn" type="button" class="btn btn-success me-3">Crop & Add Image</button>
+        <button id="cancelCropBtn" type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Subcategory filtering logic (same as addProduct)
+    const categorySelect = document.getElementById("categoryId");
+    const subcategorySelect = document.getElementById("subcategory");
+    function filterSubcategories() {
+      const selectedId = categorySelect.value;
+      let hasAny = false;
+      Array.from(subcategorySelect.options).forEach((option, idx) => {
+        if (idx === 0) {
+          option.style.display = '';
+          return;
+        }
+        const catIdAttr = option.getAttribute('data-category-id') || '';
+        if (selectedId && catIdAttr === selectedId) {
+          option.style.display = '';
+          hasAny = true;
+        } else {
+          option.style.display = 'none';
+        }
+      });
+      subcategorySelect.value = ''; 
+      subcategorySelect.disabled = !hasAny;
+    }
+    categorySelect.addEventListener("change", filterSubcategories);
+    filterSubcategories();
+
+    // Listed/Unlisted toggle badges
+    const listBadge = document.getElementById("listStatus");
+    const unlistBadge = document.getElementById("unlistStatus");
+    listBadge.classList.add("<%= product.isListed ? 'selected' : '' %>");
+    unlistBadge.classList.add("<%= !product.isListed ? 'selected' : '' %>");
+    listBadge.addEventListener("click", function () {
+      listBadge.classList.add("selected");
+      unlistBadge.classList.remove("selected");
+    });
+    unlistBadge.addEventListener("click", function () {
+      unlistBadge.classList.add("selected");
+      listBadge.classList.remove("selected");
+    });
+
+    // Cropper JS logic
+    document.getElementById("cropImageBtn").onclick = function () {
+  let boxLeft = cropBox.offsetLeft;
+  let boxTop = cropBox.offsetTop;
+  let boxW = cropBox.offsetWidth;
+  let boxH = cropBox.offsetHeight;
+  let imgLeft = parseFloat(imageToCrop.style.left);
+  let imgTop = parseFloat(imageToCrop.style.top);
+
+  let cropX = (boxLeft - imgLeft) / scaleToFit;
+  let cropY = (boxTop - imgTop) / scaleToFit;
+  let cropWidth = boxW / scaleToFit;
+  let cropHeight = boxH / scaleToFit;
+
+  cropX = Math.max(0, cropX);
+  cropY = Math.max(0, cropY);
+  if (cropX + cropWidth > origImgW) cropWidth = origImgW - cropX;
+  if (cropY + cropHeight > origImgH) cropHeight = origImgH - cropY;
+
+  let canvas = document.createElement("canvas");
+  canvas.width = 300;
+  canvas.height = 300;
+  let ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(imageToCrop, cropX, cropY, cropWidth, cropHeight, 0, 0, 300, 300);
+
+  const dataURL = canvas.toDataURL("image/png");
+  croppedImagesDataURLs[cropIndex] = dataURL;
+
+  document.getElementById(imagesPreviews[cropIndex]).src = dataURL;
+
+  closeCropperModal();
+  cropIndex++;
+  if (cropIndex < Math.min(fileList.length, 3)) {
+    processImage(cropIndex);
+  }
+};
+
+function createFileListFromDataURLs(dataURLs) {
+  const files = dataURLs.map((dataURL, i) => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/);
+    const bstr = atob(arr);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+    return new File([u8arr], `cropped_image_${i+1}.png`, { type: mime });
+  });
+  const dataTransfer = new DataTransfer();
+  files.forEach(file => dataTransfer.items.add(file));
+  return dataTransfer.files;
+}
+
+  </script>
+</body>
+</html>

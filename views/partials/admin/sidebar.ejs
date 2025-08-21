@@ -1,0 +1,169 @@
+<aside class="sidebar" id="sidebar">
+    <style>
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            min-width: 250px;
+            z-index: 900;
+        }
+        .sidebar-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar-nav {
+            padding: 0 20px;
+        }
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-item.active { background-color: #4f46e5; }
+        .nav-item:hover:not(.active) { background-color: #444; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.05em;
+            position: relative;
+        }
+        .nav-link i { margin-right: 15px; font-size: 1.2em; }
+        .nav-link span { flex-grow: 1; }
+        .nav-link .arrow { font-size: 0.8em; transition: transform 0.3s ease; }
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #444;
+            margin-top: 20px;
+        }
+        .account-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .account-btn,
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #555;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+        .account-btn:hover,
+        .logout-btn:hover { background-color: #666; }
+        .account-btn i,
+        .logout-btn i { margin-right: 10px; }
+        @media (max-width: 900px) {
+            .sidebar {
+                min-width: 80px;
+                width: 80px;
+                padding: 10px 0;
+            }
+            .sidebar-nav {
+                padding: 0 7px;
+            }
+            .nav-link span,
+            .sidebar-footer .account-section span { display: none; }
+            .nav-link { justify-content: center; }
+        }
+        @media (max-width: 600px) {
+            .sidebar { display: none; }
+        }
+    </style>
+    <div class="sidebar-content">
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item active">
+                    <a href="/admin/dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/adminProducts" class="nav-link">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/orders" class="nav-link">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Order List</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/customers" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Customer</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/sales" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Sales</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/category" class="nav-link">
+                        <i class="fas fa-tags"></i>
+                        <span>Category</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/coupons" class="nav-link">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Coupons</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/banner" class="nav-link">
+                        <i class="fas fa-image"></i>
+                        <span>Banner</span>
+                        <i class="fas fa-chevron-right arrow"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="account-section">
+                <a href="/admin/account" class="account-btn">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Account</span>
+                </a>
+                <a href="/admin/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>

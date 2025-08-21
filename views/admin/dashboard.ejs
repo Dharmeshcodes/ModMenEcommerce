@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- FontAwesome + Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        html, body {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .dashboard-wrapper {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+        }
+        .sidebar-holder {
+            flex-shrink: 0;
+        }
+        .dashboard-maincol {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-width: 0;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+        /* Overwrite default browser spacing for all direct children */
+        .dashboard-maincol > * { margin: 0; padding: 0; }
+        main.main-content {
+            flex: 1 1 0%;
+            padding: 32px 32px 20px 32px;
+            background: #f8f9fa;
+            min-width: 0;
+            min-height: 0;
+        }
+        @media (max-width: 900px) {
+            .dashboard-wrapper { flex-direction: column; }
+            .sidebar-holder { width: 100vw; }
+        }
+        @media (max-width: 600px) {
+            .dashboard-wrapper { flex-direction: column; }
+            .sidebar-holder { display: none; }
+        }
+        /* --- Insert ONLY the dashboard content CSS here (stat-cards, charts, etc.) --- */
+        .stats-section { margin-bottom: 2rem; }
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .stat-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.15);}
+        .stat-icon-wrapper { flex-shrink: 0; }
+        .stat-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;}
+        .customers-icon { background: linear-gradient(135deg, #4CAF50, #45a049);}
+        .orders-icon { background: linear-gradient(135deg, #2196F3, #1976D2);}
+        .sales-icon { background: linear-gradient(135deg, #FF9800, #F57C00);}
+        .pending-icon { background: linear-gradient(135deg, #9C27B0, #7B1FA2);}
+        .stat-content { flex: 1; min-width: 0;}
+        .stat-number { font-size: 2rem; font-weight: 700; color: #333; margin: 0 0 0.25rem 0; line-height: 1;}
+        .stat-label { color: #666; margin: 0 0 0.5rem 0; font-size: 0.9rem;}
+        .stat-trend { font-size: 0.8rem; font-weight:600; padding: 0.25rem 0.5rem; border-radius: 12px; display: inline-block;}
+        .stat-trend.positive { background: #e8f5e8; color: #4CAF50;}
+        .stat-trend.negative { background: #ffeaea; color: #f44336;}
+        .charts-section { margin-bottom: 2rem; }
+        .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; width: 100%;}
+        .chart-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;}
+        .chart-title { font-size: 1.25rem; font-weight:600; color: #333; margin: 0;}
+        .chart-subtitle { color: #666; font-size: 0.9rem; margin: 0.25rem 0 0 0;}
+        .chart-controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;}
+        .control-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; background: #f8f9fa; color: #666; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease;}
+        .control-btn.active { background: #667eea; color: white;}
+        .control-select { padding: 0.5rem 0.75rem; border: 1px solid #ddd; border-radius: 6px; background: white; color: #333; cursor: pointer; font-size: 0.9rem;}
+        .chart-wrapper { position: relative; height: 300px; width: 100%;}
+        .progress-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1.5rem;}
+        .circular-progress-container { position: relative; width: 140px; height: 140px;}
+        .progress-ring { width: 100%; height: 100%; transform: rotate(-90deg);}
+        .progress-ring-bg { fill: none; stroke: #e9ecef; stroke-width: 8;}
+        .progress-ring-fill { fill: none; stroke: #667eea; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 314; stroke-dashoffset: 77; transition: stroke-dashoffset 0.5s ease;}
+        .progress-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;}
+        .progress-percentage { display: block; font-size: 1.5rem; font-weight: 700; color: #333; line-height: 1;}
+        .progress-change { display: block; font-size: 0.9rem; color: #4CAF50; font-weight: 600; margin-top: 0.25rem;}
+        .progress-info { text-align: center; width: 100%;}
+        .progress-text { color: #666; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.4;}
+        .progress-metrics { display: flex; justify-content: space-between; width: 100%; gap: 1rem;}
+        .metric-item { text-align: center; flex: 1;}
+        .metric-label { display: block; font-size: 0.8rem; color: #999; margin-bottom: 0.25rem;}
+        .metric-value { display: block; font-size: 1rem; font-weight: 600; color: #333;}
+        @media (max-width: 1200px) {
+            .charts-container { grid-template-columns: 1fr;}
+            .progress-wrapper { flex-direction: row; align-items: flex-start; gap: 2rem;}
+            .progress-info { flex: 1; text-align: left;}
+            .progress-metrics { justify-content: flex-start; gap: 2rem;}
+        }
+        @media (max-width: 768px) {
+            main.main-content { padding: 1rem 0.5rem; }
+            .stats-container { grid-template-columns: 1fr; gap: 1rem;}
+            .stat-card { padding: 1rem;}
+            .stat-icon { width: 50px; height: 50px; font-size: 1.25rem;}
+            .stat-number { font-size: 1.5rem;}
+            .chart-card { padding: 1rem;}
+            .chart-header { flex-direction: column; align-items: flex-start;}
+            .chart-wrapper { height: 250px;}
+            .progress-wrapper { flex-direction: column; align-items: center;}
+            .progress-info { text-align: center;}
+            .progress-metrics { justify-content: space-between;}
+        }
+        @media (max-width: 480px) {
+            .stats-container { grid-template-columns: 1fr;}
+            .stat-card { flex-direction: column; text-align: center; gap: 0.75rem;}
+            .chart-controls { flex-direction: column; gap: 0.5rem; width: 100%;}
+            .control-btn, .control-select { width: 100%;}
+            .progress-metrics { flex-direction: column; gap: 0.75rem;}
+        }
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .chart-wrapper canvas { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;}
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <div class="sidebar-holder">
+        <%- include('../partials/admin/sidebar') %>
+    </div>
+    <div class="dashboard-maincol">
+        <%- include('../partials/admin/header') %>
+        <main class="main-content">
+            <!-- ==== DASHBOARD BODY ==== -->
+            <section class="stats-section">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper">
+                            <div class="stat-icon customers-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">5,423</h3>
+                            <p class="stat-label">Total Customers</p>
+                            <span class="stat-trend positive">+8% this month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper">
+                            <div class="stat-icon orders-icon"><i class="fas fa-truck"></i></div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">1,893</h3>
+                            <p class="stat-label">Total Orders</p>
+                            <span class="stat-trend positive">+12% this month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper">
+                            <div class="stat-icon sales-icon"><i class="fas fa-dollar-sign"></i></div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">₹65,805</h3>
+                            <p class="stat-label">Total Sales</p>
+                            <span class="stat-trend positive">+15% this month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrapper">
+                            <div class="stat-icon pending-icon"><i class="fas fa-clock"></i></div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number">189</h3>
+                            <p class="stat-label">Total Pending</p>
+                            <span class="stat-trend negative">-3% this month</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="charts-section">
+                <div class="charts-container">
+                    <div class="chart-card sales-chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Sales Details</h3>
+                            <div class="chart-controls">
+                                <button class="control-btn active">Activity</button>
+                                <select class="control-select">
+                                    <option value="month">Month</option>
+                                    <option value="week">Week</option>
+                                    <option value="year">Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card progress-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Sales Progress</h3>
+                            <p class="chart-subtitle">This Quarter</p>
+                        </div>
+                        <div class="progress-wrapper">
+                            <div class="circular-progress-container">
+                                <svg class="progress-ring" viewBox="0 0 120 120">
+                                    <circle class="progress-ring-bg" cx="60" cy="60" r="50"/>
+                                    <circle class="progress-ring-fill" cx="60" cy="60" r="50"/>
+                                </svg>
+                                <div class="progress-content">
+                                    <span class="progress-percentage">75.55%</span>
+                                    <span class="progress-change">+10%</span>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <p class="progress-text">You succeed earn ₹48663 today, its higher than yesterday</p>
+                                <div class="progress-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">Target</span>
+                                        <span class="metric-value">₹30k</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">Revenue</span>
+                                        <span class="metric-value">₹16k</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">Today</span>
+                                        <span class="metric-value">₹28k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ==== END DASHBOARD BODY ==== -->
+        </main>
+    </div>
+</div>
+<script>
+// Chart.js implementation with responsive configuration
+document.addEventListener('DOMContentLoaded', function() {
+    const chartCanvas = document.getElementById('salesChart');
+    if (chartCanvas && typeof Chart !== 'undefined') {
+        const ctx = chartCanvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [100, 150, 120, 300, 250, 200, 280, 150, 320, 380, 400, 450],
+                    backgroundColor: '#667eea',
+                    borderRadius: 6,
+                    barThickness: 'flex',
+                    maxBarThickness: 30,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        cornerRadius: 6,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { display: true, color: '#f0f0f0' },
+                        ticks: { color: '#666', font: { size: 12 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#666', font: { size: 12 } }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                }
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
