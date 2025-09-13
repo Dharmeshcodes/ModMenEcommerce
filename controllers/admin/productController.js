@@ -1,18 +1,15 @@
-
 const Product = require("../../models/productSchema");
 const Category = require("../../models/categorySchema");
 const Subcategory = require("../../models/subcategorySchema");
 const User = require("../../models/userSchema");
 const fs = require("fs");
-const path = require('path');
-const sharp = require("sharp"); 
+const path = require("path");
+const sharp = require("sharp");
 const mongoose = require("mongoose");
-const { determineBestOffer, calculateBestPrice } = require("../../utils/offerUtils");
-
-
+const { calculateBestPrice } = require("../../utils/offerUtils");
 
 const getProducts = async (req, res) => {
-  const limit = 10;
+  const limit = 6;
   try {
     const page = Number.parseInt(req.query.page) || 1;
     const skip = (page - 1) * limit;
@@ -33,7 +30,7 @@ const getProducts = async (req, res) => {
     if (searchQuery.trim()) {
       filter.$or = [
         { name: { $regex: searchQuery, $options: "i" } },
-        { description: { $regex: searchQuery, $options: "i" } }
+        { description: { $regex: searchQuery, $options: "i" } },
       ];
     }
 
@@ -73,7 +70,7 @@ const getProducts = async (req, res) => {
 
     const products = await Product.find(filter)
       .populate("categoryId", "name")
-      .populate("subcategory", "name")
+      .populate("subCategoryId", "name")
       .sort(sort)
       .skip(skip)
       .limit(limit);
@@ -84,7 +81,7 @@ const getProducts = async (req, res) => {
       ? {
           name: req.session.admin.name,
           email: req.session.admin.email,
-          profileImage: req.session.admin.profileImage || ""
+          profileImage: req.session.admin.profileImage || "",
         }
       : {};
 
@@ -106,7 +103,7 @@ const getProducts = async (req, res) => {
       sortOrder,
       isActiveFilter,
       query: req.query,
-      error_msg: null
+      error_msg: null,
     });
   } catch (error) {
     console.error(error);
@@ -128,11 +125,10 @@ const getProducts = async (req, res) => {
       isActiveFilter: req.query.isActive || "",
       query: req.query,
       limit,
-      error_msg: "Server error: " + error.message
+      error_msg: "Server error: " + error.message,
     });
   }
 };
-
 
 const getProductAddPage = async (req, res) => {
   try {
@@ -141,9 +137,9 @@ const getProductAddPage = async (req, res) => {
     res.render("admin/addProducts", {
       categories,
       subcategories,
-      categoryId: '',
-      subCategoryId: '',
-      messages: req.flash()
+      categoryId: "",
+      subCategoryId: "",
+      messages: req.flash(),
     });
   } catch (error) {
     console.error("Error in getProductAddPage:", error);
@@ -152,8 +148,14 @@ const getProductAddPage = async (req, res) => {
 };
 
 
+function calculateVariantPrice(variantPrice, productOffer = 0, categoryOffer = 0, subcategoryOffer = 0) {
+  const bestOffer = Math.max(productOffer || 0, categoryOffer || 0, subcategoryOffer || 0);
+  const discount = (variantPrice * bestOffer) / 100;
+  const salePrice = Math.max(Math.round(variantPrice - discount), 0);
+  return { salePrice, bestOffer };
+}
 
-const addProducts = async (req, res) => {
+const addProducts = async (req, res) => { 
   try {
     const {
       name,
@@ -161,184 +163,155 @@ const addProducts = async (req, res) => {
       categoryId,
       subCategoryId,
       color,
-      offer,
       tags,
       fitType,
+      sleeveType,
       washCare,
-      isListed
+      isListed,
     } = req.body;
 
-    if (!name || !description || !categoryId || !color) {
-      return res.status(400).json({
-        error_msg: "Please fill all required fields (name, description, category, color)"
-      });
-    }
+  
+    const offer = {
+      productOffer: Number(req.body['offer.productOffer']) || 0,
+      maxRedeem: Number(req.body['offer.maxRedeem']) || 0,
+      startDate: req.body['offer.startDate'] ? new Date(req.body['offer.startDate']) : undefined,
+      validUntil: req.body['offer.validUntil'] ? new Date(req.body['offer.validUntil']) : undefined,
+    };
 
-    const existingProduct = await Product.findOne({
-      name: { $regex: new RegExp(`^${name.trim()}$`, "i") }
-    });
-    if (existingProduct) {
-      return res.status(409).json({
-        error_msg: "Product with the same name already exists"
-      });
+   
+
+    if (!name || !description || !categoryId || !color || !fitType || !sleeveType) {
+      req.flash(
+        "error_msg",
+        "Please fill all required fields (name, description, category, color, sleeveType, fitType)"
+      );
+      return res.redirect("/admin/addProducts");
     }
 
     const category = await Category.findById(categoryId);
-    if (!category) {
-      return res.status(404).json({
-        error_msg: "Selected category not found"
-      });
-    }
-
     let subCategory = null;
     if (subCategoryId) {
       subCategory = await Subcategory.findById(subCategoryId);
-      console.log("Submitted subCategoryId:", subCategoryId);
-      if (!subCategory || String(subCategory.categoryId) !== String(category._id)) {
-        return res.status(404).json({
-          error_msg: "Selected subcategory not found for this category"
+    }
+
+    const productOffer = offer.productOffer;
+    const categoryOffer = Number(category?.offer?.offerPercentage) || 0;
+    const subcategoryOffer = Number(subCategory?.offer?.offerPercentage) || 0;
+
+
+    const bestOffer = Math.max(productOffer, categoryOffer, subcategoryOffer);
+    let offerSource = "product";
+    if (bestOffer === categoryOffer) offerSource = "category";
+    else if (bestOffer === subcategoryOffer) offerSource = "subcategory";
+    const displayOffer = bestOffer || 0;
+
+    const productofferData = {
+      productOffer,
+      maxRedeem: offer.maxRedeem,
+      startDate: offer.startDate,
+      validUntil: offer.validUntil,
+    };
+    
+    const sizes = ["S", "M", "L", "XL"];
+    const variants = [];
+
+    for (let size of sizes) {
+      const price = Number(req.body.price?.[size]);
+      const quantity = Number(req.body.qty?.[size]);
+
+      if (!isNaN(price) && price > 0 && !isNaN(quantity) && quantity > 0) {
+        const { salePrice } = calculateVariantPrice(
+          price,
+          productOffer,
+          categoryOffer,
+          subcategoryOffer
+        );
+
+        const sku = `${name.slice(0, 3).toUpperCase()}-${color.slice(0, 3).toUpperCase()}-${size}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        variants.push({
+          size,
+          variantPrice: price,
+          salePrice,
+          variantQuantity: quantity,
+          sku,
+          color,
         });
       }
     }
 
-    if (!req.files || req.files.length < 3) {
-      return res.status(400).json({
-        error_msg: "Please upload exactly 3 product images (1 main + 2 additional)"
-      });
+    if (variants.length === 0) {
+      req.flash("error_msg", "At least one variant with valid price and quantity is required");
+      return res.redirect("/admin/addProducts");
     }
-
-    const images = req.files.map((file, index) => ({
-      url: file.path,
-      thumbnail: file.path,
-      isMain: index === 0
-    }));
-
-    const productOffer = Number(offer) || 0;
-    const categoryOffer = category.categoryOffer || 0;
-    const subcategoryOffer = subCategory && subCategory.subcategoryOffer ? subCategory.subcategoryOffer : 0;
-    const bestOffer = determineBestOffer(productOffer, categoryOffer, subcategoryOffer);
-
-    const variants = [];
-    const sizes = ["S", "M", "L", "XL"];
-
-    const variantPrices = Array.isArray(req.body.variantPrice)
-      ? req.body.variantPrice.map(p => Number(p)).filter(p => !isNaN(p) && p > 0)
-      : [req.body.variantPrice].filter(Boolean).map(p => Number(p)).filter(p => !isNaN(p) && p > 0);
-
-    const variantQuantities = Array.isArray(req.body.variantQuantity)
-      ? req.body.variantQuantity.map(q => Number(q)).filter(q => !isNaN(q) && q > 0)
-      : [req.body.variantQuantity].filter(Boolean).map(q => Number(q)).filter(q => !isNaN(q) && q > 0);
-
-    if (variantPrices.length === 0 || variantQuantities.length === 0) {
-      return res.status(400).json({
-        error_msg: "At least one variant with valid price and quantity is required"
-      });
-    }
-    if (variantPrices.length !== variantQuantities.length) {
-      return res.status(400).json({
-        error_msg: "Number of prices and quantities must match"
-      });
-    }
-
-    const baseSku = name.slice(0, 3).toUpperCase() + Date.now().toString().slice(-4);
-
-    for (let i = 0; i < variantPrices.length; i++) {
-      const price = variantPrices[i];
-      const quantity = variantQuantities[i];
-      const size = sizes[i] || `SIZE_${i + 1}`;
-      const { salePrice } = calculateBestPrice(price, productOffer, categoryOffer, subcategoryOffer);
-      const sku = `${baseSku}-${size}-${color.toUpperCase().slice(0, 3)}`;
-
-      variants.push({
-        size,
-        variantPrice: price,
-        salePrice,
-        variantQuantity: quantity,
-        sku
-      });
-    }
-
-    const tagArray = tags
-      ? typeof tags === "string"
-        ? tags.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0)
-        : Array.isArray(tags) ? tags.map(tag => tag.trim()).filter(tag => tag.length > 0) : []
-      : [];
 
     const newProduct = new Product({
       name: name.trim(),
       description: description.trim(),
-      categoryId: new mongoose.Types.ObjectId(categoryId),
-      subcategory: subCategoryId ? new mongoose.Types.ObjectId(subCategoryId) : undefined,
+      categoryId,
+      subCategoryId: subCategoryId || undefined,
       color: color.trim(),
-      offer: productOffer,
-      displayOffer: bestOffer,
-      offerSource:
-        bestOffer === productOffer
-          ? "product"
-          : bestOffer === categoryOffer
-          ? "category"
-          : "subcategory",
-      images,
+      offer: productofferData,
+      displayOffer,
+      offerSource,
+      images: req.files.map((file, i) => ({
+        url: file.path,
+        thumbnail: file.path,
+        isMain: i === 0,
+      })),
       variants,
-      tags: tagArray,
-      fitType: fitType ? fitType.trim() : undefined,
-      washCare: washCare ? washCare.trim() : undefined,
+      tags: tags?.split(",").map(t => t.trim()),
+      fitType: fitType?.trim(),
+      sleeveType: sleeveType?.trim(),
+      washCare: washCare?.trim(),
       ratings: { average: 0, count: 0 },
       isListed: isListed !== "false",
     });
 
-    await newProduct.save();
-        req.flash("success_msg", "Product added successfully!");
-        return res.redirect("/admin/products");
+    //console.log("SKUs for variants :", variants.map(v => v.sku));
 
+    await newProduct.save();
+    req.flash("success_msg", "Product added successfully!");
+    return res.redirect("/admin/adminProducts");
 
   } catch (error) {
-    console.error("PRODUCT CONTROLLER: Error in addProduct:", error);
-
-    if (error.name === "ValidationError") {
-      const messages = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({
-        error_msg: "Validation error: " + messages.join(", ")
-      });
-    }
-    return res.status(500).json({
-      error_msg: "Something went wrong while adding the product. Please try again."
-    });
+    console.error("Add product error:", error);
+    req.flash("error_msg", "Something went wrong while adding the product. Please try again.");
+    return res.redirect("/admin/addProducts");
   }
 };
 
-let getUpdateProductPage= async(req,res)=>{
-    try{
-        const productId=req.params.id;
-        const product=await Product.findById(productId)
-        .populate("categoryId")
-        .populate("subcategory")
-        .lean()
 
-        if(!product){
-            req.flas("error_msg","product not found")
-            res.redirect("/admin/adminp\Products")
-        }
-        const category=await Category.find({isListed:true}).lean();
-        const subcategory=await Subcategory.find({isListed:true}).lean()
+const getUpdateProductPage = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const product = await Product.findById(productId).lean();
+    if (!product) {
+      req.flash("error_msg", "Product not found");
+      return res.redirect("/admin/adminProducts");
+    }
+    const categories = await Category.find({ isListed: true }).lean();
+    const subcategories = await Subcategory.find({ isListed: true }).lean();
 
-        res.render("admin/updateProduct",{
-            product,
-            category,
-            subcategory,
-            message:req.flash()
-        })
-    }catch (err) {
-    console.error("Error in getUpdateProductPage:", err);
-    req.flash("error_msg", "Something went wrong");
-    res.redirect("/admin/Adminroducts");
-}
-}
+    res.render("admin/updateProduct", {
+      product,
+      categories,
+      subcategories,
+      messages: req.flash(),
+    });
+  } catch (error) {
+   
+    req.flash("error_msg", "An error occurred loading the product.");
+    res.redirect("/admin/adminProducts");
+  }
+};
 
-const postUpdateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
+  console.log("REQ.BODY:", req.body);
+console.log("REQ.FILES:", req.files);
+
   try {
     const productId = req.params.id;
-
     const {
       name,
       description,
@@ -347,79 +320,256 @@ const postUpdateProduct = async (req, res) => {
       color,
       tags,
       fitType,
+      sleeveType,
       washCare,
       isListed,
-      variantQuantity,
-      variantPrice
     } = req.body;
 
-    let product = await Product.findById(productId);
+    const offer = {
+      productOffer: Number(req.body['offer.productOffer']) || 0,
+      maxRedeem: Number(req.body['offer.maxRedeem']) || 0,
+      startDate: req.body['offer.startDate'] ? new Date(req.body['offer.startDate']) : undefined,
+      validUntil: req.body['offer.validUntil'] ? new Date(req.body['offer.validUntil']) : undefined,
+    };
+
+    if (!name || !description || !categoryId || !color || !fitType || !sleeveType) {
+      req.flash(
+        'error_msg',
+        'Please fill all required fields (name, description, category, color, sleeveType, fitType)'
+      );
+      return res.redirect(`/admin/updateProduct/${productId}`);
+    }
+
+    const product = await Product.findById(productId);
     if (!product) {
-      req.flash("error_msg", "product not found");
-      return res.redirect("/admin/adminProducts");
+      req.flash('error_msg', 'Product not found.');
+      return res.redirect('/admin/adminProducts');
+    }
+
+    const category = await Category.findById(categoryId);
+    let subCategory = null;
+    if (subCategoryId) {
+      subCategory = await Subcategory.findById(subCategoryId);
+    }
+
+    const productOffer = offer.productOffer;
+    const categoryOffer = Number(category?.offer?.offerPercentage) || 0;
+    const subcategoryOffer = Number(subCategory?.offer?.offerPercentage) || 0;
+
+    const bestOffer = Math.max(productOffer, categoryOffer, subcategoryOffer);
+    let offerSource = 'product';
+    if (bestOffer === categoryOffer) offerSource = 'category';
+    else if (bestOffer === subcategoryOffer) offerSource = 'subcategory';
+    const displayOffer = bestOffer || 0;
+
+    const productofferData = {
+      productOffer,
+      maxRedeem: offer.maxRedeem,
+      startDate: offer.startDate,
+      validUntil: offer.validUntil,
+    };
+
+    const sizes = ['S', 'M', 'L', 'XL'];
+    const variants = [];
+
+    for (let size of sizes) {
+      const price = Number(req.body.price?.[size]);
+      const quantity = Number(req.body.qty?.[size]);
+
+      if (!isNaN(price) && price > 0 && !isNaN(quantity) && quantity > 0) {
+        const { salePrice } = calculateVariantPrice(
+          price,
+          productOffer,
+          categoryOffer,
+          subcategoryOffer
+        );
+
+        const sku =
+          product.variants.find((v) => v.size === size)?.sku ||
+          `${name.slice(0, 3).toUpperCase()}-${color.slice(0, 3).toUpperCase()}-${size}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        variants.push({
+          size,
+          variantPrice: price,
+          salePrice,
+          variantQuantity: quantity,
+          sku,
+          color,
+        });
+      }
+    }
+
+    if (variants.length === 0) {
+      req.flash('error_msg', 'At least one variant with valid price and quantity is required');
+      return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
     product.name = name.trim();
     product.description = description.trim();
     product.categoryId = categoryId;
-    product.subcategory = subCategoryId;
-    product.color = color;
-    product.isListed = isListed === "true";
-    product.FitType = fitType ? fitType.trim() : product.FitType;
-    product.washCare = washCare ? washCare.trim() : product.washCare;
-    product.tags = tags
-      ? typeof tags === "string"
-        ? tags.split(",").map((t) => t.trim())
-        : tags
-      : [];
+    product.subCategoryId = subCategoryId || undefined;
+    product.color = color.trim();
+    product.offer = productofferData;
+    product.displayOffer = displayOffer;
+    product.offerSource = offerSource;
 
-    product.variants = [];
-
-    let quantities = Array.isArray(variantQuantity) ? variantQuantity : [variantQuantity];
-    let prices = Array.isArray(variantPrice) ? variantPrice : [variantPrice];
-    const sizes = ["S", "M", "L", "XL"];
-
-    for (let i = 0; i < quantities.length && i < prices.length; i++) {
-      const qty = Number(quantities[i]);
-      const price = Number(prices[i]);
-
-      if (!isNaN(qty) && qty > 0 && !isNaN(price) && price > 0) {
-        product.variants.push({
-          size: sizes[i] || `Size${i + 1}`,
-          variantPrice: price,
-          salePrice: calculateBestPrice(price, categoryOffer, subcategoryOffer, product.offer),
-          variantQuantity: qty,
-          sku: product.variants[i]?.sku || `${product.name.slice(0, 3).toUpperCase()}-${sizes[i]}-${color.slice(0, 3).toUpperCase()}`,
-        });
-      }
+    
+    if (req.files && req.files.length > 0) {
+      product.images = req.files.map((file, i) => ({
+        url: file.path,
+        thumbnail: file.path,
+        isMain: i === 0,
+      }));
     }
+
+    product.variants = variants;
+    product.tags = tags?.split(',').map((t) => t.trim()) || [];
+    product.fitType = fitType?.trim();
+    product.sleeveType = sleeveType?.trim();
+    product.washCare = washCare?.trim();
+    product.isListed = isListed !== 'false';
 
     await product.save();
 
-    req.flash("success_msg", "Product updated successfully!");
-    res.redirect("/admin/adminProducts");
+    req.flash('success_msg', 'Product updated successfully!');
+    return res.redirect('/admin/adminProducts');
+  } catch (error) {
+    console.error('Update product error:', error);
+    req.flash('error_msg', 'Something went wrong while updating the product. Please try again.');
+    return res.redirect(`/admin/updateProduct/${req.params.id}`);
+  }
+};
 
-  } catch (err) {
-    console.error("Error in postUpdateProduct:", err);
-    req.flash("error_msg", "Unable to update the product. Please try again.");
-    res.redirect(`/admin/updateProduct/${req.params.id}`);
+const toggleListStatus= async(req,res)=>{
+  try{
+    
+
+    const productId=req.params.id
+ 
+
+    const {isListed}=req.body
+    const product=await Product.findById(productId)
+
+    if(!product){
+     return res.status(404).json({message:'product not found'})
+    }
+
+    product.isListed=isListed
+    await product.save()
+    res.json({success:true,newstatus:product.isListed})
+  }
+  catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+ 
+}
+
+const softDeleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    product.isDeleted = true; 
+    await product.save();
+
+    res.json({ success: true, message: 'Product soft deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
 
+ const addOffer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
 
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    if (!product.offer) {
+      product.offer = {};
+    }
+
+    product.offer.productOffer = offerPercentage;
+    product.offer.maxRedeem = maxRedeem;
+    product.offer.startDate = new Date(startDate);
+    product.offer.validUntil = new Date(validUntil);
+
+    await product.save();
+
+    res.json({ success: true, message: 'Offer added successfully', offer: product.offer });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+const editOffer = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    if (!product.offer) {
+      product.offer = {};
+    }
+
+    product.offer.productOffer = offerPercentage;
+    product.offer.maxRedeem = maxRedeem;
+    product.offer.startDate = new Date(startDate);
+    product.offer.validUntil = new Date(validUntil);
+
+    await product.save();
+
+    res.json({ success: true, message: 'Offer updated successfully', offer: product.offer });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+const deleteOffer = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    product.offer = undefined;
+    await product.save();
+
+    res.json({ success: true, message: 'Offer deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+ 
 
 
 
 
 
 module.exports = {
-    getProductAddPage,
-    getProducts,
-    addProducts,
-    getUpdateProductPage,
-     postUpdateProduct
-
-
-    
+  getProductAddPage,
+  getProducts,
+  addProducts,
+  getUpdateProductPage,
+  updateProduct,
+  toggleListStatus,
+  softDeleteProduct,
+  addOffer,
+  editOffer,
+  deleteOffer
 };

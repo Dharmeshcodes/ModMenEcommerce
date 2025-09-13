@@ -1,107 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Products - MODMEN Admin</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products - MODMEN Admin</title>
 
-<!-- Bootstrap 5 CSS -->
- 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-  body { background-color: #f8f9fa; }
-  .product-name { font-weight: bold; }
-  .product-variant { font-size: 0.85em; color: #6c757d; display: block; }
-  .list-toggle-btn.list { background-color: #28a745; color: #fff; }
-  .list-toggle-btn.unlist { background-color: #dc3545; color: #fff; }
-  .offer-button.add-offer { background-color: #4f46e5; color: #fff; }
-  .product-img { width: 60px; height: 60px; object-fit: cover; border: 1px solid #ddd; border-radius: 5px; }
-</style>
+  <style>
+    body { background:#f6f6f6; }
+    .breadcrumb a, .breadcrumb a:hover {
+      color: #6c757d;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .breadcrumb-item.active {
+      color: #18181b;
+      font-weight: 600;
+    }
+    .product-name {
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      word-break: break-word;
+      margin-bottom: 0.18rem;
+    }
+    .product-details {
+      font-size: 0.82rem;
+      color: #555;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .table-product-cell {
+      vertical-align: middle;
+      text-align: center;
+      font-size: 0.92rem;
+    }
+    .variant-divider {
+      color: #aaa;
+      padding: 0 0.4em;
+    }
+    .compact-filter-bar, .compact-sort-bar {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #ccc;
+      padding: 0.2em 1em;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+    .compact-filter-bar select,
+    .compact-filter-bar button,
+    .compact-sort-bar button {
+      border: none !important;
+      background: none !important;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: none !important;
+      margin-right: 0.3em;
+      cursor: pointer;
+    }
+    .compact-filter-bar select {
+      min-width: 120px;
+      padding-left: 0.3rem;
+      padding-right: 0.3rem;
+      height: 30px;
+      border-radius: 12px;
+    }
+    .compact-filter-bar-btn {
+      font-weight: 600;
+      color: #2d2d2d;
+      margin-right: 6px;
+    }
+    .compact-sort-bar {
+      gap: 0.4em;
+      margin-left: auto;
+    }
+    .compact-sort-label {
+      font-weight: 600;
+      color: #444;
+      margin-right: 0.7em;
+      font-size: 0.9rem;
+    }
+    .compact-sort-bar .btn-sort {
+      border-radius: 16px;
+      padding: 3px 12px;
+      border: 1.3px solid transparent;
+      background: #f9f9f9;
+      color: #444;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .compact-sort-bar .btn-sort.active {
+      background: #18181b !important;
+      color: #fff !important;
+      border-color: #444 !important;
+    }
+
+    /* Toggle switch */
+    .switch-toggle {
+      display: inline-flex;
+      align-items: center;
+    }
+    .slider-btn {
+      background: #ccc;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 72px;
+      height: 30px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 0;
+    }
+    .slider-btn.switch-on {
+      background: #37c327;
+    }
+    .slider-btn.switch-off {
+      background: #ea2323;
+    }
+    .slider-label {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      width: 40px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      z-index: 2;
+      transition: color 0.2s;
+      user-select: none;
+    }
+    .slider-label.switch-on {
+      left: 12px;
+      right: auto;
+    }
+    .slider-label.switch-off {
+      right: 12px;
+      left: auto;
+    }
+    .slider-toggle {
+      position: absolute;
+      top: 3px;
+      left: 5px;
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.26s;
+      box-shadow: 0 0 3px rgba(0,0,0,0.08);
+    }
+    .slider-btn.switch-on .slider-toggle {
+      left: 44px;
+    }
+    .slider-btn.switch-off .slider-toggle {
+      left: 5px;
+    }
+
+    /* Offer section */
+    .offer-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .offer-badge {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #222;
+      letter-spacing: 0.15px;
+      border-radius: 8px;
+      background: #f6f6f6;
+      margin-top: 0.3em;
+      margin-bottom: 0.1em;
+      min-width: 72px;
+      padding: 5px 0;
+      text-align: center;
+      user-select: none;
+      pointer-events: none;
+    }
+    .offer-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+      margin-top: 0;
+    }
+    .btn-offer-edit,
+    .btn-offer-delete {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid #ededed;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      padding: 0;
+      transition: border 0.16s, color 0.16s;
+      margin: 0 1px;
+      cursor: pointer;
+    }
+    .btn-offer-edit {
+      color: #1818d5;
+    }
+    .btn-offer-delete {
+      color: #e31b1b;
+    }
+    .btn-offer-edit:hover,
+    .btn-offer-delete:hover {
+      border: 1.5px solid #b5b5b5;
+    }
+    .offer-btn.add-offer {
+      background: #18181b;
+      color: #fff;
+      border-radius: 18px;
+      border: none;
+      min-width: 100px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 0.2em;
+      cursor: pointer;
+    }
+
+    .product-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border: 1px solid #f1f1f1;
+      border-radius: 5px;
+    }
+    .table th,
+    .table td {
+      vertical-align: middle;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .action-cell .btn {
+      padding: 0.3em 0.7em;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .btn-paginate.active {
+      background: #000;
+      color: #fff;
+    }
+    .btn-paginate {
+      border: 0;
+      padding: 0.45em 1em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .shadowed-box {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.04);
+    }
+    @media (max-width: 900px) {
+      .table th,
+      .table td {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <%- include('../partials/admin/header') %>
-
 <div class="container-fluid">
   <div class="row">
     <%- include('../partials/admin/sidebar') %>
-
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-        
 
-      <div class="mb-3 text-muted">Dashboard &gt; Products</div>
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb fs-6">
+          <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Products</li>
+        </ol>
+      </nav>
 
-      <!-- Page Header with Search -->
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-        <div class="d-flex align-items-center gap-3">
-          <h1 class="h3 m-0">Products</h1>
-          <form id="filterForm" class="d-flex ms-3" action="/admin/adminProducts" method="GET">
-            <input type="text" class="form-control form-control-sm" 
-                   name="search" placeholder="Search product..." value="<%= searchQuery %>">
-          </form>
-        </div>
-        <a href="/admin/addProducts" class="btn btn-dark"><i class="fas fa-plus me-1"></i> Add New Product</a>
+      <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
+        <h1 class="h3 m-0 fw-semibold">Products</h1>
+        <form id="filterForm" class="flex-grow-1 mx-3" style="max-width:360px;" action="/admin/adminProducts" method="GET">
+          <input type="text" class="form-control form-control-sm" name="search" placeholder="Search product..." value="<%= searchQuery || '' %>" />
+        </form>
+        <a href="/admin/addProducts" class="btn btn-dark px-4">
+          <i class="fas fa-plus me-1"></i> Add New Product
+        </a>
       </div>
 
-      <!-- Filters & Sort -->
-
-      <form id="secondaryFilterForm" action="/admin/adminProducts" method="GET" class="bg-white p-3 rounded shadow-sm row g-3 align-items-end">
-        <input type="hidden" name="search" value="<%= searchQuery %>">
-        <input type="hidden" name="page" value="<%= currentPage %>">
-        <input type="hidden" name="sortBy" id="sortByInput" value="<%= sortBy %>">
-        <input type="hidden" name="sortOrder" id="sortOrderInput" value="<%= sortOrder %>">
-
-        <!-- Left filter group -->
-
-        <div class="col-md-8 d-flex flex-wrap gap-3 align-items-end">
-          <div>
-            <label class="form-label fw-bold">Category</label>
-            <select class="form-select" name="category" onchange="document.getElementById('secondaryFilterForm').submit()">
-              <option value="">All Categories</option>
-              <% categories.forEach(function(cat){ %>
-                <option value="<%= cat._id %>" <%= (category === cat._id.toString()) ? 'selected' : '' %>><%= cat.name %></option>
-              <% }); %>
-            </select>
-          </div>
-          <div>
-            <label class="form-label fw-bold">Price Range</label>
-            <select class="form-select" name="priceRange" onchange="document.getElementById('secondaryFilterForm').submit()">
-              <option value="">All Prices</option>
-              <option value="0-500" <%= priceRange === '0-500' ? 'selected' : '' %>>₹0 - ₹500</option>
-              <option value="501-1000" <%= priceRange === '501-1000' ? 'selected' : '' %>>₹501 - ₹1000</option>
-              <option value="1001-2000" <%= priceRange === '1001-2000' ? 'selected' : '' %>>₹1001 - ₹2000</option>
-              <option value="2001-999999" <%= priceRange === '2001-999999' ? 'selected' : '' %>>₹2001+</option>
-            </select>
-          </div>
+      <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <form id="secondaryFilterForm" action="/admin/adminProducts" method="GET" class="compact-filter-bar px-0 gap-2">
+          <input type="hidden" name="search" value="<%= searchQuery %>">
+          <input type="hidden" name="page" value="<%= currentPage %>">
+          <input type="hidden" name="sortBy" id="sortByInput" value="<%= sortBy %>">
+          <input type="hidden" name="sortOrder" id="sortOrderInput" value="<%= sortOrder %>">
+          <button type="button" class="compact-filter-bar-btn" disabled style="margin-right:.3em;">Filter By</button>
+          <select class="form-select fs-6 px-2 py-1" name="category" onchange="document.getElementById('secondaryFilterForm').submit()">
+            <option value="">Category</option>
+            <% categories.forEach(function(cat) { %>
+            <option value="<%= cat._id %>" <%= (category === cat._id.toString()) ? 'selected' : '' %>><%= cat.name %></option>
+            <% }); %>
+          </select>
+          <select class="form-select fs-6 px-2 py-1" name="priceRange" onchange="document.getElementById('secondaryFilterForm').submit()">
+            <option value="">Price</option>
+            <option value="0-500" <%= priceRange === '0-500' ? 'selected' : '' %>>₹0 - ₹500</option>
+            <option value="501-1000" <%= priceRange === '501-1000' ? 'selected' : '' %>>₹501 - ₹1000</option>
+            <option value="1001-2000" <%= priceRange === '1001-2000' ? 'selected' : '' %>>₹1001 - ₹2000</option>
+            <option value="2001-999999" <%= priceRange === '2001-999999' ? 'selected' : '' %>>₹2001+</option>
+          </select>
+        </form>
+        <div class="compact-sort-bar ms-md-auto my-2 my-md-0">
+          <span class="compact-sort-label me-1">Sort</span>
+          <button type="button" onclick="setSort('variants.variantPrice','desc')" class="btn-sort <%= (sortBy === 'variants.variantPrice' && sortOrder === 'desc') ? 'active' : '' %>">Price High-Low</button>
+          <button type="button" onclick="setSort('variants.variantPrice','asc')" class="btn-sort <%= (sortBy === 'variants.variantPrice' && sortOrder === 'asc') ? 'active' : '' %>">Price Low-High</button>
+          <button type="button" onclick="setSort('createdAt','desc')" class="btn-sort <%= (sortBy === 'createdAt' && sortOrder === 'desc') ? 'active' : '' %>">Last added first</button>
         </div>
+      </div>
 
-        <!-- Right sort group -->
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-          <label class="form-label fw-bold me-2">Sort:</label>
-          <div class="btn-group">
-            <button type="button" onclick="setSort('variants.variantPrice','asc')" class="btn btn-outline-secondary <%= (sortBy === 'variants.variantPrice' && sortOrder === 'asc') ? 'active' : '' %>">Price Low-High</button>
-            <button type="button" onclick="setSort('variants.variantPrice','desc')" class="btn btn-outline-secondary <%= (sortBy === 'variants.variantPrice' && sortOrder === 'desc') ? 'active' : '' %>">Price High-Low</button>
-            <button type="button" onclick="setSort('createdAt','desc')" class="btn btn-outline-secondary <%= (sortBy === 'createdAt' && sortOrder === 'desc') ? 'active' : '' %>">Newest</button>
-            <button type="button" onclick="setSort('createdAt','asc')" class="btn btn-outline-secondary <%= (sortBy === 'createdAt' && sortOrder === 'asc') ? 'active' : '' %>">Oldest</button>
-          </div>
-        </div>
-      </form>
-
-
-      <!-- Product Table -->
-      <div class="table-responsive bg-white mt-4 p-3 rounded shadow-sm">
+      <div class="table-responsive bg-white p-3 rounded shadowed-box">
         <table class="table align-middle">
-          <thead class="table-light">
+          <thead class="table-dark align-middle">
             <tr>
               <th>Image</th>
-              <th>Name</th>
+              <th>Product Name</th>
               <th>Category</th>
+              <th>Subcategory</th>
               <th>Price</th>
               <th>Stock</th>
               <th>List</th>
-              <th>Actions</th>
+              <th>Action</th>
               <th>Offer</th>
             </tr>
           </thead>
@@ -109,72 +341,126 @@
             <% if (products && products.length > 0) { %>
               <% products.forEach(function(product) { %>
               <tr>
-                <td>
+                <td class="table-product-cell">
                   <% 
                     var prodImg = '';
                     if (product.images && product.images.length > 0) {
-                      prodImg = product.images[0].thumbnail ? product.images[0].thumbnail : (product.images[0].url ? product.images[0].url : '');
+                      let mainImg = product.images.find(img => img.isMain);
+                      prodImg = (mainImg && mainImg.thumbnail) ? mainImg.thumbnail : product.images[0].thumbnail || product.images[0].url;
                     }
                   %>
                   <img src="<%= prodImg ? prodImg : 'https://via.placeholder.com/60' %>" class="product-img" alt="Product Image">
                 </td>
-                <td>
-                  <span class="product-name"><%= product.name %></span>
+                <td class="table-product-cell">
+                  <div class="product-name"><%= product.name %></div>
                   <% if (product.variants && product.variants.length > 0) { %>
-                    <span class="product-variant">Size: <%= product.variants[0].size %></span>
-                    <span class="product-variant">Color: <%= product.color %></span>
+                    <div class="product-details">
+                      Size <%= product.variants[0].size %> <span class="variant-divider">||</span> Color <%= product.color %>
+                    </div>
                   <% } %>
                 </td>
-                <td>
+                <td class="table-product-cell">
                   <%= product.categoryId && product.categoryId.name ? product.categoryId.name : 'N/A' %>
                 </td>
-                <td>
+                <td class="table-product-cell">
+                  <%= product.subCategoryId && product.subCategoryId.name ? product.subCategoryId.name : '--' %>
+                </td>
+                <td class="table-product-cell">
                   ₹
-                  <%= (product.variants && product.variants.length > 0 && typeof product.variants[0].variantPrice === 'number') ?
-                      product.variants[0].variantPrice.toFixed(2)
-                    : 'N/A'
+                  <%= (
+                        product.variants && product.variants.length > 0 && 
+                        typeof product.variants[0].variantPrice === 'number'
+                      ) ? product.variants[0].variantPrice.toFixed(2) : '-' %>
+                </td>
+                <td class="table-product-cell">
+                  <%= product.variants && product.variants.length > 0
+                        ? product.variants.reduce((sum, v) => sum + (v.variantQuantity || 0), 0)
+                        : 0
                   %>
                 </td>
-                <td>
-                  <%= (product.variants && product.variants.length > 0) ?
-                      product.variants.reduce(function(sum, v) { return sum + (v.variantQuantity || 0); }, 0)
-                    : 0
-                  %>
-                </td>
-                <td>
-                  <button class="btn btn-sm list-toggle-btn <%= product.isDeleted ? 'unlist' : 'list' %>" data-product-id="<%= product._id %>">
-                    <%= product.isDeleted ? 'UNLIST' : 'LISTED' %>
-                  </button>
-                </td>
-                <td>
-                  <div class="d-flex gap-2">
-                    <button onclick="location.href='/admin/view-product/<%= product._id %>'" class="btn btn-sm btn-outline-info" title="View">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button onclick="location.href='/admin/updateProduct/<%= product._id %>'" class="btn btn-sm btn-outline-secondary" title="Edit">
-                      <i class="fas fa-pen"></i>
+                <td class="table-product-cell">
+                  <div class="switch-toggle">
+                    <button 
+                      class="slider-btn <%= product.isListed ? 'switch-on' : 'switch-off' %>" 
+                      data-product-id="<%= product._id %>"
+                    >
+                      <span class="slider-label <%= product.isListed ? 'switch-on' : 'switch-off' %>">
+                        <%= product.isListed ? 'UNLIST' : 'LIST' %>
+                      </span>
+                      <span class="slider-toggle"></span>
                     </button>
                   </div>
                 </td>
-                <td>
-                  <button class="btn btn-sm offer-button <%= product.displayOffer && product.displayOffer > 0 ? '' : 'add-offer' %>"
-                    onclick="offerModal('<%= product._id %>')">
-                    <%= product.displayOffer && product.displayOffer > 0 ? product.displayOffer + '% Off (Max: ' + (product.maxRedeem || '') + ')' : 'Add Offer' %>
+                <td class="action-cell">
+                  <a href="/admin/updateProduct/<%= product._id %>" class="btn btn-outline-dark" title="Edit">
+                    <i class="fas fa-pen"></i>
+                  </a>
+                  <button data-product-id="<%= product._id %>" class="btn btn-outline-danger delete-product-btn" title="Delete">
+                    <i class="fas fa-trash"></i>
                   </button>
+                </td>
+                <td class="table-product-cell">
+                  <div class="offer-widget">
+                    <% if (product.offer && product.offer.productOffer > 0) { %>
+                      <div class="offer-actions">
+                        <button 
+                              onclick='editOfferModal("<%= product._id %>", "<%= product.offer._id %>", <%- JSON.stringify(product.offer) %>)' 
+                              class="btn-offer-edit" 
+                              title="Edit Offer"
+                            >
+                              <i class="fas fa-pen"></i>
+                            </button>
+
+                        <button 
+                      onclick="deleteOfferModal('<%= product._id %>')" 
+                      class="btn-offer-delete" 
+                      title="Delete Offer"
+                      type="button"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+
+                      </div>
+                      <div class="offer-badge">
+                        <%= product.offer.productOffer %>% Off
+                      </div>
+                    <% } else { %>
+                      <button class="offer-btn add-offer" onclick="addOfferModal('<%= product._id %>')" type="button">
+                        Add Offer
+                      </button>
+                    <% } %>
+                  </div>
                 </td>
               </tr>
               <% }); %>
             <% } else { %>
-              <tr><td colspan="8" class="text-center py-5">No products found.</td></tr>
+              <tr>
+                <td colspan="9" class="text-center py-5">No products found.</td>
+              </tr>
             <% } %>
           </tbody>
         </table>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-end align-items-center gap-2">
+        <span class="me-2 small text-muted">
+          Showing <%= ((currentPage-1)*limit)+1 %>-<%= Math.min(currentPage*limit,totalProducts) %> from <%= totalProducts %>
+        </span>
+        <nav>
+          <ul class="pagination m-0">
+  <% for(let i = 1; i <= totalPages; i++) { %>
+    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+      <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+    </li>
+  <% } %>
+</ul>
+
+        </nav>
       </div>
     </main>
   </div>
 </div>
 
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -185,12 +471,11 @@ function setSort(sortByValue, sortOrderValue) {
   document.getElementById('secondaryFilterForm').submit();
 }
 
-document.querySelectorAll('.list-toggle-btn').forEach(function(btn) {
+document.querySelectorAll('.slider-btn').forEach(function(btn) {
   btn.addEventListener('click', function () {
     var productId = this.getAttribute('data-product-id');
-    var isUnlisting = !this.classList.contains('list');
-    var actionText = isUnlisting ? 'Unlist Product?' : 'List Product?';
-
+    var isCurrentlyListed = this.classList.contains('switch-on');
+    var actionText = isCurrentlyListed ? 'Unlist product?' : 'List product?';
     Swal.fire({
       title: actionText,
       icon: 'question',
@@ -198,28 +483,51 @@ document.querySelectorAll('.list-toggle-btn').forEach(function(btn) {
       confirmButtonText: 'Yes'
     }).then(function(result) {
       if (result.isConfirmed) {
-        fetch('/admin/product/toggle-status/' + productId, {
+        fetch('/admin/product/toggleList/' + productId, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ isDeleted: isUnlisting })
-        }).then(function() {
-          location.reload();
+          body: JSON.stringify({ isListed: !isCurrentlyListed })
+        })
+        .then(response => response.json())
+        .then(data => {
+          Swal.fire({
+            title: 'Status Updated',
+            text: data.message || 'Product status changed.',
+            icon: data.success ? 'success' : 'error',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            location.reload();
+          });
+        })
+        .catch(() => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Could not update product status.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
         });
       }
     });
   });
 });
 
-function offerModal(productId) {
+function addOfferModal(productId) {
   Swal.fire({
-    title: 'Set Offer',
-    html:
+    title: 'Add Offer',
+    html: 
       '<label>Offer Percentage</label><input id="swal-offer" type="number" min="1" max="100" class="swal2-input" placeholder="Percentage">' +
-      '<label>Max Redeem</label><input id="swal-max" type="number" min="1" class="swal2-input" placeholder="Max Redeem">',
+      '<label>Max Redeem</label><input id="swal-max" type="number" min="1" class="swal2-input" placeholder="Max Redeem">' +
+      '<label>Start Date</label><input id="swal-start" type="date" class="swal2-input">' +
+      '<label>Valid Until</label><input id="swal-until" type="date" class="swal2-input">',
     focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'Add Offer',
     preConfirm: () => {
       const offer = parseInt(document.getElementById('swal-offer').value, 10);
       const maxRedeem = parseInt(document.getElementById('swal-max').value, 10);
+      const startDate = document.getElementById('swal-start').value;
+      const validUntil = document.getElementById('swal-until').value;
       if (!offer || offer < 1 || offer > 100) {
         Swal.showValidationMessage('Enter a valid offer percentage (1-100)');
         return false;
@@ -228,17 +536,164 @@ function offerModal(productId) {
         Swal.showValidationMessage('Max redeem must be at least 1');
         return false;
       }
-      return { offer, maxRedeem };
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Set Offer'
+      if (!startDate) {
+        Swal.showValidationMessage('Start Date is required');
+        return false;
+      }
+      if (!validUntil) {
+        Swal.showValidationMessage('Valid Until date is required');
+        return false;
+      }
+      if (new Date(startDate) > new Date(validUntil)) {
+        Swal.showValidationMessage('Start Date cannot be after Valid Until');
+        return false;
+      }
+      return { offer, maxRedeem, startDate, validUntil };
+    }
   }).then((result) => {
     if (result.isConfirmed && result.value) {
-      // TODO: send offer and maxRedeem to server here
-      console.log('Set offer for product:', productId, 'Offer:', result.value.offer, 'Max Redeem:', result.value.maxRedeem);
+      fetch(`/admin/product/${productId}/offer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          offerPercentage: result.value.offer,
+          maxRedeem: result.value.maxRedeem,
+          startDate: result.value.startDate,
+          validUntil: result.value.validUntil
+        })
+      }).then(() => location.reload());
     }
   });
 }
+
+document.querySelectorAll('.delete-product-btn').forEach(function(btn) {
+  btn.addEventListener('click', function () {
+    var productId = this.getAttribute('data-product-id');
+    Swal.fire({
+      title: "Delete this product?",
+      text: "You cannot undo this action.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete"
+    }).then(function(result) {
+      if (result.isConfirmed) {
+        fetch('/admin/deleteProduct/' + productId, { method: 'DELETE' })
+          .then(function() { location.reload(); });
+      }
+    });
+  });
+});
+
+function editOfferModal(productId, existingOffer) {
+  Swal.fire({
+    title: 'Edit Offer',
+    html: 
+      `<label>Offer Percentage</label><input id="swal-offer" type="number" min="1" max="100" class="swal2-input" placeholder="Percentage" value="${existingOffer.productOffer || ''}">` +
+      `<label>Max Redeem</label><input id="swal-max" type="number" min="1" class="swal2-input" placeholder="Max Redeem" value="${existingOffer.maxRedeem || ''}">` +
+      `<label>Start Date</label><input id="swal-start" type="date" class="swal2-input" value="${existingOffer.startDate ? existingOffer.startDate.toISOString().slice(0,10) : ''}">` +
+      `<label>Valid Until</label><input id="swal-until" type="date" class="swal2-input" value="${existingOffer.validUntil ? existingOffer.validUntil.toISOString().slice(0,10) : ''}">`,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'Update Offer',
+    preConfirm: () => {
+      const offer = parseInt(document.getElementById('swal-offer').value, 10);
+      const maxRedeem = parseInt(document.getElementById('swal-max').value, 10);
+      const startDate = document.getElementById('swal-start').value;
+      const validUntil = document.getElementById('swal-until').value;
+
+      if (!offer || offer < 1 || offer > 100) {
+        Swal.showValidationMessage('Enter a valid offer percentage (1-100)');
+        return false;
+      }
+      if (!maxRedeem || maxRedeem < 1) {
+        Swal.showValidationMessage('Max redeem must be at least 1');
+        return false;
+      }
+      if (!startDate) {
+        Swal.showValidationMessage('Start Date is required');
+        return false;
+      }
+      if (!validUntil) {
+        Swal.showValidationMessage('Valid Until date is required');
+        return false;
+      }
+      if (new Date(startDate) > new Date(validUntil)) {
+        Swal.showValidationMessage('Start Date cannot be after Valid Until');
+        return false;
+      }
+
+      return { offer, maxRedeem, startDate, validUntil };
+    }
+  }).then((result) => {
+    if (result.isConfirmed && result.value) {
+      fetch(`/admin/product/${productId}/offer`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          offerPercentage: result.value.offer,
+          maxRedeem: result.value.maxRedeem,
+          startDate: result.value.startDate,
+          validUntil: result.value.validUntil
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          title: data.success ? 'Success' : 'Error',
+          text: data.message || (data.success ? 'Offer updated successfully.' : 'Failed to update offer.'),
+          icon: data.success ? 'success' : 'error',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          if (data.success) location.reload();
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Server communication failed',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
+    }
+  });
+}
+function deleteOfferModal(productId) {
+  Swal.fire({
+    title: 'Do you want to delete the offer?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/admin/product/${productId}/offer`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+          Swal.fire({
+            title: data.success ? 'Deleted' : 'Error',
+            text: data.message || (data.success ? 'Offer deleted successfully.' : 'Failed to delete offer.'),
+            icon: data.success ? 'success' : 'error',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            if (data.success) location.reload();
+          });
+        })
+        .catch(() => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Server communication failed',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        });
+    }
+  });
+}
+
+
+
+
 </script>
 
 </body>

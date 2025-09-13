@@ -131,73 +131,84 @@
         return res.status(500).send("Server error in viewCategory");
       }
     };
+const loadEditCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
 
-    const loadEditCategory = async (req, res) => {
-      try {
-        const categoryId = req.params.id;
-        const category = await Category.findById(categoryId).populate('subcategories').lean();
+    const category = await Category.findById(categoryId).populate('subcategories').lean();
 
-        if (!category) {
-          req.flash('error_msg', 'Category not found');
-          return res.redirect('/admin/category');
-        }
+    if (!category) {
+      req.flash('error_msg', 'Category not found');
+      return res.redirect('/admin/category');
+    }
 
-        res.render('admin/editCategory', { category, messages: req.flash() });
-      } catch (error) {
-        console.error('Edit category load error:', error);
-        req.flash('error_msg', 'Server error while loading category');
-        res.redirect('/admin/category');
-      }
+    res.render('admin/editCategory', { category, messages: req.flash() });
+  } catch (error) {
+    console.error('Edit category load error:', error);
+    req.flash('error_msg', 'Server error while loading category');
+    res.redirect('/admin/category');
+  }
+};
+
+const updateCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const {
+      name,
+      description,
+      offer = {},
+      isListed,
+    } = req.body;
+    const image = req.file ? req.file.path : null;
+
+    
+    const existingCategory = await Category.findOne({ name: name.trim(), _id: { $ne: categoryId } });
+    if (existingCategory) {
+      const category = await Category.findById(categoryId).populate('subcategories').lean();
+      req.flash('error_msg', 'Category already exists');
+      return res.render('admin/editCategory', {
+        category,
+        messages: { error_msg: 'Category already exists' },
+        formData: req.body,
+      });
+    }
+
+    const offerParsed = {
+      offerPercentage: Number(offer.offerPercentage) || 0,
+      maxRedeem: Number(offer.maxRedeem) || 0,
+      startDate: offer.startDate ? new Date(offer.startDate) : undefined,
+      validUntil: offer.validUntil ? new Date(offer.validUntil) : undefined,
     };
 
-    const updateCategory = async (req, res) => {
-      try {
-        const categoryId = req.params.id;
-        const {
-          name,
-          description,
-          offer = {},
-          isListed,
-        } = req.body;
-        const image = req.file ? req.file.path : null;
-
-        
-          const existingCategory = await Category.findOne({ name: name.trim() });
-            if (existingCategory) {
-          req.flash('error_msg', 'Category already exists');
-          return res.render('admin/editCategory', {
-            messages: { error_msg: 'Category already exists' },
-            formData: req.body 
-          });
-        }
-
-        const offerParsed = {
-          offerPercentage: Number(offer.offerPercentage) || 0,
-          maxRedeem: Number(offer.maxRedeem) || 0,
-          startDate: offer.startDate ? new Date(offer.startDate) : undefined,
-          validUntil: offer.validUntil ? new Date(offer.validUntil) : undefined,
-        };
-
-        const updatedFields = {
-          name,
-          description,
-          offer: offerParsed,
-          isListed: isListed === 'true' || isListed === true,
-        };
-
-        if (image) {
-          updatedFields.image = image;
-        }
-
-        await Category.findByIdAndUpdate(categoryId, updatedFields);
-        req.flash('success_msg', 'Category updated successfully');
-        res.redirect('/admin/category');
-      } catch (error) {
-        console.error('Error updating category:', error);
-        req.flash('error_msg', 'Server error while updating category');
-        res.redirect(`/admin/editCategory/${req.params.id}`);
-      }
+    const updatedFields = {
+      name,
+      description,
+      offer: offerParsed,
+      isListed: isListed === 'true' || isListed === true,
     };
+
+    if (image) {
+      updatedFields.image = image;
+    }
+
+    await Category.findByIdAndUpdate(categoryId, updatedFields);
+
+    req.flash('success_msg', 'Category updated successfully');
+    res.redirect('/admin/category');
+  } catch (error) {
+    console.error('Error updating category:', error);
+
+    const category = await Category.findById(req.params.id).populate('subcategories').lean();
+
+    req.flash('error_msg', 'Server error while updating category');
+    res.render('admin/editCategory', { category, messages: req.flash() });
+  }
+};
+
+module.exports = {
+  loadEditCategory,
+  updateCategory,
+};
 
 
     const updateCategoryOffer = async (req, res) => {

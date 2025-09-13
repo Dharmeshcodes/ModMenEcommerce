@@ -5,15 +5,15 @@ function determineBestOffer(productOffer, categoryOffer, subcategoryOffer) {
 function calculateBestPrice(regularPrice, productOffer = 0, categoryOffer = 0, subcategoryOffer = 0) {
   const bestOffer = determineBestOffer(productOffer, categoryOffer, subcategoryOffer);
   const discount = (regularPrice * bestOffer) / 100;
-  const salePrice = Math.round(regularPrice - discount);
-
+  const salePrice = Math.max(Math.round(regularPrice - discount), 0); 
+  
   return {
     salePrice,
-    bestOffer
+    bestOffer,
   };
 }
 
 module.exports = {
-  determineBestOffer,
-  calculateBestPrice
-};
+  calculateBestPrice,
+  determineBestOffer
+}

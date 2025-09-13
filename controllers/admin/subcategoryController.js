@@ -4,7 +4,7 @@ const Category = require('../../models/categorySchema');
 async function getSubcategory(req, res) {
   try {
     const search = req.query.search || '';
-    const page = parseInt(req.query.page) || 1;
+    const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = 10;
 
     const filter = search
@@ -13,25 +13,27 @@ async function getSubcategory(req, res) {
 
     const total = await Subcategory.countDocuments(filter);
     const totalPages = Math.ceil(total / limit);
+    const currentPage = Math.min(page, totalPages || 1);
 
     const subcategories = await Subcategory.find(filter)
       .populate('category')
-      .skip((page - 1) * limit)
+      .skip((currentPage - 1) * limit)
       .limit(limit)
-      .sort({ addedDate: -1 })
+      .sort({ _id: -1 })
       .lean();
 
     res.render('admin/subcategory', {
       subcategories,
       search,
-      currentPage: page,
+      currentPage,
       totalPages,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server Error while fetching subcaategory list');
   }
 }
+
 
 async function getAddSubcategoryPage(req, res) {
   try {
@@ -254,18 +256,16 @@ async function softDeleteSubcategory(req, res) {
     const result = await Subcategory.findByIdAndUpdate(subcategoryId, { isDeleted: true });
 
     if (!result) {
-      req.flash('error_msg', 'Subcategory not found.');
-      return res.redirect('/admin/subcategory');
+      return res.status(404).json({ success: false, message: 'Subcategory not found.' });
     }
 
-    req.flash('success_msg', 'Subcategory deleted successfully.');
-    res.redirect('/admin/subcategory');
+    return res.json({ success: true, message: 'Subcategory deleted successfully.' });
   } catch (error) {
     console.error(error);
-    req.flash('error_msg', 'Server error.');
-    res.redirect('/admin/subcategory');
+    return res.status(500).json({ success: false, message: 'Server error occurred when deleting.' });
   }
 }
+
 
 
 module.exports = {

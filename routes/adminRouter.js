@@ -4,7 +4,6 @@ const customerController=require('../controllers/admin/customerController')
 const adminController=require('../controllers/admin/adminController')
 const categoryController=require('../controllers/admin/categoryController')
 const subcategoryController=require('../controllers/admin/subcategoryController')
-//const categoryUpload = require('../config/multer');
 const productController=require('../controllers/admin/productController')
 const {
   uploadProductImages,
@@ -31,7 +30,9 @@ router.get("/category",adminAuth,categoryController.categoryInfo)
 router.get("/addCategory", adminAuth,categoryController. getAddCategoryPage) 
 router.get("/viewCategory/:id",adminAuth,categoryController.viewCategory)
 router.get("/editCategory/:id", adminAuth, categoryController.loadEditCategory);
-router.patch("/editCategory/:id",adminAuth, uploadCategoryImages.single("categoryImage"),categoryController.updateCategory);
+
+router.post("/editCategory/:id",adminAuth, uploadCategoryImages.single("categoryImage"),categoryController.updateCategory);
+
 router.post('/addCategory', adminAuth, uploadCategoryImages.single('categoryImage'), categoryController.addCategory);
 router.patch("/updateCategoryOffer",adminAuth, categoryController.updateCategoryOffer);
 router.patch('/toggleListStatus',adminAuth, categoryController.toggleListStatus);
@@ -49,16 +50,36 @@ router.patch('/subcategory/toggleList/:id', adminAuth, subcategoryController.tog
 router.post('/subcategory/offer/:id', adminAuth, subcategoryController.editOffer);
 router.patch('/subcategory/delete/:id', adminAuth, subcategoryController.softDeleteSubcategory);
 
-//product
+//produc
 
-router.get("/addProducts", adminAuth, productController.getProductAddPage);
+
 
 router.get("/adminProducts", adminAuth, productController.getProducts);
+router.get("/addProducts", adminAuth, productController.getProductAddPage);
+router.post("/addProducts",adminAuth,uploadProductImages.array("images", 4),productController.addProducts);
+router.get("/updateProduct/:id",adminAuth, productController.getUpdateProductPage);
+router.patch("/updateProduct/:id",adminAuth,uploadProductImages.array("images", 4),productController.updateProduct);
 
-router.post(
-  "/addProducts",adminAuth,uploadProductImages.array("images", 3),productController.addProducts);
-router.get("/updateProduct/:id", productController.getUpdateProductPage);
-router.post("/updateProduct/:id", productController.postUpdateProduct);
+// router.patch("/product/toggleList/:id",adminAuth,productController.toggleListStatus)
+router.patch("/product/toggleList/:id", adminAuth,productController.toggleListStatus)
+router.delete('/deleteProduct/:id', adminAuth, productController.softDeleteProduct);
+
+router.post('/product/:id/offer', adminAuth, productController.addOffer);
+router.patch('/product/:productId/offer', adminAuth, productController.editOffer);
+router.delete('/product/:productId/offer', adminAuth, productController.deleteOffer);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

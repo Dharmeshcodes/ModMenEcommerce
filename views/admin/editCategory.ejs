@@ -69,8 +69,12 @@
               <div><%= messages.success_msg %></div>
             </div>
           <% } %>
-          <form method="PATCH" action="/admin/editCategory/<%= category._id %>" enctype="multipart/form-data" autocomplete="off" novalidate>
-            <div class="edit-title">Edit Category</div>
+          <form method="POST"
+              enctype="multipart/form-data"
+              action="/admin/editCategory/<%= category._id %>"
+              autocomplete="off"
+              novalidate>
+            
 
             <div class="img-area-edit">
               <img 
@@ -201,6 +205,7 @@
       reader.readAsDataURL(input.files[0]);
     }
   }
+  
   function softDeleteCategory(categoryId) {
     Swal.fire({
       title: 'Delete Category?',
@@ -233,6 +238,11 @@
       }
     });
   }
+   
+
+
+
+
 </script>
 </body>
 </html>
