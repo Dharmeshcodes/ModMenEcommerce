@@ -578,11 +578,24 @@ document.querySelectorAll('.delete-product-btn').forEach(function(btn) {
     }).then(function(result) {
       if (result.isConfirmed) {
         fetch('/admin/deleteProduct/' + productId, { method: 'DELETE' })
-          .then(function() { location.reload(); });
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire('Deleted!', data.message, 'success').then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire('Error', 'Failed to delete product', 'error');
+            }
+          })
+          .catch(() => {
+            Swal.fire('Error', 'Failed to delete product', 'error');
+          });
       }
     });
   });
 });
+
 
 function editOfferModal(productId, existingOffer) {
   Swal.fire({

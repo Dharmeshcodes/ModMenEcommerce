@@ -3,28 +3,178 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const nodemailer = require('nodemailer');
 const env = require("dotenv").config();
+const Product = require('../../models/productSchema');
+const Category=require("../../models/categorySchema")
+const subCategory=require('../../models/subcategorySchema')
 
 
-const loadHomepage = async (req, res) => {
+  const testanythingGet= async (req,res)=>{
+
+    let isLoggedIn=true
+    let animals=["cat","dog","camel","lion"];
+    const names="rahul"
+
+    res.render("user/test",{animals,names,isLoggedIn})
+
+  }
+   const testanythingPost= async (req,res)=>{
+   
+
+    res.render("user/test",{message:"ejs starting"})
+    
+  }
+
+
+
+     const loadHomepage = async (req, res) => {
   try {
-    console.log("Loading homepage for path:", req.path);
-    const featuredProducts = [{ name: "Shirt", price: 999 }, { name: "Pant", price: 1499 }];
-    let userData = null;
+    const user= req.session.user || null
+   
+    let userDetails = null;
+    if (user) {
+      userDetails = await User.findById(user).lean();
 
-    if (req.session.user) {
-      console.log("Session user:", req.session.user);
-      userData = await User.findOne({ _id: req.session.user._id });
-      console.log("Fetched userData:", userData);
-    } else {
-      console.log("No session user found");
+     
+      
     }
+    const newArrivals = await Product.find({
+      isDeleted: false,
+      isListed: true
+    })
+      .populate('categoryId')
+      .populate('subCategoryId')
+      .sort({ createdAt: -1 })
+      .limit(8)
+      .lean();
 
-    res.render("home", { featuredProducts, user: userData }); 
+    const premiumTrending = await Product.find({
+      isDeleted: false,
+      isListed: true,
+      // $or:[
+      //   {'offer.productOffer':{$gt:15}},
+      //   {varientPrice:{$gt:1500}}
+      // ]
+    })
+      .populate('categoryId')
+      .populate('subCategoryId')
+      .limit(8)
+      .lean();
+
+
+    
+
+    return res.render('user/home', {
+      newArrivals,
+      premiumTrending,
+      user:userDetails,
+      isLandingPage: false,
+    });
   } catch (error) {
-    console.log("Error in homepage rendering:", error);
-    res.status(500).send("Server error");
+    console.error('Error in getHome:', error);
+    return res.redirect('/user/Page-404');
   }
 };
+
+
+
+const salePage = async (req, res) => {
+
+  try {
+         const user= req.session.user || null
+    let userDetails = null;
+    if (user) {
+      userDetails = await User.findById(user).lean();
+    }
+    const {
+      category,
+      subCategory,
+      size,
+      sleeveType,
+      fitType,
+      sortBy,
+      page = 1,
+      search = ''
+    } = req.query;
+
+    const pageSize = 16;
+    const skip = (page - 1) * pageSize;
+
+    // Fetch categories for filter sidebar
+    const categories = await Category.find({ isListed: true, isDeleted: false }).lean();
+
+    // Build filter query
+    let query = {
+      isDeleted: false,
+      isListed: true,
+      'offer.productOffer': { $gt: 0 },
+    };
+
+    if (category) query.categoryId = { $in: Array.isArray(category) ? category : [category] };
+    if (subCategory) query.subCategoryId = { $in: Array.isArray(subCategory) ? subCategory : [subCategory] };
+    if (size) query['variants.size'] = { $in: Array.isArray(size) ? size : [size] };
+    if (sleeveType) query.sleeveType = { $in: Array.isArray(sleeveType) ? sleeveType : [sleeveType] };
+    if (fitType) query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
+    if (search && search.trim()) query.name = { $regex: search.trim(), $options: 'i' };
+
+    // Get total count for pagination
+    const totalCount = await Product.countDocuments(query);
+
+    // Build MongoDB query with skip, limit, populate and sorting
+    let productsQuery = Product.find(query)
+      .populate('categoryId')
+      .populate('subCategoryId')
+      .skip(skip)
+      .limit(pageSize)
+      .lean();
+
+    if (sortBy === 'pricelowhigh') {
+      productsQuery = productsQuery.sort({ 'variants.salePrice': 1 });
+    } else if (sortBy === 'pricehighlow') {
+      productsQuery = productsQuery.sort({ 'variants.salePrice': -1 });
+    } else if (sortBy === 'newest') {
+      productsQuery = productsQuery.sort({ createdAt: -1 });
+    } else {
+      // Default sorting
+      productsQuery = productsQuery.sort({ _id: -1 });
+    }
+
+    const saleProducts = await productsQuery;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const currentPage = Number(page) || 1;
+
+    // Build pagination query parameters preserving filters
+    const params = [];
+    if (category) params.push(`category=${category}`);
+    if (subCategory) params.push(`subCategory=${subCategory}`);
+    if (size) params.push(`size=${size}`);
+    if (sleeveType) params.push(`sleeveType=${sleeveType}`);
+    if (fitType) params.push(`fitType=${fitType}`);
+    if (sortBy) params.push(`sortBy=${sortBy}`);
+    if (search) params.push(`search=${encodeURIComponent(search)}`);
+    const paginationQuery = params.length ? `&${params.join('&')}` : '';
+
+    res.render('user/sale', {
+      categories,
+      saleProducts,
+      selectedCategories: Array.isArray(category) ? category : [category].filter(Boolean),
+      selectedSubCategories: Array.isArray(subCategory) ? subCategory : [subCategory].filter(Boolean),
+      selectedSizes: Array.isArray(size) ? size : [size].filter(Boolean),
+      selectedSleeves: Array.isArray(sleeveType) ? sleeveType : [sleeveType].filter(Boolean),
+      selectedFits: Array.isArray(fitType) ? fitType : [fitType].filter(Boolean),
+      sortBy,
+      currentPage,
+      totalPages,
+      paginationQuery,
+      user:userDetails,
+    
+    });
+  } catch (err) {
+    console.error('Sale Page Error:', err);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 
 const PageNotFound = async (req, res) => {
@@ -35,7 +185,6 @@ const PageNotFound = async (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
-
 
 const loadSignup = async (req, res) => {
   try {
@@ -48,6 +197,7 @@ const loadSignup = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
 
 
 function generateOtp() {
@@ -81,9 +231,8 @@ async function sendVerificationEmail(email, otp) {
   }
 }
 
-
 const signup = async (req, res) => {
-  console.log("Signup route hit:", req.body);
+
   try {
     const { fullName, mobile, email, password, confirmPassword } = req.body;
     const errors = [];
@@ -122,6 +271,7 @@ const signup = async (req, res) => {
     res.render("user/verify-otp", { email });
 
     console.log("OTP sent", otp);
+     
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).send("Server Error");
@@ -171,7 +321,7 @@ const verifyOtp = async (req, res) => {
 const resendOtp = async (req, res) => {
   try {
 
-    console.log("otp recieved ")
+   
     const { email } = req.session.userData;
     if (!email) {
       return res.status(400).json({ success: false, message: "email not found" });
@@ -232,6 +382,7 @@ const login = async (req, res) => {
       name: finduser.fullName
     };
 
+      //console.log(req.session.user)
     res.redirect("/user/home"); 
 
   } catch (error) {
@@ -262,6 +413,8 @@ const logout = async (req, res) => {
 
 
 module.exports = {
+  testanythingGet,
+  testanythingPost,
   loadHomepage,
   loadSignup,
   signup,
@@ -270,5 +423,6 @@ module.exports = {
   loadLogin,
   PageNotFound,
   login,
-  logout
+  logout,
+  salePage,
 };

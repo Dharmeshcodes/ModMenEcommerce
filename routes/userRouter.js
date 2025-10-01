@@ -1,14 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const userController = require("../controllers/user/userController");
+const productController=require("../controllers/user/productController")
 const passport = require('passport');
+const {userAuth, adminAuth} =require("../middlewares/auth")
 
-// router.get("/home", userController.loadHomepage); 
-// router.get("/signup", userController.loadSignup);
-router.get("/home", (req, res, next) => {
-  
-  next();
-}, userController.loadHomepage);
+
+router.get("/test",userController.testanythingGet);
+router.post("/test",userController.testanythingPost)
+
+
+
+router.get("/home", userController.loadHomepage);
+router.get("/sale",userAuth, userController.salePage);
+router.get("/product/:id",userAuth,productController.productDetails)
+
+
 
 // Route: /signup
 router.get("/signup", (req, res, next) => {
@@ -30,12 +37,9 @@ router.get('/auth/google/callback',
 );
 
 router.get("/login", userController.loadLogin);
-router.get("/PageNotFound", userController.PageNotFound);
+router.get("/Page-404", userController.PageNotFound);
 router.post("/login", userController.login);
-router.get("/home", (req, res) => {
-  const user = req.session.user;
-  res.render("home", { user });
-});
+
 router.get("/logout",userController.logout)
 
 module.exports = router;

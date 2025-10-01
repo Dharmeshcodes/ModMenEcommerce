@@ -94,11 +94,7 @@
 //   next();
 // });
 
-  // Root route example
-  app.get('/', (req, res) => {
-    const user = req.session.user || null; 
-    res.render('home', { user });
-  });
+ 
 
   // Connect to DB and start server
   connectDB()

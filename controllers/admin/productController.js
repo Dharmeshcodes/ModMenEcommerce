@@ -42,11 +42,7 @@ const getProducts = async (req, res) => {
       filter.subcategory = new mongoose.Types.ObjectId(subcategory);
     }
 
-    if (isActiveFilter === "true") {
-      filter.isDeleted = false;
-    } else if (isActiveFilter === "false") {
-      filter.isDeleted = true;
-    }
+   
 
     if (priceRange && !minPrice && !maxPrice) {
       const [min, max] = priceRange.split("-");
@@ -67,6 +63,8 @@ const getProducts = async (req, res) => {
 
     const totalProducts = await Product.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
+
+     filter.isDeleted=false
 
     const products = await Product.find(filter)
       .populate("categoryId", "name")
@@ -430,9 +428,10 @@ console.log("REQ.FILES:", req.files);
     product.isListed = isListed !== 'false';
 
     await product.save();
-
+    
+     return res.redirect('/admin/adminProducts');
     req.flash('success_msg', 'Product updated successfully!');
-    return res.redirect('/admin/adminProducts');
+   
   } catch (error) {
     console.error('Update product error:', error);
     req.flash('error_msg', 'Something went wrong while updating the product. Please try again.');
@@ -475,7 +474,7 @@ const softDeleteProduct = async (req, res) => {
 
     product.isDeleted = true; 
     await product.save();
-
+    console.log("produc deleted",product)
     res.json({ success: true, message: 'Product soft deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
