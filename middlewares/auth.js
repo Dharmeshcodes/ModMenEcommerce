@@ -7,7 +7,7 @@ const userAuth = (req, res, next) => {
         if (data && !data.isBlocked) {
           next();
         } else {
-          res.redirect("/login");
+          res.redirect("user/login");
         }
       })
       .catch(error => {
@@ -15,7 +15,7 @@ const userAuth = (req, res, next) => {
         res.status(500).send("Internal server error");
       });
   } else {
-    res.redirect("/login");
+    res.redirect("/user/login");
   }
 };
 

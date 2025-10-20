@@ -8,22 +8,23 @@ const userSchema = new mongoose.Schema({
   mobile: {
     type: String,
     required: false,
-    unique:true,
-    sparse:true,
-    default:null
+    unique: true,
+    sparse: true,
+    default: undefined 
   },
   email: {     
     type: String,
     required: true,
     unique: true
   },
-  googleId:{
-    type:"string",
-    unique:true
+  googleId: {
+    type: String,  
+    unique: true,
+    sparse: true  
   },
   password: {
     type: String,
-    required:false
+    required: false
   },
   role: {
     type: String,

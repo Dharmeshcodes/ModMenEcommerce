@@ -50,23 +50,28 @@ const loadAdminDashboard = async (req, res) => {
   }
 };
 
-const logout=async (req,res)=>{
-  try{
-    req.session.destroy((error)=>{
-      if(error){
-        res.send("logout failed")
-      }
-      else{
-        res.redirect("/admin/login")
-      }
-    })
 
+const logout = async (req, res) => {
+  try {
+    if (req.session.admin) {
+      delete req.session.admin;
+
+      req.session.save((err) => {
+        if (err) {
+          console.log('Error saving session during logout:', err);
+          return res.redirect('/admin/pageerror');
+        }
+        return res.redirect('/admin/login');
+      });
+    } else {
+      return res.redirect('/admin/login');
+    }
+  } catch (error) {
+    console.log('Logout error:', error);
+    return res.redirect('/admin/pageerror');
   }
-  catch (error){
-    console.error("admin logout failed",error)
-    res.status(500).send("server error,logout failed")
-  }
-}
+};
+
 
 
 module.exports = {

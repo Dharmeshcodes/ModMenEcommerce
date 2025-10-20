@@ -73,6 +73,14 @@ const getProducts = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
+      // let sum=0
+      // products.forEach(product=>{
+
+      //   sum=sum+product.varients.varientPrice
+      //   console.log(sum)
+
+      // })
+
     const categories = await Category.find({ isListed: true });
 
     const admin = req.session.admin

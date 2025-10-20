@@ -25,6 +25,7 @@ router.get("/customers",adminAuth,customerController.customerInfo)
 router.get("/blockCustomer",adminAuth,customerController.customerBlocked)
 router.get("/unblockCustomer",adminAuth,customerController.customerunBlocked)
 
+
 //categoy Admin
 router.get("/category",adminAuth,categoryController.categoryInfo)
 router.get("/addCategory", adminAuth,categoryController. getAddCategoryPage) 

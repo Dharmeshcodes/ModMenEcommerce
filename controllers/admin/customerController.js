@@ -2,13 +2,17 @@
 const User = require('../../models/userSchema');
 const mongoose = require('mongoose');
 
+
 const customerInfo = async (req, res) => {
   try {
     // Extract query parameters
     let { search, page, status } = req.query;
     search = search ? search.trim() : '';
     page = parseInt(page) || 1;
-    const limit = 6;
+    const perPage = 6; // Renamed from limit to match EJS
+
+    // Validate page number
+    if (page < 1) page = 1;
 
     // Build query object
     let query = { role: 'user' };
@@ -31,19 +35,26 @@ const customerInfo = async (req, res) => {
     // Fetch users
     const userData = await User.find(query)
       .sort({ createdDate: -1 })
-      .limit(limit)
-      .skip((page - 1) * limit)
+      .limit(perPage)
+      .skip((page - 1) * perPage)
       .exec();
 
-    const count = await User.countDocuments(query);
+    const totalCustomers = await User.countDocuments(query); // Renamed from count to match EJS
+    const totalPages = Math.ceil(totalCustomers / perPage);
+
+    // Ensure page doesn't exceed totalPages
+    if (page > totalPages && totalPages > 0) {
+      page = totalPages;
+    }
 
     res.render('admin/customers', {
       data: userData,
-      totalPages: Math.ceil(count / limit),
+      totalPages,
       currentPage: page,
       search,
       status: status || '',
-      count,
+      totalCustomers, // Pass totalCustomers instead of count
+      perPage, // Pass perPage explicitly
     });
   } catch (error) {
     console.error('Error in customerInfo:', error);
@@ -51,6 +62,7 @@ const customerInfo = async (req, res) => {
   }
 };
 
+module.exports = { customerInfo };
 const customerBlocked = async (req, res) => {
   try {
     let id = req.query.id;

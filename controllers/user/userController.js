@@ -6,6 +6,8 @@ const env = require("dotenv").config();
 const Product = require('../../models/productSchema');
 const Category=require("../../models/categorySchema")
 const subCategory=require('../../models/subcategorySchema')
+const passport = require('../../config/passport');
+
 
 
   const testanythingGet= async (req,res)=>{
@@ -29,10 +31,13 @@ const subCategory=require('../../models/subcategorySchema')
      const loadHomepage = async (req, res) => {
   try {
     const user= req.session.user || null
+    console.log(`the user name is ${user}`)
+    
    
     let userDetails = null;
     if (user) {
       userDetails = await User.findById(user).lean();
+     
 
      
       
@@ -99,10 +104,9 @@ const salePage = async (req, res) => {
     const pageSize = 16;
     const skip = (page - 1) * pageSize;
 
-    // Fetch categories for filter sidebar
+   
     const categories = await Category.find({ isListed: true, isDeleted: false }).lean();
 
-    // Build filter query
     let query = {
       isDeleted: false,
       isListed: true,
@@ -116,10 +120,10 @@ const salePage = async (req, res) => {
     if (fitType) query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
     if (search && search.trim()) query.name = { $regex: search.trim(), $options: 'i' };
 
-    // Get total count for pagination
+   
     const totalCount = await Product.countDocuments(query);
 
-    // Build MongoDB query with skip, limit, populate and sorting
+    
     let productsQuery = Product.find(query)
       .populate('categoryId')
       .populate('subCategoryId')
@@ -134,7 +138,7 @@ const salePage = async (req, res) => {
     } else if (sortBy === 'newest') {
       productsQuery = productsQuery.sort({ createdAt: -1 });
     } else {
-      // Default sorting
+    
       productsQuery = productsQuery.sort({ _id: -1 });
     }
 
@@ -142,7 +146,7 @@ const salePage = async (req, res) => {
     const totalPages = Math.ceil(totalCount / pageSize);
     const currentPage = Number(page) || 1;
 
-    // Build pagination query parameters preserving filters
+    
     const params = [];
     if (category) params.push(`category=${category}`);
     if (subCategory) params.push(`subCategory=${subCategory}`);
@@ -173,8 +177,6 @@ const salePage = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
-
-
 
 
 const PageNotFound = async (req, res) => {
@@ -355,8 +357,6 @@ const loadLogin = async (req, res) => {
   }
 };
 
-
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -381,8 +381,6 @@ const login = async (req, res) => {
       _id: finduser._id,
       name: finduser.fullName
     };
-
-      //console.log(req.session.user)
     res.redirect("/user/home"); 
 
   } catch (error) {
@@ -392,25 +390,66 @@ const login = async (req, res) => {
 };
 
 
+// Google OAuth initiation
+const googleAuth = passport.authenticate('google', { 
+  scope: ['profile', 'email'] 
+});
+
+// Google OAuth Callback
+const googleAuthCallback = [
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  async (req, res) => {
+    try {
+      // Check if user is blocked
+      if (req.user.isBlocked) {
+        req.logout((err) => {
+          if (err) console.error('Logout error:', err);
+        });
+        return res.render("user/login", { message: "User blocked by admin" });
+      }
+
+      // Store user in session the SAME way as your regular login
+      req.session.user = {
+        _id: req.user._id,
+        name: req.user.fullName
+      };
+      
+      // Save session explicitly
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session save error:', err);
+          return res.redirect('/login');
+        }
+        console.log('Google login successful:', req.user.email);
+        res.redirect('/user/home'); // Same redirect as regular login
+      });
+    } catch (error) {
+      console.error('Google callback error:', error);
+      res.redirect('/user/login');
+    }
+  }
+];
 
 const logout = async (req, res) => {
   try {
-    req.session.destroy(function (error) {
-      if (error) {
-        console.error("session not destroyed", error);
-        res.status(500).send("failed to logout");
-      } else {
-        res.clearCookie('connect.sid');
-        res.redirect("/user/home"); 
-      }
-    });
+    if (req.session.user) {
+      delete req.session.user;
+
+      req.session.save((err) => {
+        if (err) {
+          console.log('Error saving session during logout:', err);
+          return res.redirect('/pageNotFound');
+        }
+        return res.redirect('/user/login');
+      });
+    } else {
+      return res.redirect('/user/login');
+    }
   } catch (error) {
-    console.error("logout error", error);
-    res.status(500).send("Server error during logout");
+    console.log('Logout error:', error);
+    return res.redirect('/pageNotFound');
   }
 };
-
-
 
 module.exports = {
   testanythingGet,
@@ -419,10 +458,14 @@ module.exports = {
   loadSignup,
   signup,
   verifyOtp,
-  resendOtp,
+  resendOtp,                
   loadLogin,
   PageNotFound,
   login,
   logout,
   salePage,
+  googleAuth,
+  googleAuthCallback,
+ 
 };
+

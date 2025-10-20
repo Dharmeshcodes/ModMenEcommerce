@@ -13,20 +13,55 @@ passport.use(
     },
     async (request, accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        // Check by BOTH googleId AND email
+        let user = await User.findOne({
+          $or: [
+            { googleId: profile.id },
+            { email: profile.emails[0].value }
+          ]
+        });
 
         if (user) {
+          // User exists - update googleId if it's not set
+          if (!user.googleId) {
+            user.googleId = profile.id;
+            await user.save();
+          }
           return done(null, user);
         } else {
-          user = new User({
-            googleId: profile.id,
-            fullName: profile.displayName,
-            email: profile.emails[0].value
-          });
-          await user.save();
-          return done(null, user);
+          // Truly new user - create account with error handling
+          try {
+            user = new User({
+              googleId: profile.id,
+              fullName: profile.displayName,
+              email: profile.emails[0].value
+            });
+            await user.save();
+            return done(null, user);
+          } catch (saveError) {
+            // If duplicate key error, try to find and link the existing user
+            if (saveError.code === 11000) {
+              console.log('Duplicate key error, attempting to link existing account...');
+              user = await User.findOneAndUpdate(
+                { email: profile.emails[0].value },
+                { 
+                  $set: { 
+                    googleId: profile.id,
+                    fullName: profile.displayName 
+                  } 
+                },
+                { new: true }
+              );
+              
+              if (user) {
+                return done(null, user);
+              }
+            }
+            throw saveError;
+          }
         }
       } catch (error) {
+        console.error('Google auth error:', error);
         return done(error, null);
       }
     }
