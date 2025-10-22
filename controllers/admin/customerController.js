@@ -13,7 +13,6 @@ const customerInfo = async (req, res) => {
 
     // Validate page number
     if (page < 1) page = 1;
-
     // Build query object
     let query = { role: 'user' };
 
@@ -61,8 +60,17 @@ const customerInfo = async (req, res) => {
     res.redirect('/admin/pageerror');
   }
 };
+const customerDetails= async (req,res)=>{
+  const customerId=req.params.id
+  
+  const customer= await User.findById(customerId)
+  console.log("customer is :",customer)
 
-module.exports = { customerInfo };
+
+  res.render("admin/customerDetails",{customer})
+}
+
+
 const customerBlocked = async (req, res) => {
   try {
     let id = req.query.id;
@@ -95,4 +103,5 @@ module.exports = {
   customerInfo,
   customerBlocked,
   customerunBlocked,
+  customerDetails
 };

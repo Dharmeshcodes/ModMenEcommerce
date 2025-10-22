@@ -15,13 +15,16 @@ const {
 const {userAuth, adminAuth} =require("../middlewares/auth")
 
 
-//people
+//admin
 
 router.get("/login",adminController.loadAdminLogin)
 router.post("/login",adminController.adminLogin)
 router.get("/dashboard", adminAuth , adminController.loadAdminDashboard)
 router.get("/logout",adminController.logout)
+
+//customer
 router.get("/customers",adminAuth,customerController.customerInfo)
+router.get("/customerDetails/:id",adminAuth,customerController.customerDetails)
 router.get("/blockCustomer",adminAuth,customerController.customerBlocked)
 router.get("/unblockCustomer",adminAuth,customerController.customerunBlocked)
 

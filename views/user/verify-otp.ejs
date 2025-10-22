@@ -147,7 +147,7 @@
             icon:'success',
             title:'Otp verified successfully',
             showConfirmButton:false,
-            timer:2000,
+            timer:3000,
           })
           window.location.href=result.redirectUrl || 'user/login'
          }
@@ -166,7 +166,7 @@
         Swal.fire({
           icon:'error',
           title:'Server error',
-          text:"please try again later"
+          text:"please try again later catch block in front end"
         })
 
        }
@@ -194,7 +194,7 @@
             icon: 'success',
             title: 'OTP Resent Successfully',
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3000,
           });
         } else {
           Swal.fire({

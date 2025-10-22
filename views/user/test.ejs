@@ -27,6 +27,18 @@
     </div>
 
 
+    <h1 id="check">hello from id</h1>
+
+    <h2 class="classmethod">class testing</h2>
+    <h2 class="classmethod">class testing 2</h2>
+    <h2 class="classmethod">class testing 3</h2>
+
+
+    <button class="green" onclick="green()"">click to chnage to green</button>
+    <button class="red" onclick="red()">click to chnage to red</button>
+
+     
+
 
 
 
@@ -65,6 +77,13 @@
   
 </body>
 <script>
-   
+   function green(){
+    document.getElementsByClassName('green')[0].style.backgroundColor='green'
+   }
+   function red(){
+    document.getElementsByClassName('red')[0].style.backgroundColor='red'
+
+   }
+
 </script>
 </html>

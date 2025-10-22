@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Details - MODMAN</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: #f7f7f9;
+      min-height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .layout-container { display: flex; min-height: 100vh; }
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+    .content-wrapper { flex: 1; padding: 32px 24px 24px 24px; }
+    .customer-card, .info-card, .stats-card, .transaction-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px 0 #0001;
+    }
+    .customer-card {
+      padding: 32px 0 16px 0;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .customer-avatar-img {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      background: #e5e5e5;
+      border: 8px solid #23272e;
+      display: inline-block;
+      margin-top: -48px;
+    }
+    .customer-avatar-blank {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      background: #d6d6d8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 50px;
+      color: #8d8d95;
+      border: 8px solid #23272e;
+      margin-top: -48px;
+    }
+    .customer-card h5 {
+      margin-top: 1.5rem;
+      margin-bottom: .5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -.02em;
+    }
+    .info-card {
+      padding: 18px 22px 18px 22px;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+    .info-label { font-weight: 700; }
+    .info-icon {
+      color: #3c3f90;
+      width: 1.2em;
+      margin-right: 8px;
+    }
+    .stats-row {
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+    .stats-card {
+      padding: 18px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      min-width: 190px;
+      min-height: 90px;
+    }
+    .stats-title {
+      font-size: 15px; color: #767678; font-weight: 500; margin-bottom: 7px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .stats-value {
+      font-size: 2rem; font-weight: 700; color: #212120; letter-spacing: -.01em;
+    }
+    .action-btn-block {
+      float: right;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+    .block-btn {
+      background: #eb2222;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 7px;
+      font-size: 15px;
+      border: none;
+      padding: 9px 20px;
+      transition: background 0.1s;
+      min-width: 160px;
+    }
+    .block-btn:hover { background: #b81c1c;}
+    .unblock-btn {
+      background: #28a745;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 7px;
+      font-size: 15px;
+      border: none;
+      padding: 9px 20px;
+      transition: background 0.1s;
+      min-width: 160px;
+    }
+    .unblock-btn:hover { background: #218838;}
+    .transaction-card {
+      padding: 20px;
+      margin-top: 0px;
+    }
+    .tx-table th, .tx-table td {
+      vertical-align: middle !important;
+      font-size: 15px;
+      padding-top: 12px; padding-bottom: 11px;
+    }
+    .tx-table th {background: #fcfcfc;}
+    .tx-table tr { border-bottom: 1px solid #f3f3f3;}
+    .badge-status {
+      font-size: 14px;
+      border-radius: 8px;
+      padding: 6px 15px;
+      font-weight: 600;
+    }
+    .badge-processing { background: #ffe5c2; color: #b86800;}
+    .badge-shipped { background: #d8eafd; color: #0267c1;}
+    .badge-delivered { background: #dafbe3; color: #248a3d;}
+    @media (max-width: 1200px) {
+      .content-wrapper { padding: 18px 7px 14px 7px; }
+    }
+    @media (max-width: 991px) {
+      .content-wrapper {padding: 18px 3vw;}
+      .stats-row { gap: 8px;}
+      .stats-card { min-width: 150px;}
+    }
+    @media (max-width: 767px) {
+      .customer-card, .info-card, .stats-card, .transaction-card { border-radius: 10px;}
+      .content-wrapper {padding: 7px 0 7px 0;}
+      .stats-row { flex-direction: column; gap: 16px;}
+      .action-btn-block { float: none; display: block; text-align:right;}
+    }
+    @media (max-width: 600px) {
+      .customer-avatar-img, .customer-avatar-blank { width: 78px; height: 78px; font-size: 28px;}
+      .stats-card { padding: 14px 11px; min-width: 110px;}
+      .transaction-card { padding: 11px 2vw;}
+      .info-card { padding: 12px 6px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Sidebar (ADMIN) -->
+    <%- include('../partials/admin/sidebar') %>
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header (ADMIN) -->
+      <%- include('../partials/admin/header') %>
+      <!-- Page Content -->
+      <div class="content-wrapper">
+        <div class="container-fluid">
+          <div class="d-flex justify-content-between mb-3 flex-wrap align-items-center">
+            <div>
+              <div class="fw-bold" style="font-size:1.3rem;margin-bottom:3px;">Customer Details</div>
+              <div style="font-size:15px;color:#9299a2;">
+                Dashboard &gt; Customer List &gt; <span>Customer Details</span>
+              </div>
+            </div>
+            <% if (customer.isBlocked) { %>
+              <button class="unblock-btn action-btn-block" id="toggleBlockBtn" onclick="toggleBlockStatus('<%= customer._id %>', false)">
+                Unblock Customer
+              </button>
+            <% } else { %>
+              <button class="block-btn action-btn-block" id="toggleBlockBtn" onclick="toggleBlockStatus('<%= customer._id %>', true)">
+                Block Customer
+              </button>
+            <% } %>
+          </div>
+          <div class="row g-4">
+            <!-- Left COLUMN = Customer Info -->
+            <div class="col-lg-4">
+              <div class="customer-card">
+                <!-- Profile bg area -->
+                <div style="background:#23272e;height:100px;border-top-left-radius:12px;border-top-right-radius:12px;margin:-32px -1px 0 -1px;"></div>
+                <!-- Avatar circle (replace src with <%= customer.avatar %> as needed) -->
+                <!--<img src="<%= customer.avatar %>" class="customer-avatar-img" alt="Avatar">-->
+                <div class="customer-avatar-blank">
+                  <i class="fas fa-user"></i>
+                </div>
+                <h5><%= customer.fullName %></h5>
+              </div>
+              <div class="info-card">
+                <div class="mb-3">
+                  <span class="info-icon"><i class="fa-solid fa-user"></i></span>
+                  <span class="info-label">User Name:</span>  <%= customer.fullName %> 
+                </div>
+                <div class="mb-3">
+                  <span class="info-icon"><i class="fa-solid fa-envelope"></i></span>
+                  <span class="info-label">Email:</span> <%= customer.email %> 
+                </div>
+                <div class="mb-3">
+                  <span class="info-icon"><i class="fa-solid fa-phone"></i></span>
+                  <span class="info-label">Phone Number:</span>  <%= customer.mobile %>
+                </div>
+                <div class="mb-3">
+                  <span class="info-icon"><i class="fa-solid fa-location-dot"></i></span>
+                  <span class="info-label">Delivery Address:</span>
+                  <div style="font-weight:400;margin-top:2px;">
+                    <%= customer.address || '1833 Bell Meadow Drive, Fontana, California 92335, USA' %>
+                  </div>
+                </div>
+                <div>
+                  <span class="info-icon"><i class="fa-solid fa-calendar-alt"></i></span>
+                  <span class="info-label">Latest Transaction:</span> <%= customer.latestTransactionDate || '12 December 2022' %>
+                </div>
+              </div>
+            </div>
+            <!-- Right COLUMN = Stats & Transaction History -->
+            <div class="col-lg-8">
+              <div class="row stats-row mb-3">
+                <div class="col-sm-6 col-xl-4 mb-3 mb-xl-0">
+                  <div class="stats-card">
+                    <div class="stats-title"><i class="fa-solid fa-wallet"></i> Total Balance</div>
+                    <div class="stats-value"><%= customer.totalBalance || '₹ 7200' %></div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-xl-4">
+                  <div class="stats-card">
+                    <div class="stats-title"><i class="fa-solid fa-box"></i> Total Orders</div>
+                    <div class="stats-value"><%= customer.totalOrders || '1,296' %></div>
+                  </div>
+                </div>
+              </div>
+              <div class="transaction-card">
+                <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                  <div class="fw-semibold" style="font-size:1.1rem;">Transaction History</div>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-2"><i class="fa-regular fa-calendar"></i> Select Date</button>
+                    <button class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-filter"></i> Filters</button>
+                  </div>
+                </div>
+                <div class="table-responsive mb-2">
+                  <table class="table tx-table align-middle mb-1">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Example transaction row -->
+                      <tr>
+                        <td><a href="#">#302012</a></td>
+                        <td>
+                          Mint Green Fit Shirt
+                          <div style="color:#8f9091;font-size:13px;">+3 other products</div>
+                        </td>
+                        <td>₹12000</td>
+                        <td><span class="badge-status badge-processing">Processing</span></td>
+                        <td>12 Dec 2023</td>
+                      </tr>
+                      <tr>
+                        <td><a href="#">#302011</a></td>
+                        <td>
+                          Mint GreeShirt
+                          <div style="color:#8f9091;font-size:13px;">+3 other products</div>
+                        </td>
+                        <td>₹12000</td>
+                        <td><span class="badge-status badge-processing">Processing</span></td>
+                        <td>1 Dec 2023</td>
+                      </tr>
+                      <tr>
+                        <td><a href="#">#302006</a></td>
+                        <td>
+                          Mint Green Shirt
+                          <div style="color:#8f9091;font-size:13px;">+2 other products</div>
+                        </td>
+                        <td>₹12000</td>
+                        <td><span class="badge-status badge-shipped">Shipped</span></td>
+                        <td>10 Nov 2023</td>
+                      </tr>
+                      <tr>
+                        <td><a href="#">#302001</a></td>
+                        <td>
+                          Mint Green Shirt
+                          <div style="color:#8f9091;font-size:13px;">+2 other products</div>
+                        </td>
+                        <td>₹12000</td>
+                        <td><span class="badge-status badge-shipped">Shipped</span></td>
+                        <td>2 Nov 2023</td>
+                      </tr>
+                      <tr>
+                        <td><a href="#">#301988</a></td>
+                        <td>
+                          Mint Green Shirt
+                          <div style="color:#8f9091;font-size:13px;">+3 other products</div>
+                        </td>
+                        <td>₹12000</td>
+                        <td><span class="badge-status badge-delivered">Delivered</span></td>
+                        <td>7 Sep 2023</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pt-1 pb-1" style="font-size:15px;color:#888;">
+                  Showing 1-5 from 1,296
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- .container-fluid -->
+      </div> <!-- .content-wrapper -->
+    </div> <!-- .main-content -->
+  </div> <!-- .layout-container -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function toggleBlockStatus(customerId, shouldBlock) {
+      const action = shouldBlock ? 'block' : 'unblock';
+      const actionCapitalized = action.charAt(0).toUpperCase() + action.slice(1);
+      
+      Swal.fire({
+        title: `${actionCapitalized} Customer?`,
+        text: `Do you want to ${action} this customer?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: shouldBlock ? '#eb2222' : '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: `Yes, ${action}!`,
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const endpoint = shouldBlock ? 'blockCustomer' : 'unblockCustomer';
+          
+          // Make fetch request instead of redirect
+          fetch(`/admin/${endpoint}?id=${customerId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Success!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonColor: '#28a745'
+              }).then(() => {
+                // Reload page to update UI
+                window.location.reload();
+              });
+            } else {
+              Swal.fire({
+                title: 'Error!',
+                text: data.message || 'Something went wrong.',
+                icon: 'error',
+                confirmButtonColor: '#eb2222'
+              });
+            }
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to update customer status.',
+              icon: 'error',
+              confirmButtonColor: '#eb2222'
+            });
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
