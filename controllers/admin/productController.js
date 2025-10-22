@@ -311,11 +311,7 @@ const getUpdateProductPage = async (req, res) => {
     res.redirect("/admin/adminProducts");
   }
 };
-
 const updateProduct = async (req, res) => {
-  console.log("REQ.BODY:", req.body);
-console.log("REQ.FILES:", req.files);
-
   try {
     const productId = req.params.id;
     const {
@@ -419,15 +415,25 @@ console.log("REQ.FILES:", req.files);
     product.displayOffer = displayOffer;
     product.offerSource = offerSource;
 
-    
-    if (req.files && req.files.length > 0) {
-      product.images = req.files.map((file, i) => ({
+    // Merge existing images with newly uploaded images at the same index
+    const existingImages = product.images || [];
+    const uploadedFiles = req.files || [];
+    const finalImages = [...existingImages];
+
+    uploadedFiles.forEach((file, index) => {
+      finalImages[index] = {
         url: file.path,
         thumbnail: file.path,
-        isMain: i === 0,
-      }));
+        isMain: index === 0,
+      };
+    });
+
+    if (finalImages.length < 4) {
+      req.flash('error_msg', 'Minimum 4 images are required.');
+      return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
+    product.images = finalImages;
     product.variants = variants;
     product.tags = tags?.split(',').map((t) => t.trim()) || [];
     product.fitType = fitType?.trim();
@@ -436,16 +442,16 @@ console.log("REQ.FILES:", req.files);
     product.isListed = isListed !== 'false';
 
     await product.save();
-    
-     return res.redirect('/admin/adminProducts');
+
     req.flash('success_msg', 'Product updated successfully!');
-   
+    return res.redirect('/admin/adminProducts');
   } catch (error) {
     console.error('Update product error:', error);
     req.flash('error_msg', 'Something went wrong while updating the product. Please try again.');
     return res.redirect(`/admin/updateProduct/${req.params.id}`);
   }
 };
+
 
 const toggleListStatus= async(req,res)=>{
   try{
