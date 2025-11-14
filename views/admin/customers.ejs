@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <style>
-    /* Category-style layout/alignment wrapping only */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Arial', sans-serif;
@@ -44,11 +43,44 @@
       letter-spacing: 0; line-height: 1.15;
       color: #111;
     }
-    /* Retain all your original style for table, search, filter, toggle, etc. */
     .list-header-bar { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; margin-bottom: 22px; gap: 12px 0; }
     .search-box-group { position: relative; width: 267px; max-width: 97vw; }
-    .search-box-group input[type="text"] { border-radius: 13px; background: #fff; border: 1.5px solid #e3e4e7; font-size: 15px; height: 41px; padding-right: 37px; padding-left: 18px;}
-    .search-close-btn {position: absolute; right: 10px; top: 8px; border: none; background: #fff; font-size: 16px; color: #b4b4b4; border-radius: 50%; width: 23px; height: 23px; cursor: pointer; display: flex; justify-content: center; align-items: center;}
+    .search-box-group input[type="text"] { border-radius: 13px; background: #fff; border: 1.5px solid #e3e4e7; font-size: 15px; height: 41px; padding-right: 80px; padding-left: 18px;}
+    .search-actions {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      gap: 6px;
+      align-items: center;
+    }
+    .search-actions.show {
+      display: flex;
+    }
+    .search-btn, .search-clear-btn {
+      border: none;
+      background: #454678;
+      color: #fff;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .search-btn:hover {
+      background: #363554;
+    }
+    .search-clear-btn {
+      background: #dc3545;
+    }
+    .search-clear-btn:hover {
+      background: #c82333;
+    }
     .filter-dropdown { position: relative; }
     .filter-btn { background: #fff; box-shadow: 0 2px 10px 0 #0001; border: 1.5px solid #e3e4e7; border-radius: 13px; color: #454678; font-size: 15px; padding: 8.5px 23px 8.5px 34px; font-weight: 600; cursor: pointer; outline: none; transition: border 0.13s, color 0.13s, background 0.13s; position: relative; min-width: 109px; height: 41px; display: flex; align-items: center; gap: 4px;}
     .filter-btn i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px;}
@@ -103,13 +135,9 @@
 </head>
 <body>
   <div class="layout-container">
-    <!-- Sidebar -->
     <%- include('../partials/admin/sidebar') %>
-    <!-- Main Content -->
     <div class="main-content">
-      <!-- Header -->
       <%- include('../partials/admin/header') %>
-      <!-- Content Wrapper -->
       <div class="content-wrapper">
         <div class="breadcrumb-bar">
           <a href="/admin/dashboard">Dashboard</a> &gt; <span>CUSTOMERS</span>
@@ -118,9 +146,14 @@
         <div class="list-header-bar flex-wrap align-items-center">
           <div class="search-box-group">
             <input type="text" class="form-control shadow-none" placeholder="Search customer..." value="<%= search || '' %>" id="customerSearchInput" autocomplete="off">
-            <button type="button" class="search-close-btn" id="clearSearchBtn" style="display: none;" aria-label="Clear search">
-              <i class="fas fa-times"></i>
-            </button>
+            <div class="search-actions" id="searchActions">
+              <button type="button" class="search-btn" id="searchBtn" title="Search">
+                <i class="fas fa-search"></i>
+              </button>
+              <button type="button" class="search-clear-btn" id="clearSearchBtn" title="Clear">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
           </div>
           <div class="filter-dropdown ms-2">
             <button class="filter-btn" id="filterToggleBtn" type="button">
@@ -223,21 +256,46 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    // Search box clear button
     const searchInput = document.getElementById('customerSearchInput');
+    const searchActions = document.getElementById('searchActions');
+    const searchBtn = document.getElementById('searchBtn');
     const clearBtn = document.getElementById('clearSearchBtn');
+
     if(searchInput) {
       searchInput.addEventListener('input', function() {
-        clearBtn.style.display = this.value ? 'flex' : 'none';
+        if(this.value.trim()) {
+          searchActions.classList.add('show');
+        } else {
+          searchActions.classList.remove('show');
+        }
       });
+
+      searchInput.addEventListener('keypress', function(e) {
+        if(e.key === 'Enter' && this.value.trim()) {
+          performSearch();
+        }
+      });
+
+      searchBtn.addEventListener('click', performSearch);
+
       clearBtn.addEventListener('click', function() {
         searchInput.value = '';
-        clearBtn.style.display = 'none';
-        searchInput.focus();
+        searchActions.classList.remove('show');
+        window.location.href = '?<%= status ? "status=" + status : "" %>';
       });
-      if(searchInput.value) clearBtn.style.display = 'flex';
+
+      if(searchInput.value.trim()) {
+        searchActions.classList.add('show');
+      }
     }
-    // Filter dropdown logic
+
+    function performSearch() {
+      const searchValue = searchInput.value.trim();
+      if(searchValue) {
+        window.location.href = `?search=${encodeURIComponent(searchValue)}<%= status ? "&status=" + status : "" %>`;
+      }
+    }
+
     const filterBtn = document.getElementById('filterToggleBtn');
     const filterPop = document.getElementById('filterPop');
     if(filterBtn && filterPop) {
@@ -250,6 +308,7 @@
       });
       filterPop.addEventListener('click', function(e) { e.stopPropagation(); });
     }
+
     function toggleBlockButton(btn, userId, isBlockedInitial) {
       btn.classList.toggle('active');
       let willBlock = !isBlockedInitial;

@@ -282,6 +282,14 @@
           <li class="breadcrumb-item active" aria-current="page">Products</li>
         </ol>
       </nav>
+      <% if (success_msg && success_msg.length > 0) { %>
+            <div class="alert alert-success text-center"><%= success_msg %></div>
+          <% } %>
+
+          <% if (error_msg && error_msg.length > 0) { %>
+            <div class="alert alert-danger text-center"><%= error_msg %></div>
+          <% } %>
+
 
       <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
         <h1 class="h3 m-0 fw-semibold">Products</h1>
@@ -299,7 +307,7 @@
           <input type="hidden" name="page" value="<%= currentPage %>">
           <input type="hidden" name="sortBy" id="sortByInput" value="<%= sortBy %>">
           <input type="hidden" name="sortOrder" id="sortOrderInput" value="<%= sortOrder %>">
-          <button type="button" class="compact-filter-bar-btn" disabled style="margin-right:.3em;">Filter By</button>
+          <button type="button" class="compact-filter-bar-btn" disabled style="margin-right:.3em;">FilterBy</button>
           <select class="form-select fs-6 px-2 py-1" name="category" onchange="document.getElementById('secondaryFilterForm').submit()">
             <option value="">Category</option>
             <% categories.forEach(function(cat) { %>

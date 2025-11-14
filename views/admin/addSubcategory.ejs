@@ -54,6 +54,8 @@
                 <input type="file" name="subcategoryImage" id="imageInput" accept="image/*" class="d-none" />
                 <button type="button" class="btn btn-outline-primary mt-3" onclick="triggerImageInput()">Add Image</button>
               </div>
+              <div id="imageError" class="text-danger small mt-1"></div>
+
             </div>
 
             <!-- Parent Category -->
@@ -65,6 +67,8 @@
                   <option value="<%= cat._id %>" <%= typeof formData !== 'undefined' && String(formData.category) === String(cat._id) ? 'selected' : '' %>><%= cat.name %></option>
                 <% }) %>
               </select>
+              <div id="categoryError" class="text-danger small"></div>
+
             </div>
 
             <!-- Subcategory Name -->
@@ -72,6 +76,8 @@
               <label for="name" class="form-label fw-semibold">Subcategory Name <span class="text-danger">*</span></label>
               <input type="text" id="name" name="name" class="form-control" required
                 value="<%= typeof formData !== 'undefined' ? formData.name : '' %>" placeholder="e.g. Denim, Polo" />
+                <div id="nameError" class="text-danger small"></div>
+
             </div>
 
             <!-- Offer Percentage -->
@@ -86,6 +92,8 @@
                 name="offer[subcategoryOffer]"
                 value="<%= typeof formData !== 'undefined' && formData.offer && formData.offer.subcategoryOffer ? formData.offer.subcategoryOffer : '' %>"
                 placeholder="Discount... (optional)" />
+                <div id="offerPercentError" class="text-danger small"></div>
+
             </div>
 
             <!-- Max Redeem -->
@@ -93,7 +101,9 @@
               <label for="maxRedeem" class="form-label fw-semibold">Max Redeem</label>
               <input type="number" min="0" class="form-control" id="maxRedeem" name="offer[maxRedeem]"
                 value="<%= typeof formData !== 'undefined' && formData.offer ? formData.offer.maxRedeem : 0 %>" placeholder="Max redeem count (0 for unlimited)" />
-            </div>
+              <div id="maxRedeemError" class="text-danger small"></div>
+
+              </div>
 
             <!-- Start Date -->
             <div class="mb-3">
@@ -178,6 +188,62 @@
         });
       }
     }
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+
+  document.getElementById("categoryError").innerText = "";
+  document.getElementById("nameError").innerText = "";
+  document.getElementById("offerPercentError").innerText = "";
+  document.getElementById("maxRedeemError").innerText = "";
+  document.getElementById("imageError").innerText = "";
+
+  let isValid = true;
+
+  const category = document.getElementById("categoryId").value.trim();
+  if (category === "") {
+    document.getElementById("categoryError").innerText = "Please select a parent category.";
+    isValid = false;
+  }
+
+  const name = document.getElementById("name").value.trim();
+  if (name.length < 3) {
+    document.getElementById("nameError").innerText = "Subcategory name must be at least 3 characters.";
+    isValid = false;
+  }
+
+  
+  const offerValue = document.getElementById("subcategoryOffer").value.trim();
+  if (offerValue !== "") {
+    const offerNum = Number(offerValue);
+    if (offerNum < 0 || offerNum > 99) {
+      document.getElementById("offerPercentError").innerText = "Offer must be between 0 and 99.";
+      isValid = false;
+    }
+  }
+
+ 
+  const maxRedeemValue = document.getElementById("maxRedeem").value.trim();
+  if (maxRedeemValue !== "") {
+    const maxRedeemNum = Number(maxRedeemValue);
+    if (maxRedeemNum < 0) {
+      document.getElementById("maxRedeemError").innerText = "Max redeem cannot be negative.";
+      isValid = false;
+    }
+  }
+
+  const imageInput = document.getElementById("imageInput");
+  if (imageInput.files.length > 0) {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const file = imageInput.files[0];
+
+    if (!allowedTypes.includes(file.type)) {
+      document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG or WEBP files are allowed.";
+      isValid = false;
+    }
+  }
+
+  if (!isValid) e.preventDefault();
+});
   </script>
 </body>
 </html>

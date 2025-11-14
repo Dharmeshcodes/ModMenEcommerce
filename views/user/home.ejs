@@ -43,33 +43,36 @@
 <body>
   <%- include('../partials/user/header.ejs',{ user: user }) %>
 
-  <!-- Hero Carousel Section -->
-  <section class="container-fluid my-3 px-0">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner rounded shadow">
-        <% const carouselImages = ['1.png','2.png','3.png','4.png']; %>
-        <% carouselImages.forEach((img, idx) => { %>
-          <div class="carousel-item <%= idx === 0 ? 'active' : '' %>">
-            <img src="/user/images/carousel/<%= img %>" alt="Hero Image <%= idx+1 %>">
-            <% if(idx === 0) { %>
-              <div class="carousel-caption d-none d-md-block">
-                <h1 class="display-4 fw-bold">Shirts</h1>
-                <div class="fw-semibold">Plain &nbsp; | &nbsp; Stripes &nbsp; | &nbsp; Checks &nbsp; | &nbsp; Printed</div>
+<section class="container-fluid my-3 px-0">
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner rounded shadow">
+      <% const carouselImages = ['1.png','2.png','3.png','4.png']; %>
+      <% carouselImages.forEach((img, idx) => { %>
+        <div class="carousel-item <%= idx === 0 ? 'active' : '' %>">
+          <img src="/user/images/carousel/<%= img %>" class="d-block w-100" alt="Hero Image <%= idx+1 %>">
+          <% if(idx === 0) { %>
+            <div class="carousel-caption d-none d-md-block">
+              <h1 class="display-4 fw-bold">Shirts</h1>
+              <div class="fw-semibold">
+                Plain &nbsp; | &nbsp; Stripes &nbsp; | &nbsp; Checks &nbsp; | &nbsp; Printed
               </div>
-            <% } %>
-          </div>
-        <% }) %>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
     </div>
-  </section>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
 
   <!-- New Arrivals Section -->
   <section class="container py-4">
@@ -78,7 +81,7 @@
       <p class="text-muted">Discover the latest in men’s fashion—premium shirts with modern style, comfort, and durability only at MODMEN.</p>
     </div>
     <div class="row justify-content-center">
-      <% newArrivals.forEach(function(product) { %>
+      <% newArrivals.slice(0, 8).forEach(function(product) { %>
         <div class="col-md-3 col-6 mb-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="product-image-wrapper">
@@ -91,7 +94,7 @@
               <h6 class="card-title fw-semibold mb-1">
                 <a href="/user/product/<%= product._id %>" class="text-decoration-none text-dark"><%= product.name %></a>
               </h6>
-              <p class="mb-0 text-primary fw-semibold">$<%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %></p>
+              <p class="mb-0 text-primary fw-semibold">₹<%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %></p>
               <div class="mb-1">
                 <% for(let i=0; i<5; i++) { %>
                   <i class="fas fa-star text-warning"></i>
@@ -118,7 +121,7 @@
       <p class="text-muted">Top premium picks trending this season, curated for comfort and elegance by MODMEN.</p>
     </div>
     <div class="row justify-content-center">
-      <% premiumTrending.forEach(function(product) { %>
+      <% premiumTrending.slice(0,8).forEach(function(product) { %>
         <div class="col-md-3 col-6 mb-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="product-image-wrapper">
@@ -131,7 +134,7 @@
               <h6 class="card-title fw-semibold mb-1">
                 <a href="/user/product/<%= product._id %>" class="text-decoration-none text-dark"><%= product.name %></a>
               </h6>
-              <p class="mb-0 text-primary fw-semibold">$<%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %></p>
+              <p class="mb-0 text-primary fw-semibold">₹<%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %></p>
               <div class="mb-1">
                 <% for(let i=0; i<5; i++) { %>
                   <i class="fas fa-star text-warning"></i>

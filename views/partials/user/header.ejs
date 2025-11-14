@@ -24,23 +24,50 @@
     max-width: 250px;
     margin-left: auto;
   }
+  .header-search-form {
+    position: relative;
+    width: 100%;
+  }
   .header-search-input {
     background: #f5f5f5;
     color: #333;
     border: none;
     border-radius: 1.1em;
-    padding: 0.5em 2em 0.5em 1em;
+    padding: 0.5em 4.5em 0.5em 1em;
     font-weight: 500;
     width: 100%;
     font-size: 0.95em;
     outline: none;
     box-shadow: none;
   }
-  .header-search-btn {
+  .header-search-input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .header-search-buttons {
     position: absolute;
-    right: 11px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .header-search-clear {
+    color: #666;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0 4px;
+    display: none;
+  }
+  .header-search-clear:hover {
+    color: #333;
+  }
+  .header-search-btn {
     color: #333;
     border: none;
     background: none;
@@ -48,6 +75,11 @@
     outline: none;
     box-shadow: none;
     cursor: pointer;
+    padding: 0 4px;
+    display: none;
+  }
+  .header-search-btn:hover {
+    color: #000;
   }
   .header-icons .btn-link, .header-icons .fa-heart, .header-icons .fa-shopping-cart, .header-icons .fa-user {
     color: #fff !important;
@@ -152,10 +184,34 @@
       </div>
 
       <!-- Search Bar -->
-               <form action="sale" method="GET">
-  <input type="text" name="search" placeholder="Search products..." required>
-  <button type="submit">Search</button>
-</form>
+      <div class="header-search-wrap">
+        <form action="/user/sale" method="GET" class="header-search-form" id="headerSearchForm">
+          <input 
+            type="text" 
+            name="search" 
+            id="headerSearchInput"
+            class="header-search-input" 
+            placeholder="Search products..." 
+            value="<%= typeof search !== 'undefined' && search ? search : '' %>"
+            autocomplete="off">
+          <div class="header-search-buttons">
+            <button 
+              type="button" 
+              class="header-search-clear" 
+              id="headerSearchClear"
+              aria-label="Clear search">
+              <i class="fas fa-times"></i>
+            </button>
+            <button 
+              type="submit" 
+              class="header-search-btn" 
+              id="headerSearchBtn"
+              aria-label="Search">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
 
       <!-- Icons: Wishlist, Cart, Profile -->
       <div class="header-icons d-flex align-items-center ms-auto">
@@ -171,7 +227,6 @@
               <i class="fas fa-user"><%=user.fullName %></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="profileDropdown">
-             
               <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user-circle me-2"></i>Account</a></li>
               <li><a class="dropdown-item" href="/user/orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
               <li><hr class="dropdown-divider"></li>
@@ -188,3 +243,41 @@
     </div>
   </nav>
 </header>
+
+<script>
+  // Search functionality
+  (function() {
+    const searchInput = document.getElementById('headerSearchInput');
+    const searchBtn = document.getElementById('headerSearchBtn');
+    const clearBtn = document.getElementById('headerSearchClear');
+    const searchForm = document.getElementById('headerSearchForm');
+
+    if (!searchInput || !searchBtn || !clearBtn) return;
+
+    // Function to update button visibility
+    function updateButtons() {
+      const hasValue = searchInput.value.trim().length > 0;
+      searchBtn.style.display = hasValue ? 'block' : 'none';
+      clearBtn.style.display = hasValue ? 'block' : 'none';
+    }
+
+    // Initial check on page load
+    updateButtons();
+
+    // Show/hide buttons based on input
+    searchInput.addEventListener('input', updateButtons);
+
+    // Clear button functionality - redirects to sale page without search
+    clearBtn.addEventListener('click', function() {
+      window.location.href = '/user/sale';
+    });
+
+    // Form submit validation
+    searchForm.addEventListener('submit', function(e) {
+      if (searchInput.value.trim().length === 0) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+  })();
+</script>

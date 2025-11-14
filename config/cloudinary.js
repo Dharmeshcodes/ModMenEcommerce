@@ -10,7 +10,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "MODMAN/Products",
+    folder: 'MODMAN/Products',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'], 
     transformation: [{ width: 800, height: 800, crop: 'limit' }]
   }

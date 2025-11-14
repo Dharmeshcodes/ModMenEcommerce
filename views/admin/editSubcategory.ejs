@@ -39,7 +39,7 @@
             </div>
           <% } %>
 
-          <form method="POST" action="/admin/editSubcategory/<%= subcategory._id %>" enctype="multipart/form-data" autocomplete="off" novalidate>
+          <form  novalidate method="POST" action="/admin/editSubcategory/<%= subcategory._id %>" enctype="multipart/form-data" autocomplete="off" novalidate>
 
             <!-- Image Upload -->
             <div class="mb-4">
@@ -57,24 +57,31 @@
                 <input type="file" name="subcategoryImage" id="imageInput" accept="image/*" class="d-none" />
                 <button type="button" class="btn btn-outline-primary mt-3" onclick="triggerImageInput()">Change Image</button>
               </div>
+              <div class="text-danger small mt-1" id="imageError"></div>
             </div>
 
             <!-- Parent Category -->
             <div class="mb-3">
-              <label for="categoryId" class="form-label fw-semibold">Parent Category <span class="text-danger">*</span></label>
-              <select class="form-select" id="categoryId" name="categoryId" required>
-                <option value="">Select Category</option>
-                <% categories.forEach(cat => { %>
-                  <option value="<%= cat._id %>" <%= String(cat._id) === String(subcategory.category._id) ? 'selected' : '' %>><%= cat.name %></option>
-                <% }) %>
-              </select>
-            </div>
+                <label for="categoryId" class="form-label fw-semibold">Parent Category <span class="text-danger">*</span></label>
+                <select class="form-select" id="categoryId" name="categoryId">
+                  <option value="">Select Category</option>
+                  <% categories.forEach(cat => { %>
+                    <option value="<%= cat._id %>" 
+                      <%= (subcategory.category && String(cat._id) === String(subcategory.category._id)) ? 'selected' : '' %>>
+                      <%= cat.name %>
+                    </option>
+                  <% }) %>
+                </select>
+                <div class="text-danger small" id="parentCategoryError"></div>
+              </div>
+
 
             <!-- Subcategory Name -->
             <div class="mb-3">
               <label for="name" class="form-label fw-semibold">Subcategory Name <span class="text-danger">*</span></label>
-              <input type="text" id="name" name="name" class="form-control" required
+              <input type="text" id="name" name="name" class="form-control" 
                 value="<%= subcategory.name %>" placeholder="e.g. Denim, Polo" />
+                <div class="text-danger small" id="nameError"></div>
             </div>
 
             <!-- Offer Percentage -->
@@ -89,6 +96,7 @@
                 name="offer[subcategoryOffer]"
                 value="<%= subcategory.offer ? subcategory.offer.subcategoryOffer : '' %>"
                 placeholder="Discount... (optional)" />
+                <div class="text-danger small" id="offerPercentError"></div>
             </div>
 
             <!-- Max Redeem -->
@@ -96,7 +104,8 @@
               <label for="maxRedeem" class="form-label fw-semibold">Max Redeem</label>
               <input type="number" min="0" class="form-control" id="maxRedeem" name="offer[maxRedeem]"
                 value="<%= subcategory.offer ? subcategory.offer.maxRedeem : 0 %>" placeholder="Max redeem count (0 for unlimited)" />
-            </div>
+              <div class="text-danger small" id="maxRedeemError"></div>
+              </div>
 
             <!-- Start Date -->
             <div class="mb-3">
@@ -185,6 +194,56 @@
         });
       }
     }
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+    let isValid = true;
+
+    document.getElementById("parentCategoryError").innerText = "";
+    document.getElementById("nameError").innerText = "";
+    document.getElementById("offerPercentError").innerText = "";
+    document.getElementById("maxRedeemError").innerText = "";
+    document.getElementById("imageError").innerText = "";
+
+    const categoryId = document.getElementById("categoryId").value.trim();
+    if (categoryId === "") {
+      document.getElementById("parentCategoryError").innerText = "Please select a parent category.";
+      isValid = false;
+    }
+
+    const name = document.getElementById("name").value.trim();
+    if (name === "") {
+      document.getElementById("nameError").innerText = "Subcategory name is required.";
+      isValid = false;
+    }
+
+    const offerValue = document.getElementById("subcategoryOffer").value.trim();
+    if (offerValue !== "") {
+      const offerNum = Number(offerValue);
+      if (offerNum < 1 || offerNum > 100) {
+        document.getElementById("offerPercentError").innerText = "Offer must be between 1 and 100.";
+        isValid = false;
+      }
+    }
+
+    const maxRedeemValue = document.getElementById("maxRedeem").value.trim();
+    if (maxRedeemValue !== "" && Number(maxRedeemValue) < 0) {
+      document.getElementById("maxRedeemError").innerText = "Max redeem value cannot be negative.";
+      isValid = false;
+    }
+
+    const imageFile = document.getElementById("imageInput").files[0];
+    if (imageFile) {
+      const validTypes = ["image/jpeg", "image/png", "image/webp"];
+      if (!validTypes.includes(imageFile.type)) {
+        document.getElementById("imageError").innerText = "Only JPG, PNG, or WEBP images are allowed.";
+        isValid = false;
+      }
+    }
+
+    if (!isValid) e.preventDefault();
+  });
+
+
   </script>
 </body>
 </html>

@@ -1,14 +1,15 @@
-const User = require("../../models/userSchema");
+const User = require('../../models/userSchema');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const nodemailer = require('nodemailer');
-require("dotenv").config();
+const env = require('dotenv').config();
+const { apiLogger, errorLogger } = require('../../config/logger');
 
 async function securePassword(password) {
   try {
     return await bcrypt.hash(password, 10);
   } catch (error) {
-    console.error("Error hashing password:", error);
+    errorLogger.error('Error hashing password: %o', error);
     return null;
   }
 }
@@ -32,14 +33,14 @@ async function sendVerificationEmail(email, otp) {
     const info = await transporter.sendMail({
       from: process.env.nodemailer_email,
       to: email,
-      subject: "Password Reset OTP",
+      subject: 'Password Reset OTP',
       text: `Your OTP is ${otp}`,
       html: `<b>Your OTP: ${otp}</b>`
     });
 
     return info.accepted.length > 0;
   } catch (error) {
-    console.error("Error sending email:", error);
+    errorLogger.error('Error sending email: %o', error);
     return false;
   }
 }
@@ -58,18 +59,22 @@ const postForgotPasswordPage = async (req, res) => {
     if (!userDetails) {
       return res.status(404).json({ error_msg: 'User not found for the given email' });
     }
+
     const otp = generateOtp();
     const emailSent = await sendVerificationEmail(email, otp);
     if (!emailSent) {
       return res.status(500).json({ error_msg: 'Failed to send OTP email' });
     }
+
     req.session.userOtp = otp;
     req.session.email = email;
     req.session.resetAllowed = false;
-    console.log("OTP sent:", otp);
+
+    apiLogger.info('OTP sent successfully: %o', otp);
+
     res.json({ success_msg: 'OTP sent to your email', otpEmail: email });
   } catch (error) {
-    console.error("Error in postForgotPasswordPage:", error);
+    errorLogger.error('Error in postForgotPasswordPage: %o', error);
     res.status(500).json({ error_msg: 'Something went wrong, please try again.' });
   }
 };
@@ -78,11 +83,11 @@ const getOtpPage = (req, res) => {
   if (!req.session.email) {
     return res.redirect('/user/forgot-password');
   }
-  res.render('user/forgot-password', { 
-    step: 'otp', 
-    otpEmail: req.session.email, 
-    error_msg: null, 
-    success_msg: null 
+  res.render('user/forgot-password', {
+    step: 'otp',
+    otpEmail: req.session.email,
+    error_msg: null,
+    success_msg: null
   });
 };
 
@@ -94,12 +99,13 @@ const forgotpasswordVerifyOtp = async (req, res) => {
     }
     if (otp === req.session.userOtp) {
       req.session.resetAllowed = true;
+      apiLogger.info('OTP verified successfully for email: %s', req.session.email);
       res.json({ success_msg: 'OTP verified successfully' });
     } else {
       res.status(400).json({ error_msg: 'Invalid OTP, please try again' });
     }
   } catch (error) {
-    console.error("Error in forgotpasswordVerifyOtp:", error);
+    errorLogger.error('Error in forgotpasswordVerifyOtp: %o', error);
     res.status(500).json({ error_msg: 'Error verifying OTP' });
   }
 };
@@ -108,11 +114,11 @@ const getResetpage = (req, res) => {
   if (!req.session.resetAllowed || !req.session.email) {
     return res.redirect('/user/forgot-password');
   }
-  res.render('user/forgot-password', { 
-    step: 'reset', 
-    otpEmail: req.session.email, 
-    error_msg: null, 
-    success_msg: null 
+  res.render('user/forgot-password', {
+    step: 'reset',
+    otpEmail: req.session.email,
+    error_msg: null,
+    success_msg: null
   });
 };
 
@@ -125,20 +131,26 @@ const postNewPassword = async (req, res) => {
     if (newPassword !== confirmPassword) {
       return res.status(400).json({ error_msg: 'Passwords do not match' });
     }
+
     const passwordHash = await securePassword(newPassword);
     if (!passwordHash) {
       return res.status(500).json({ error_msg: 'Error processing password' });
     }
+
     const updateResult = await User.updateOne({ email: req.session.email }, { $set: { password: passwordHash } });
     if (updateResult.modifiedCount === 0) {
       return res.status(500).json({ error_msg: 'Failed to update password' });
     }
+
+    apiLogger.info('Password updated successfully for %s', req.session.email);
+
     req.session.destroy((err) => {
-      if (err) console.error("Error destroying session:", err);
+      if (err) errorLogger.error('Error destroying session: %o', err);
     });
+
     res.json({ success_msg: 'Password reset successful. Please log in.' });
   } catch (error) {
-    console.error("Error in postNewPassword:", error);
+    errorLogger.error('Error in postNewPassword: %o', error);
     res.status(500).json({ error_msg: 'Error resetting password, please try again' });
   }
 };
@@ -149,16 +161,19 @@ const forgotPasswordResendOtp = async (req, res) => {
     if (!email) {
       return res.status(400).json({ error_msg: 'Session expired or invalid' });
     }
+
     const otp = generateOtp();
     const emailSent = await sendVerificationEmail(email, otp);
     if (!emailSent) {
       return res.status(500).json({ error_msg: 'Failed to resend OTP' });
     }
+
     req.session.userOtp = otp;
-    console.log("Resent OTP:", otp);
+    apiLogger.info('Resent OTP successfully: %o', otp);
+
     res.json({ success_msg: 'OTP resent successfully' });
   } catch (error) {
-    console.error("Error in forgotPasswordResendOtp:", error);
+    errorLogger.error('Error in forgotPasswordResendOtp: %o', error);
     res.status(500).json({ error_msg: 'Failed to resend OTP' });
   }
 };

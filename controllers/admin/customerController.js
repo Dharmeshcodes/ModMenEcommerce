@@ -2,21 +2,17 @@
 const User = require('../../models/userSchema');
 const mongoose = require('mongoose');
 
-
 const customerInfo = async (req, res) => {
   try {
-    // Extract query parameters
     let { search, page, status } = req.query;
     search = search ? search.trim() : '';
     page = parseInt(page) || 1;
-    const perPage = 6; // Renamed from limit to match EJS
+    const perPage = 6; 
 
-    // Validate page number
     if (page < 1) page = 1;
-    // Build query object
+
     let query = { role: 'user' };
 
-    // Add search filter
     if (search) {
       query.$or = [
         { fullName: { $regex: search, $options: 'i' } },
@@ -24,24 +20,20 @@ const customerInfo = async (req, res) => {
       ];
     }
 
-    // Add status filter
     if (status === 'active') {
       query.isBlocked = false;
     } else if (status === 'blocked') {
       query.isBlocked = true;
     }
-
-    // Fetch users
     const userData = await User.find(query)
       .sort({ createdDate: -1 })
       .limit(perPage)
       .skip((page - 1) * perPage)
       .exec();
 
-    const totalCustomers = await User.countDocuments(query); // Renamed from count to match EJS
+    const totalCustomers = await User.countDocuments(query);
     const totalPages = Math.ceil(totalCustomers / perPage);
-
-    // Ensure page doesn't exceed totalPages
+  
     if (page > totalPages && totalPages > 0) {
       page = totalPages;
     }
@@ -52,24 +44,23 @@ const customerInfo = async (req, res) => {
       currentPage: page,
       search,
       status: status || '',
-      totalCustomers, // Pass totalCustomers instead of count
-      perPage, // Pass perPage explicitly
+      totalCustomers, 
+      perPage, 
     });
   } catch (error) {
     console.error('Error in customerInfo:', error);
     res.redirect('/admin/pageerror');
   }
 };
+
 const customerDetails= async (req,res)=>{
-  const customerId=req.params.id
+  const customerId=req.params.id;
   
-  const customer= await User.findById(customerId)
-  console.log("customer is :",customer)
+  const customer= await User.findById(customerId);
+  console.log('customer is :',customer);
 
-
-  res.render("admin/customerDetails",{customer})
-}
-
+  res.render('admin/customerDetails',{customer});
+};
 
 const customerBlocked = async (req, res) => {
   try {

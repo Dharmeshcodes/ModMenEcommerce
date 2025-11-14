@@ -16,4 +16,4 @@ function calculateBestPrice(regularPrice, productOffer = 0, categoryOffer = 0, s
 module.exports = {
   calculateBestPrice,
   determineBestOffer
-}
+};

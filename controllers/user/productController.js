@@ -1,43 +1,42 @@
-const Product=require("../../models/productSchema")
-const Category=require("../../models/categorySchema")
-const subCategory=require('../../models/subcategorySchema')
-const User = require("../../models/userSchema");
-
+const Product=require('../../models/productSchema');
+const Category=require('../../models/categorySchema');
+const subCategory=require('../../models/subcategorySchema');
+const User = require('../../models/userSchema');
 
 const productDetails = async (req, res) => {
   try {
-
     
-      const user= req.session.user || null
+      const user= req.session.user || null;
         let userDetails = null;
-        if (user) {
+        if (user && user._id) {
           userDetails = await User.findById(user._id).lean();
         }
-    
 
     const id = req.params.id;
-    const product = await Product.findOne({
-  _id: id,
-  isDeleted: false,
-  isListed: true
-}).lean();
-if(!product)
-     return res.redirect('/user/sale')
+    const product = await Product.findById(id)
+  .populate({
+    path: 'categoryId',
+    match: { isDeleted: false, isListed: true }
+  })
+  .populate({
+    path: 'subCategoryId',
+    match: { isDeleted: false, isListed: true }
+  })
+  .lean();
 
-
+if (!product || product.isDeleted || !product.isListed || !product.categoryId || !product.subCategoryId) {
+  return res.redirect('/user/sale');
+}
 
     const variant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
-    
-
   
-    alsoLikeProducts = await Product.find({
+    const alsoLikeProducts = await Product.find({
   categoryId: product.categoryId,
   _id: { $ne: id },
   isDeleted: false,
   isListed: true
 }).limit(4).lean();
 //console.log("also like product",alsoLikeProducts)
-
 
     // dummy  change after 8 th week  or 9th week
 
@@ -80,7 +79,7 @@ if(!product)
       }
     ];
     
-    res.render("user/product-detail", {
+    res.render('user/product-detail', {
       product,
       alsoLikeProducts,
       dummyReviews,
@@ -89,10 +88,11 @@ if(!product)
     });
 
   } catch (error) {
-    console.error("Error in product detail page:", error);
-    res.status(500).send("there is an error in product detail page");
+    console.error('Error in product detail page:', error);
+    res.status(500).send('there is an error in product detail page');
   }
-}
+};
+
 
 module.exports = {
   productDetails

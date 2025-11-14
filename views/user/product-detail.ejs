@@ -524,7 +524,7 @@
        <div class="like-card">
          <img src="<%= item.images && item.images[0] ? item.images[0].url : '/user/images/no-image.png' %>" alt="Also like product"/>
          <div class="like-title">
-           <a href="/product/<%= item._id %>" class="text-decoration-none text-dark"><%= item.name %></a>
+          <a href="/user/product/<%= item._id %>" class="text-decoration-none text-dark"><%= item.name %></a>
          </div>
          <div class="like-price">₹ <%= Math.round(variant.salePrice) %>.00</div>
          <div class="like-stars">

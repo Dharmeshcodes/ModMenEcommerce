@@ -1,7 +1,6 @@
 // const multer = require('multer');
 // const path = require('path');
 
-
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     cb(null, 'public/categoryImages');
@@ -12,7 +11,6 @@
 //     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
 //   }
 // });
-
 
 // const fileFilter = function (req, file, cb) {
 //   const allowedTypes = /jpeg|jpg|png|webp/;
@@ -25,7 +23,6 @@
 //     cb(new Error('Only image files (jpeg, jpg, png, webp) are allowed!'));
 //   }
 // };
-
 
 // const upload = multer({
 //   storage: storage,
