@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Address | ModMen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background: #fafafa;
+        }
+        .sidebar-container {
+            width: 330px;
+            min-width: 290px;
+            max-width: 340px;
+            margin-top: 34px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .sidebar-profile {
+            width: 100%;
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(30,30,30,0.07);
+            padding: 32px 20px 24px 26px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+        .sidebar-avatar {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: #111; flex-shrink: 0;
+            margin-right: 20px;
+        }
+        .sidebar-username {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #222;
+        }
+        .sidebar-menu {
+            width: 100%;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 6px 18px rgba(60,60,60,0.07);
+            border: 1px solid #eee;
+            padding: 14px 0 10px 0;
+            margin-top: -18px;
+        }
+        .sidebar-menu-list .list-group-item {
+            background: transparent;
+            font-size: 1.05rem;
+            color: #222;
+            font-weight: 400;
+            border: none;
+            padding: 13px 28px 13px 26px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .sidebar-menu-list .list-group-item i {
+            font-size: 1.32rem;
+            color: #070707;
+            min-width: 26px;
+        }
+        .sidebar-menu-list .list-group-item.active,
+        .sidebar-menu-list .list-group-item:hover {
+            background: #f4f4f4;
+            font-weight: 500;
+        }
+        /* Main content */
+        .main-content-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1 1 0%;
+        }
+        .main-content-box {
+            background: #fff;
+            border-radius: 21px;
+            box-shadow: 0 10px 24px rgba(60,60,60,0.09);
+            border: 2.5px solid #3194fa36; /* blue translucent */
+            padding: 26px 45px 33px 45px;
+            margin-top: 44px;
+            margin-bottom: 0;
+            max-width: 810px;
+            min-width: 512px;
+            width: 100%;
+        }
+        .main-content-box h5 {
+            font-size: 1.26rem;
+            font-weight: 540;
+            margin-bottom: 26px;
+            color: #222;
+        }
+        .main-content-box .form-label {
+            font-size: 1.04rem;
+            color: #323232;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+        .main-content-box input,
+        .main-content-box textarea {
+            font-size: 1.04rem;
+            background: #f9f9f9;
+            border-radius: 9px;
+            border: 1px solid #e5e5e5;
+        }
+        .main-content-box input:focus,
+        .main-content-box textarea:focus {
+            background: #f2f7ff;
+            border-color: #0099ff;
+            box-shadow: 0 2px 10px rgba(49,180,250,0.10);
+        }
+        .main-content-box .form-section-divider {
+            border: none;
+            border-top: 1.3px solid #222;
+            margin: 7px 0 18px 0;
+            opacity: 0.21;
+        }
+        .form-actions {
+            margin-top: 22px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 18px;
+        }
+        .btn-cancel {
+            background: #888;
+            color: #fff;
+            border-radius: 8px;
+            min-width: 110px;
+            font-weight: 500;
+        }
+        .btn-add {
+            background: #232323;
+            color: #fff;
+            border-radius: 8px;
+            min-width: 120px;
+            font-weight: 500;
+        }
+        .form-check-input:checked {
+            background-color: #0d6efd; /* Bootstrap primary blue */
+            border-color: #0d6efd;
+        }
+        .default-box-active {
+            background: #e7f1ff;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1.8px solid #0d6efd;
+            transition: 0.2s;
+        }
+        @media (max-width:1043px) {
+            .main-content-box { min-width: 95vw; padding: 15px 4vw 25px 4vw;}
+        }
+        @media (max-width:900px) {
+            .container-fluid { padding: 0 !important;}
+            .sidebar-container,.sidebar-profile,.sidebar-menu { min-width:unset; max-width:unset; width:100%;}
+        }
+        @media (max-width:770px) {
+            .main-content-box { min-width: 99vw; }
+            .main-content-box .row > [class^='col-'] { flex:0 0 100%; max-width:100%; }
+        }
+        @media (max-width:540px) {
+            .main-content-box { padding: 6px 1rem 13px 1rem;}
+            .sidebar-username { font-size: .92rem;}
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/user/header') %>
+
+    <div class="container-fluid">
+        <div class="row flex-nowrap justify-content-start">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4 sidebar-container">
+                <div class="sidebar-profile">
+                    <span class="sidebar-avatar"></span>
+                    <span class="sidebar-username"><%= user.fullName %></span>
+                </div>
+                <div class="sidebar-menu">
+                    <div class="sidebar-menu-list list-group list-group-flush">
+                        <a href="/user/profile" class="list-group-item"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a href="/user/address" class="list-group-item"><i class="fa-solid fa-location-dot"></i> My Address</a>
+                        <a href="/user/order" class="list-group-item"><i class="fa-solid fa-bag-shopping"></i> My Order</a>
+                        <a href="/user/wishlist" class="list-group-item"><i class="fa-solid fa-heart"></i> My Wishlist (4)</a>
+                        <a href="/user/wallet" class="list-group-item"><i class="fa-solid fa-wallet"></i> My Wallet</a>
+                        <a href="/user/coupen" class="list-group-item"><i class="fa-solid fa-ticket"></i> My Coupen</a>
+                        <a href="/user/change-password" class="list-group-item"><i class="fa-solid fa-key"></i> Change password</a>
+                        <a href="/user/logout" class="list-group-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</a>
+                        <a href="/user/referral-code" class="list-group-item"><i class="fa-solid fa-user-plus"></i> Referral Code</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Area -->
+             <div class="col-lg-9 col-md-8 main-content-section">
+                <div class="main-content-box">
+                    <div class="row">
+                        <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="mb-0 pb-0 pt-1">Add New Address</h5>
+                            <span class="fw-semibold" style="font-size:1.03rem;">Personal Information</span>
+                        </div>
+                        <hr class="form-section-divider">
+                    </div>
+
+                    <% if (error_msg && error_msg.length) { %>
+                        <% error_msg.forEach(function(msg) { %>
+                            <div class="alert alert-danger mt-2 mb-3" role="alert">
+                                <%= msg %>
+                            </div>
+                        <% }) %>
+                    <% } %>
+
+                    <form action="/user/addAddress" method="POST" novalidate>
+                        <div class="row gy-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="Full Name" name="fullName">
+                                <div id="fullNameError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">House No</label>
+                                <input type="text" class="form-control" id="houseNo" placeholder="House No" name="houseNo">
+                                <div id="houseNoError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Land Mark</label>
+                                <input type="text" class="form-control" id="landMark" placeholder="Land Mark" name="landMark">
+                                <div id="landMarkError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">District</label>
+                                <input type="text" class="form-control" id="district" placeholder="eg: Ernakulam" name="district">
+                                <div id="districtError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" placeholder="eg: Kerala" name="state">
+                                <div id="stateError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" placeholder="eg: Kakkanad" name="city">
+                                <div id="cityError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Pin Code</label>
+                                <input type="text" class="form-control" id="pincode" placeholder="eg: 689230" name="pincode">
+                                <div id="pincodeError" class="text-danger small"></div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Phone Number (optional)</label>
+                                <input type="text" class="form-control" id="phone" placeholder="eg: 9876543210" name="phone">
+                                <div id="phoneError" class="text-danger small"></div>
+                            </div>
+
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" id="isDefault" name="isDefault" value="true">
+                                <label class="form-check-label" for="isDefault" style="font-size: 0.9rem; cursor: pointer;">
+                                    Set as Default Address
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions mt-4">
+                            <button class="btn btn-cancel" type="button" onclick="window.history.back()">Cancel</button>
+                            <button class="btn btn-add" type="submit">Add Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkbox = document.getElementById("isDefault");
+            const formCheck = checkbox.closest(".form-check");
+
+            checkbox.addEventListener("change", function() {
+                if (checkbox.checked) {
+                    formCheck.classList.add("default-box-active");
+                } else {
+                    formCheck.classList.remove("default-box-active");
+                }
+            });
+
+            const form = document.querySelector("form[action='/user/addAddress']");
+            
+            if(form) {
+                form.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log("Form validation started"); // Debug line
+                    
+                    // Clear previous errors
+                    const fields = ["fullName","houseNo","landMark","district","state","city","pincode","phone"];
+                    fields.forEach(function(f) {
+                        const errorElement = document.getElementById(f + "Error");
+                        if(errorElement) {
+                            errorElement.innerText = "";
+                        }
+                    });
+
+                    let isValid = true;
+
+                    const fullName = document.getElementById("fullName").value.trim();
+                    const houseNo = document.getElementById("houseNo").value.trim();
+                    const landMark = document.getElementById("landMark").value.trim();
+                    const district = document.getElementById("district").value.trim();
+                    const state = document.getElementById("state").value.trim();
+                    const city = document.getElementById("city").value.trim();
+                    const pincode = document.getElementById("pincode").value.trim();
+                    const phone = document.getElementById("phone").value.trim();
+
+                    if(fullName.length < 3){
+                        document.getElementById("fullNameError").innerText = "Enter a valid name";
+                        isValid = false;
+                    }
+                    if(!houseNo){
+                        document.getElementById("houseNoError").innerText = "House number is required";
+                        isValid = false;
+                    }
+                    if(!landMark){
+                        document.getElementById("landMarkError").innerText = "Landmark is required";
+                        isValid = false;
+                    }
+                    if(!district){
+                        document.getElementById("districtError").innerText = "District is required";
+                        isValid = false;
+                    }
+                    if(!state){
+                        document.getElementById("stateError").innerText = "State is required";
+                        isValid = false;
+                    }
+                    if(!city){
+                        document.getElementById("cityError").innerText = "City is required";
+                        isValid = false;
+                    }
+                    if(!/^\d{6}$/.test(pincode)){
+                        document.getElementById("pincodeError").innerText = "Enter valid 6-digit pincode";
+                        isValid = false;
+                    }
+                    if(phone && !/^\d{10}$/.test(phone)){
+                        document.getElementById("phoneError").innerText = "Phone must be exactly 10 digits";
+                        isValid = false;
+                    }
+
+                    console.log("Validation result:", isValid); // Debug line
+
+                    if(isValid) {
+                        console.log("Submitting form"); // Debug line
+                        form.submit();
+                    } else {
+                        console.log("Form has errors, not submitting"); // Debug line
+                    }
+                    
+                    return false;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -12,7 +12,6 @@ const { apiLogger, errorLogger } = require('../../config/logger');
 const loadHomepage = async (req, res) => {
   try {
     const user = req.session.user ? await User.findById(req.session.user._id).lean() : null;
-
     
     const newArrivals = await Product.find({
       isDeleted: false,
@@ -29,17 +28,15 @@ const loadHomepage = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(12)
       .lean();
-
    
     const filteredNewArrivals = newArrivals.filter(
       p => p.categoryId && p.subCategoryId
     );
-
   
     const premiumTrending = await Product.find({
       isDeleted: false,
       isListed: true,
-      "variants.variantPrice":{$gt:1500}
+      'variants.variantPrice':{$gt:1500}
     })
       .populate({ 
         path: 'categoryId', 
@@ -63,12 +60,10 @@ const loadHomepage = async (req, res) => {
       isLandingPage: false,
     });
   } catch (error) {
-    console.log("Error loading homepage:", error);
+    console.log('Error loading homepage:', error);
     return res.redirect('/user/Page-404');
   }
 };
-
-
 
 const salePage = async (req, res) => {
   try {
@@ -112,7 +107,6 @@ const salePage = async (req, res) => {
       .skip(skip)
       .limit(pageSize)
       .lean();
-
     
     if (sortBy === 'pricelowhigh') {
       productsQuery = productsQuery.sort({ 'variants.salePrice': 1 });
@@ -129,7 +123,7 @@ const salePage = async (req, res) => {
     saleProducts = saleProducts.filter(
       product => product.categoryId && product.subCategoryId
     );
-
+   
     const totalPages = Math.ceil(totalCount / pageSize);
     const currentPage = Number(page) || 1;
 
@@ -404,7 +398,6 @@ const logout = async (req, res) => {
   }
 };
 
-
 module.exports = {
   loadHomepage,
   loadSignup,
@@ -419,4 +412,4 @@ module.exports = {
   googleAuth,
   googleAuthCallback,
 
-}
+};

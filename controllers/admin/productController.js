@@ -152,8 +152,6 @@ const getProductAddPage = async (req, res) => {
   }
 };
 
-
-
 function calculateVariantPrice(variantPrice, productOffer = 0, categoryOffer = 0, subcategoryOffer = 0) {
   const bestOffer = Math.max(productOffer || 0, categoryOffer || 0, subcategoryOffer || 0);
   const discount = (variantPrice * bestOffer) / 100;
@@ -269,7 +267,6 @@ const addProducts = async (req, res) => {
       isListed: isListed !== 'false',
     });
 
-
     await newProduct.save();
 
     req.flash('success_msg', 'Product added successfully!');
@@ -307,7 +304,7 @@ const getUpdateProductPage = async (req, res) => {
 };
 const updateProduct = async (req, res) => {
   try {
-    console.log('the updateproduct function hit')
+    console.log('the updateproduct function hit');
     const productId = req.params.id;
     const {
       name,
@@ -440,7 +437,6 @@ const updateProduct = async (req, res) => {
 
     req.flash('success_msg','Product updated successfully!');
     res.redirect('/admin/adminProducts');
-
     
   } catch (error) {
     console.error('Update product error:', error);

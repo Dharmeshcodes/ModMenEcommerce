@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user/userController');
+const addressController=require('../controllers/user/addressControll');
 const productController = require('../controllers/user/productController');
 const profileController = require('../controllers/user/profileController');
 const passport = require('passport');
@@ -32,7 +33,20 @@ router.get('/forgot-password/reset', profileController.getResetpage);
 router.post('/forgot-password/reset',profileController.postNewPassword);
 router.post('/forgot-password/resend-otp', profileController.forgotPasswordResendOtp);
 router.get('/forgot-password/otp', profileController.getOtpPage);
+router.get('/profile',userAuth,profileController.getprofilePage);
+router.get('/updateProfile', userAuth, profileController.getUpdateProfile);
+router.patch('/updateProfile', userAuth, profileController.updateProfile);
+router.patch('/updateEmail', userAuth, profileController.updateEmail);
+router.get('/verify-email-otp', userAuth, profileController.renderEmailOtpPage);
+router.patch('/verify-email-otp', userAuth, profileController.verifyEmailOtp);
+router.get('/resend-email-otp',userAuth,profileController.resendEmailOtp);
 
+router.get('/address',userAuth,addressController.getAddress);
+router.get('/addAddress',userAuth,addressController.getAddAddress);
+router.post('/addAddress',userAuth,addressController.postAddAddress);
+router.get('/updateAddress/:addressId',userAuth,addressController.getUpdateAddress);
+router.patch('/updateAddress/:addressId', userAuth,addressController.updateAddress);
+router.delete('/deleteAddress/:addressId', userAuth,addressController.deleteAddress);
 
 // router.get('/test',userController.test)
 

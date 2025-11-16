@@ -93,7 +93,6 @@ if (!product || product.isDeleted || !product.isListed || !product.categoryId ||
   }
 };
 
-
 module.exports = {
   productDetails
 };

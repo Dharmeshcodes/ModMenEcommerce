@@ -1,4 +1,5 @@
 const User = require('../../models/userSchema');
+const Address= require('../../models/adressSchema');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
 const nodemailer = require('nodemailer');
@@ -178,6 +179,189 @@ const forgotPasswordResendOtp = async (req, res) => {
   }
 };
 
+const getprofilePage=async (req,res)=>{
+  try{
+    let userData=null;
+    const user=req.session.user;
+     userData=await User.findById(user._id);
+
+     res.render('user/profile',{user:userData});
+  }
+  
+  catch(error){
+    errorLogger.error('there is an error in profilepage');
+  }
+
+};
+const getUpdateProfile= async(req,res)=>{
+  let userData=null;
+  let user= req.session.user;
+  userData=await User.findById(user._id);
+
+  res.render('user/updateProfile',{user:userData});
+};
+const updateProfile = async (req, res) => {
+  try {
+    const user = req.session.user;
+    if (!user) {
+      req.flash('error_msg', 'You must be logged in');
+      return res.redirect('/user/updateProfile');
+    }
+
+    const { fullName, mobile } = req.body;
+
+    // Validation
+    if (!fullName || !fullName.trim()) {
+      req.flash('error_msg', 'Full name is required');
+      return res.redirect('/user/updateProfile');
+    }
+    if (!mobile || !mobile.trim()) {
+      req.flash('error_msg', 'Phone number is required');
+      return res.redirect('/user/updateProfile');
+    }
+
+    if (!/^\d{10}$/.test(mobile.trim())) {
+      req.flash('error_msg', 'Phone number must be 10 digits');
+      return res.redirect('/user/updateProfile');
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        fullName: fullName.trim(),
+        mobile: mobile.trim(),
+      },
+      { new: true }
+    );
+
+    req.session.user = updatedUser;
+
+    req.flash('success_msg', 'Profile updated successfully');
+    return res.redirect('/user/updateProfile');
+
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Something went wrong');
+    return res.redirect('/user/updateProfile');
+  }
+};
+const updateEmail = async (req, res) => {
+  try {
+    const user = req.session.user;
+    const userDetails = await User.findById(user._id);
+
+    if (userDetails.googleId) {
+      req.flash('error_msg', 'Email cannot be changed for Google accounts');
+      return res.redirect('/user/updateProfile');
+    }
+
+    const newEmail = req.body.email;
+
+    if (!newEmail || !newEmail.trim()) {
+      req.flash('error_msg', 'Email is required');
+      return res.redirect('/user/updateProfile');
+    }
+
+    const existEmail = await User.findOne({ email: newEmail });
+    if (existEmail) {
+      req.flash('error_msg', 'This email is already in use');
+      return res.redirect('/user/updateProfile');
+    }
+
+    const otp = generateOtp();
+    req.session.emailOTP = otp;
+    req.session.newEmail = newEmail;
+
+    console.log('OTP for verification is:', otp);
+
+    const sent = await sendVerificationEmail(newEmail, otp);
+    if (!sent) {
+      req.flash('error_msg', 'Failed to send OTP. Try again later');
+      return res.redirect('/user/updateProfile');
+    }
+
+    req.flash('success_msg', 'OTP sent to your new email');
+    req.session.save(() => {
+      return res.redirect('/user/verify-email-otp');
+    });
+
+  } catch (error) {
+    console.log('Error updating email:', error);
+    req.flash('error_msg', 'Something went wrong');
+    return res.redirect('/user/updateProfile');
+  }
+};
+
+const renderEmailOtpPage = (req, res) => {
+  try {
+    if (!req.session.emailOTP || !req.session.newEmail) {
+      req.flash('error_msg', 'Invalid access, please try again');
+      return res.redirect('/user/updateProfile');
+    }
+
+    return res.render('user/verify-email-otp', {
+      success_msg: req.flash('success_msg'),
+      error_msg: req.flash('error_msg')
+    });
+
+  } catch (error) {
+    console.log('Error rendering verify email otp:', error);
+    req.flash('error_msg', 'Something went wrong');
+    return res.redirect('/user/updateProfile');
+  }
+};
+
+const verifyEmailOtp = async (req, res) => {
+  try {
+    const { otp } = req.body;
+
+    if (!req.session.emailOTP) {
+      return res.status(400).json({ success: false, message: 'Session expired. Try again.' });
+    }
+
+    if (otp != req.session.emailOTP) {
+      return res.status(400).json({ success: false, message: 'Invalid OTP. Please try again.' });
+    }
+
+    const updated = await User.findByIdAndUpdate(
+      req.session.user._id,
+      { email: req.session.newEmail },
+      { new: true }
+    );
+
+          req.session.user.email = updated.email;
+      req.session.emailOTP = null;
+      req.session.newEmail = null;
+
+    return res.json({ success: true, message: 'Email updated successfully!' });
+
+  } catch (error) {
+    console.log('OTP verify error:', error);
+    return res.status(500).json({ success: false, message: 'Something went wrong. Try again.' });
+  }
+};
+
+const resendEmailOtp = async (req, res) => {
+  try {
+    if (!req.session.newemail) {
+      return res.status(400).json({ success: false, message: 'Invalid request' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    req.session.emailOTP = otp;
+
+    const sent = await sendVerificationEmail(req.session.newemail, otp);
+    if (!sent) {
+      return res.status(500).json({ success: false, message: 'Failed to send OTP. Try again.' });
+    }
+
+    return res.json({ success: true, message: 'New OTP has been sent to your email' });
+  } catch (error) {
+    console.log('Resend OTP error:', error);
+    return res.status(500).json({ success: false, message: 'Something went wrong. Try again.' });
+  }
+};
+
 module.exports = {
   getForgotPasswordPage,
   postForgotPasswordPage,
@@ -185,5 +369,12 @@ module.exports = {
   getOtpPage,
   getResetpage,
   postNewPassword,
-  forgotPasswordResendOtp
+  forgotPasswordResendOtp,
+  getprofilePage,
+  getUpdateProfile,
+  updateProfile,
+  updateEmail,
+  renderEmailOtpPage,
+  verifyEmailOtp,
+  resendEmailOtp
 };

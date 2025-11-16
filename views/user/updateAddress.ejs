@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Address | ModMen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body { background:#fafafa; }
+
+        .sidebar-container {
+            width:330px; min-width:290px; max-width:340px;
+            margin-top:34px; display:flex; flex-direction:column; align-items:center;
+        }
+        .sidebar-profile {
+            width:100%; border-radius:22px; background:#fff;
+            box-shadow:0 6px 18px rgba(30,30,30,0.07);
+            padding:32px 20px 24px 26px; display:flex; align-items:center;
+            margin-bottom:0.4rem;
+        }
+        .sidebar-avatar {
+            width:70px; height:70px; border-radius:50%; background:#111;
+            margin-right:20px;
+        }
+        .sidebar-menu {
+            width:100%; background:#fff; border-radius:22px;
+            box-shadow:0 6px 18px rgba(60,60,60,0.07);
+            border:1px solid #eee; padding:14px 0 10px 0; margin-top:-18px;
+        }
+        .sidebar-menu-list .list-group-item {
+            background:transparent; border:none; font-size:1.05rem;
+            padding:13px 28px 13px 26px; display:flex; align-items:center; gap:12px;
+        }
+        .sidebar-menu-list .list-group-item:hover {
+            background:#f4f4f4; font-weight:500;
+        }
+
+        .main-content-section { display:flex; justify-content:center; }
+        .main-content-box {
+            background:#fff; border-radius:21px;
+            box-shadow:0 10px 24px rgba(60,60,60,0.09);
+            border:2.5px solid #3194fa36;
+            padding:26px 45px 33px 45px;
+            margin-top:44px; width:100%; max-width:810px; min-width:512px;
+        }
+        .main-content-box input {
+            background:#f9f9f9; border-radius:9px; border:1px solid #e5e5e5;
+        }
+        .main-content-box input:focus {
+            background:#f2f7ff; border-color:#0099ff;
+            box-shadow:0 2px 10px rgba(49,180,250,0.10);
+        }
+
+        .form-check-input:checked {
+            background:#0d6efd; border-color:#0d6efd;
+        }
+        .default-box-active {
+            background:#e7f1ff; padding:10px 12px;
+            border-radius:10px; border:1.8px solid #0d6efd;
+            transition:0.2s;
+        }
+         .btn-cancel {
+        background: #666;
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+    }
+    .btn-cancel:hover {
+        background: #555;
+        color: #fff;
+    }
+
+    .btn-update {
+        background: #000;
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+    }
+    .btn-update:hover {
+        background: #111;
+        color: #fff;
+    }
+    </style>
+</head>
+
+<body>
+
+<%- include('../partials/user/header') %>
+
+<div class="container-fluid">
+    <div class="row flex-nowrap justify-content-start">
+
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4 sidebar-container">
+            <div class="sidebar-profile">
+                <span class="sidebar-avatar"></span>
+                <span class="sidebar-username"><%= user.fullName %></span>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="list-group list-group-flush sidebar-menu-list">
+                    <a href="/user/profile" class="list-group-item"><i class="fa-solid fa-user"></i> My Profile</a>
+                    <a href="/user/address" class="list-group-item"><i class="fa-solid fa-location-dot"></i> My Address</a>
+                    <a href="/user/order" class="list-group-item"><i class="fa-solid fa-bag-shopping"></i> My Order</a>
+                    <a href="/user/wishlist" class="list-group-item"><i class="fa-solid fa-heart"></i> Wishlist</a>
+                    <a href="/user/wallet" class="list-group-item"><i class="fa-solid fa-wallet"></i> My Wallet</a>
+                    <a href="/user/coupen" class="list-group-item"><i class="fa-solid fa-ticket"></i> My Coupen</a>
+                    <a href="/user/change-password" class="list-group-item"><i class="fa-solid fa-key"></i> Change Password</a>
+                    <a href="/user/logout" class="list-group-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-lg-9 col-md-8 main-content-section">
+            <div class="main-content-box">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>Update Address</h5>
+                    <span class="fw-semibold">Personal Information</span>
+                </div>
+                <hr class="form-section-divider">
+
+                <% if (error_msg && error_msg.length) { %>
+                    <% error_msg.forEach(function(msg) { %>
+                        <div class="alert alert-danger"><%= msg %></div>
+                    <% }) %>
+                <% } %>
+
+               <form action="/user/updateAddress/<%= address._id %>?_method=PATCH" method="POST" novalidate>
+
+                    <div class="row gy-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" value="<%= address.fullName %>">
+                            <div id="fullNameError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">House No</label>
+                            <input type="text" class="form-control" id="houseNo" name="houseNo" value="<%= address.houseNo %>">
+                            <div id="houseNoError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Land Mark</label>
+                            <input type="text" class="form-control" id="landMark" name="landMark" value="<%= address.landMark %>">
+                            <div id="landMarkError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">District</label>
+                            <input type="text" class="form-control" id="district" name="district" value="<%= address.district %>">
+                            <div id="districtError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" id="state" name="state" value="<%= address.state %>">
+                            <div id="stateError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>">
+                            <div id="cityError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Pin Code</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" value="<%= address.pincode %>">
+                            <div id="pincodeError" class="text-danger small"></div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Phone Number (optional)</label>
+                            <input type="text" class="form-control" id="phone" name="phone" value="<%= address.phone %>">
+                            <div id="phoneError" class="text-danger small"></div>
+                        </div>
+
+                        <% if (!address.isDefault) { %>
+                            <!-- Show checkbox only if this address is NOT default -->
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" id="isDefault" name="isDefault" value="true">
+                                <label class="form-check-label" for="isDefault" style="cursor:pointer;">
+                                    Set as Default Address
+                                </label>
+                            </div>
+                        <% } else { %>
+                            <!-- If it's already default -->
+                            <div class="mt-3 p-2 bg-light border rounded">
+                                <span class="text-success fw-semibold">
+                                    ✔ This is your default address
+                                </span>
+                            </div>
+                        <% } %>
+
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-3 mt-4">
+                        <a href="/user/address" class="btn btn-cancel">Cancel</a>
+                        <button type="submit" class="btn btn-update">Update Address</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById("isDefault");
+        if (checkbox) {
+            const formCheck = checkbox.closest(".form-check");
+            checkbox.addEventListener("change", function() {
+                if (checkbox.checked) {
+                    formCheck.classList.add("default-box-active");
+                } else {
+                    formCheck.classList.remove("default-box-active");
+                }
+            });
+        }
+
+        const form = document.querySelector("form[action*='/user/updateAddress']");
+        
+        if(form) {
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log("Form validation started"); // Debug line
+                
+                // Clear previous errors
+                const fields = ["fullName","houseNo","landMark","district","state","city","pincode","phone"];
+                fields.forEach(function(f) {
+                    const errorElement = document.getElementById(f + "Error");
+                    if(errorElement) {
+                        errorElement.innerText = "";
+                    }
+                });
+
+                let isValid = true;
+
+                const fullName = document.getElementById("fullName").value.trim();
+                const houseNo = document.getElementById("houseNo").value.trim();
+                const landMark = document.getElementById("landMark").value.trim();
+                const district = document.getElementById("district").value.trim();
+                const state = document.getElementById("state").value.trim();
+                const city = document.getElementById("city").value.trim();
+                const pincode = document.getElementById("pincode").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+
+                if(fullName.length < 3){
+                    document.getElementById("fullNameError").innerText = "Enter a valid name";
+                    isValid = false;
+                }
+                if(!houseNo){
+                    document.getElementById("houseNoError").innerText = "House number is required";
+                    isValid = false;
+                }
+                if(!landMark){
+                    document.getElementById("landMarkError").innerText = "Landmark is required";
+                    isValid = false;
+                }
+                if(!district){
+                    document.getElementById("districtError").innerText = "District is required";
+                    isValid = false;
+                }
+                if(!state){
+                    document.getElementById("stateError").innerText = "State is required";
+                    isValid = false;
+                }
+                if(!city){
+                    document.getElementById("cityError").innerText = "City is required";
+                    isValid = false;
+                }
+                if(!/^\d{6}$/.test(pincode)){
+                    document.getElementById("pincodeError").innerText = "Enter valid 6-digit pincode";
+                    isValid = false;
+                }
+                if(phone && !/^\d{10}$/.test(phone)){
+                    document.getElementById("phoneError").innerText = "Phone must be exactly 10 digits";
+                    isValid = false;
+                }
+
+                console.log("Validation result:", isValid); // Debug line
+
+                if(isValid) {
+                    console.log("Submitting form"); // Debug line
+                    form.submit();
+                } else {
+                    console.log("Form has errors, not submitting"); // Debug line
+                }
+                
+                return false;
+            });
+        }
+    });
+</script>
+
+<%- include('../partials/user/footer') %>
+
+</body>
+</html>
