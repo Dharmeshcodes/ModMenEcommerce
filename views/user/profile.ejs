@@ -144,10 +144,12 @@
     <div class="container-fluid">
         <div class="row flex-nowrap justify-content-start">
             <div class="col-lg-3 col-md-4 sidebar-group">
-                <div class="sidebar-profile-capsule">
-                    <span class="profile-img"></span>
+                <div class="sidebar-profile-capsule d-flex align-items-center justify-content-start">
+                    <img src="<%= user.profileImage ? user.profileImage : '/images/default-avatar.png' %>" 
+                        alt="Avatar" class="profile-img">
                     <span class="fw-semibold fs-5 text-dark"><%= user.fullName %></span>
                 </div>
+
                 <div class="sidebar-menu-box">
                     <div class="sidebar-menu-list list-group list-group-flush">
                         <a href="/user/profile" class="list-group-item">
@@ -198,8 +200,6 @@
                             <input type="text" class="form-control rounded-pill" value="<%= user.mobile %>" readonly>
                         </div>
                        <button type="button" class="btn btn-dark" onclick="window.location.href='/user/updateProfile'">EDIT</button>
-
-                       
 
                     </form>
                 </div>

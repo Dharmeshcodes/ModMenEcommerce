@@ -39,8 +39,15 @@
             <!-- Sidebar -->
             <div class="col-lg-3 col-md-4 sidebar-container">
                 <div class="sidebar-profile">
-                    <span class="sidebar-avatar"></span>
-                    <span class="sidebar-username"><%= user.fullName %></span>
+                    <div class="sidebar-avatar position-relative" style="width:70px;height:70px;">
+                        <img src="<%= user.profileImage ? user.profileImage + '?w=70&h=70&c=fill' : '/images/default-avatar.png' %>" 
+                            alt="Profile" class="rounded-circle" style="width:70px;height:70px;object-fit:cover;">
+                        <button id="changeProfileBtn" type="button" class="btn btn-sm btn-light position-absolute" 
+                                style="bottom:0; right:0; border-radius:50%; padding:4px; font-size:0.8rem;">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                    </div>
+                    <span class="sidebar-username mt-2"><%= user.fullName %></span>
                 </div>
                 <div class="sidebar-menu">
                     <div class="sidebar-menu-list list-group list-group-flush">
@@ -107,9 +114,31 @@
             </div>
         </div>
     </div>
+    <!-- Profile Image Modal -->
+<div class="modal fade" id="profileImageModal" tabindex="-1" aria-labelledby="profileImageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="profileImageModalLabel">Change Profile Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="profilePreview" src="<%= user.profileImage ? user.profileImage + '?w=150&h=150&c=fill' : '/images/default-avatar.png' %>" 
+             class="rounded-circle mb-3" width="150" height="150" style="object-fit:cover;">
+        <form id="profileImageForm" action="/user/profile-image" enctype="multipart/form-data">
+          <input type="file" name="profileImage" id="profileImageInput" accept="image/*" class="form-control mb-2" required>
+          <button type="submit" class="btn btn-primary w-100">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <%- include('../partials/user/footer') %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   setTimeout(() => {
       let f = document.getElementById("flashBox");
@@ -161,6 +190,57 @@ function validateEmailForm() {
 
     return valid;
 }
+
+    const profileForm = document.getElementById('profileImageForm');
+const profileInput = document.getElementById('profileImageInput');
+const profilePreview = document.getElementById('profilePreview');
+const changeBtn = document.getElementById('changeProfileBtn');
+const profileModal = new bootstrap.Modal(document.getElementById('profileImageModal'));
+
+changeBtn.addEventListener('click', () => profileModal.show());
+
+profileInput.addEventListener('change', function() {
+  const file = this.files[0];
+  if(file){
+    profilePreview.src = URL.createObjectURL(file);
+  }
+});
+
+profileForm.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const file = profileInput.files[0];
+  if(!file){
+    Swal.fire('Error', 'Please select an image', 'error');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('profileImage', file);
+
+  try{
+    const res = await fetch('/user/profile-image', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+      Swal.fire('Success', data.message, 'success');
+      // Update sidebar image immediately
+      document.querySelector('.sidebar-avatar img').src = data.profileImage + '?w=70&h=70&c=fill';
+      profilePreview.src = data.profileImage + '?w=150&h=150&c=fill';
+      profileModal.hide();
+    } else {
+      Swal.fire('Error', data.message || 'Something went wrong', 'error');
+    }
+
+  } catch(err){
+    console.error(err);
+    Swal.fire('Error', 'Server error', 'error');
+  }
+});
 
   
 </script>

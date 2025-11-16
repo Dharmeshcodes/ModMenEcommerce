@@ -223,9 +223,15 @@
             <i class="fas fa-shopping-cart"></i>
           </a>
           <div class="dropdown profile-dropdown">
-            <button class="btn btn-link dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile">
-              <i class="fas fa-user"><%=user.fullName %></i>
-            </button>
+          <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile">
+            <img 
+              src="<%= user.profileImage ? user.profileImage + '?w=35&h=35&c=fill' : '/images/default-avatar.png' %>" 
+              alt="Profile" 
+              class="rounded-circle me-2" 
+              style="width:35px; height:35px; object-fit:cover;">
+            <span class="d-none d-md-inline"><%= user.fullName %></span>
+          </button>
+
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user-circle me-2"></i>Account</a></li>
               <li><a class="dropdown-item" href="/user/orders"><i class="fas fa-box me-2"></i>My Orders</a></li>

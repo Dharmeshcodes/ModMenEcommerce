@@ -7,6 +7,7 @@ const profileController = require('../controllers/user/profileController');
 const passport = require('passport');
 const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
+const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
 router.get('/home', checkBlockedUser,userController.loadHomepage);
 router.get('/sale', userAuth, checkBlockedUser, userController.salePage);
@@ -40,6 +41,12 @@ router.patch('/updateEmail', userAuth, profileController.updateEmail);
 router.get('/verify-email-otp', userAuth, profileController.renderEmailOtpPage);
 router.patch('/verify-email-otp', userAuth, profileController.verifyEmailOtp);
 router.get('/resend-email-otp',userAuth,profileController.resendEmailOtp);
+router.get('/change-password',userAuth,profileController.getchangePassword);
+router.post('/change-password', userAuth,profileController.changePassword)
+router.post('/profile-image',userAuth,uploadUserImages.single('profileImage'),profileController.uploadProfileImage
+);
+
+
 
 router.get('/address',userAuth,addressController.getAddress);
 router.get('/addAddress',userAuth,addressController.getAddAddress);

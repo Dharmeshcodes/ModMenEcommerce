@@ -362,6 +362,64 @@ const resendEmailOtp = async (req, res) => {
   }
 };
 
+const getchangePassword = async (req, res) => {
+  try {
+    const user = req.session.user;
+    const userData = await User.findById(user._id);
+    res.render("user/change-password", { user: userData });
+  } catch (error) {
+    console.log("There is an error in fetching change password");
+    return res.status(500).json({ success: false, message: 'Something went wrong. Try again.' });
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.session.user._id;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const { currentPassword, newPassword } = req.body;
+
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+
+    const hashedPassword = await securePassword(newPassword);
+    if (!hashedPassword) return res.status(500).json({ success: false, message: 'Password hashing failed' });
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ success: true, message: 'Password updated successfully' });
+
+  } catch (error) {
+    errorLogger.error('Change Password Error: %o', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+const uploadProfileImage=async (req,res)=>{
+  try{
+    const user=req.session.user
+    const userId=user._id
+
+    if(!req.file){
+      return res.status(400).json({message:"no file uploaded"})
+    }
+    const updatedUser=await User.findByIdAndUpdate(userId,
+      {profileImage:req.file.path},
+      {new:true}
+    )
+     res.status(200).json({
+      message: 'Profile image updated successfully',
+      profileImage: updatedUser.profileImage
+    });
+  }
+  catch(error){
+    onsole.error('Error updating profile image:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 module.exports = {
   getForgotPasswordPage,
   postForgotPasswordPage,
@@ -376,5 +434,8 @@ module.exports = {
   updateEmail,
   renderEmailOtpPage,
   verifyEmailOtp,
-  resendEmailOtp
+  resendEmailOtp,
+  getchangePassword,
+  changePassword,
+  uploadProfileImage
 };

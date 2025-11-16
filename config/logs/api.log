@@ -1,0 +1,196 @@
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 17:48:26"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 17:48:26"}
+{"level":"info","message":"Request: GET /user/updateAddress/6919b8e0219924560565fc64 - Body: undefined","timestamp":"2025-11-16 17:48:38"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 17:48:48"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 17:54:39"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 17:58:19"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 18:03:52"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 18:03:56"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 18:03:58"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 18:49:52"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:57:47"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:57:47"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:57:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:57:54"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:58:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:58:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:58:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:58:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:59:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:59:38"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:59:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:59:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 18:59:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 18:59:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:03:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:03:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:03:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:03:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:03:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:03:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:11:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:11:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:12:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:12:30"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 19:16:16"}
+{"level":"info","message":"Request: GET /user/forgot-password - Body: undefined","timestamp":"2025-11-16 19:16:27"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 19:16:31"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 19:16:58"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 19:17:11"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 19:23:25"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 19:23:27"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 19:23:34"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 19:24:05"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 19:24:14"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:40:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:40:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:40:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:40:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:41:29"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:41:29"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 19:42:35"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 19:42:35"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:17:49"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:17:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:22:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:22:37"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:22:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:22:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:22:49"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:22:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:23:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:23:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:23:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:23:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:23:57"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:23:57"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:24:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:24:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:24:09"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:24:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:24:11"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:24:11"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:24:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:24:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:24:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:24:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:58:49"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:58:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:58:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:58:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:27"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:27"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:29"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:29"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:35"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:35"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:37"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:48"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 20:59:56"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 20:59:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:07"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:10"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:00:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:00:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 21:01:02"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 21:01:02"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:04:24"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:04:57"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:05:01"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:12:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-16 21:12:03"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:12:50"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-16 21:12:50"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:15:46"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-16 21:15:47"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:17:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-16 21:17:25"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:18:00"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:20:55"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:21:08"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:21:10"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:21:16"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:22:00"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:22:02"}
+{"level":"info","message":"Request: GET /user/logout - Body: undefined","timestamp":"2025-11-16 21:22:11"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-11-16 21:22:11"}
+{"level":"info","message":"Request: POST /user/login - Body: { email: 'tom123@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-11-16 21:22:21"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 21:22:22"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:22:26"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:22:29"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-16 21:22:30"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:22:40"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:22:43"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:26:46"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:26:51"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:26:55"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-16 21:27:07"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:30:08"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 21:30:11"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-16 21:30:13"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:30:19"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:30:24"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:31:21"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 21:34:11"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:34:23"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:34:25"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:35:48"}
+{"level":"info","message":"Request: GET /user/updateAddress/69189a865436fd61179258f7 - Body: undefined","timestamp":"2025-11-16 21:35:51"}
+{"level":"info","message":"Request: GET /user/updateAddress/69189a865436fd61179258f7 - Body: undefined","timestamp":"2025-11-16 21:36:50"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:37:06"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 21:37:10"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:38:29"}
+{"level":"info","message":"Request: GET /user/updateAddress/69189a865436fd61179258f7 - Body: undefined","timestamp":"2025-11-16 21:38:32"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:38:35"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:38:55"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:38:58"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:40:11"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:40:35"}
+{"level":"info","message":"Request: GET /user/updateAddress/69189a865436fd61179258f7 - Body: undefined","timestamp":"2025-11-16 21:40:38"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 21:40:43"}
+{"level":"info","message":"Request: GET /user/change-password - Body: undefined","timestamp":"2025-11-16 21:41:14"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:41:19"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:41:24"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 21:41:27"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-16 21:41:30"}
+{"level":"info","message":"Request: GET /user/product/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-16 21:41:33"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 21:42:00"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 21:49:13"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:49:44"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:49:46"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-16 21:49:53"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:49:56"}
+{"level":"info","message":"Request: GET /user/updateAddress/69189a865436fd61179258f7 - Body: undefined","timestamp":"2025-11-16 21:49:59"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 21:50:36"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 21:50:38"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 22:06:48"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-16 22:07:26"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-16 22:07:36"}
+{"level":"info","message":"Request: GET /user/addAddress - Body: undefined","timestamp":"2025-11-16 22:07:41"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-16 22:08:02"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-16 22:08:58"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 22:25:25"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-16 22:25:35"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-16 22:25:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-16 22:26:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-16 22:26:13"}
