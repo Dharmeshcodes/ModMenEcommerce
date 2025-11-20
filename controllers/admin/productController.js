@@ -370,7 +370,7 @@ const updateProduct = async (req, res) => {
       const price = Number(req.body.price?.[size]);
       const quantity = Number(req.body.qty?.[size]);
 
-      if (!isNaN(price) && price > 0 && !isNaN(quantity) && quantity > 0) {
+      if (!isNaN(price) && price > 0 && !isNaN(quantity) && quantity >= 0) {
         const { salePrice } = calculateVariantPrice(
           price,
           productOffer,

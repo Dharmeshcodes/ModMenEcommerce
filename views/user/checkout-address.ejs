@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Choose Delivery Point</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --card-h: 220px;
+      --gap: 1rem;
+      --card-radius: 14px;
+      --card-bg: #f5f5f5;
+      --blue-glow: rgba(0, 102, 255, 0.28);
+    }
+
+    body {
+      background: #f8f8f8;
+      font-family: 'Bitter', serif;
+    }
+
+    .main-box {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+      padding: 25px;
+    }
+
+    .order-summary-box {
+      background: #e9f3ff;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #d1e3ff;
+    }
+
+    .addresses-heading {
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-size: 20px;
+      letter-spacing: .6px;
+    }
+
+    .addresses-wrap {
+      max-height: calc((var(--card-h) * 2) + var(--gap));
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .address-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
+
+    .address-card {
+      height: var(--card-h);
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      padding: 14px 16px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 0 8px var(--blue-glow);
+      border: 1px solid transparent;
+      transition: transform .08s ease, box-shadow .12s ease, border .08s ease;
+    }
+
+    .address-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .address-card .meta h6 {
+      font-size: 20px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .address-card .meta p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .default-badge {
+      position:absolute;
+      top:10px;
+      right:12px;
+      background:#000;
+      color:#fff;
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:8px;
+      z-index:10;
+    }
+
+    .deliver-btn {
+      background:#000;
+      color:#fff;
+      border-radius:10px;
+      padding:8px 12px;
+      border:none;
+      width:140px;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    .card-bottom{
+      position:absolute;
+      bottom:12px;
+      left:50%;
+      transform:translateX(-50%);
+      width:100%;
+      display:flex;
+      justify-content:center;
+    }
+
+    .address-card.selected {
+      border:2px solid #000;
+    }
+
+    .add-address-box {
+      height:var(--card-h);
+      border-radius:var(--card-radius);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      background:#fff;
+      border:1px dashed #cfcfcf;
+      cursor:pointer;
+    }
+
+    .summary-img{width:60px;height:60px;object-fit:cover;border-radius:8px;}
+
+    @media(max-width:767px){
+      .address-grid { grid-template-columns:1fr; }
+      .addresses-wrap { max-height:none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include('../partials/user/header') %>
+
+  <% 
+    const inStockItems = cartItems.filter(i => i.productId.stock > 0);
+    const hasOOS = cartItems.some(i => i.productId.stock === 0);
+  %>
+
+  <div class="container mt-4">
+    <div class="main-box">
+      <div class="row g-4">
+
+        <!-- ORDER SUMMARY -->
+        <div class="col-lg-5">
+          <div class="order-summary-box">
+
+            <h5 class="fw-bold mb-3">Order Summary • <%= inStockItems.length %> items</h5>
+
+            <% inStockItems.forEach(item => { %>
+              <div class="d-flex mb-3 align-items-start">
+                <img src="<%= (item.productId.images?.[0]?.url) || item.mainImage || '/placeholder.png' %>" class="summary-img me-3">
+                <div>
+                  <h6 class="fw-semibold mb-1"><%= item.productId.name %></h6>
+                  <p class="text-muted small mb-1">Qty: <%= item.quantity %></p>
+                </div>
+                <div class="ms-auto text-end">
+                  <small class="text-muted text-decoration-line-through d-block">₹<%= item.variantPrice %></small>
+                  <strong>₹<%= item.salePrice * item.quantity %></strong>
+                </div>
+              </div>
+            <% }) %>
+
+            <hr>
+
+            <div class="d-flex justify-content-between">
+              <span>Subtotal</span>
+              <strong>₹<%= grandTotal %></strong>
+            </div>
+
+            <div class="d-flex justify-content-between mt-2">
+              <span>Shipping</span>
+              <strong class="text-success">Free</strong>
+            </div>
+
+            <button class="btn btn-outline-dark w-100 mt-4">Apply Coupon</button>
+
+            <button id="reviewOrderBtn" class="btn btn-dark w-100 mt-3" 
+                    data-bs-toggle="offcanvas" data-bs-target="#orderSummaryCanvas">
+              Review Order
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ADDRESSES -->
+        <div class="col-lg-7">
+          <div class="addresses-heading">CHOOSE DELIVERY POINT</div>
+
+          <div class="addresses-wrap">
+            <div class="address-grid">
+
+              <% if (addresses && addresses.length > 0) { %>
+                <% addresses.forEach((addr) => { %>
+
+                  <div>
+                    <div class="address-card"
+                         data-addr-id="<%= addr._id %>"
+                         data-fullname="<%= addr.fullName %>"
+                         data-house="<%= addr.houseNo %>"
+                         data-city="<%= addr.city %>"
+                         data-landmark="<%= addr.landMark %>"
+                         data-district="<%= addr.district %>"
+                         data-state="<%= addr.state %>"
+                         data-pincode="<%= addr.pincode %>"
+                         data-phone="<%= addr.phone %>"
+                         data-isdefault="<%= addr.isDefault %>">
+
+                      <% if (addr.isDefault) { %>
+                        <span class="default-badge">Default</span>
+                      <% } %>
+
+                      <div class="meta">
+                        <h6><%= addr.fullName %></h6>
+                        <p><%= addr.houseNo %>, <%= addr.city %></p>
+                        <p><%= addr.landMark %>, <%= addr.district %></p>
+                        <p><%= addr.state %> - <%= addr.pincode %></p>
+                        <p class="small text-muted">Phone: <%= addr.phone %></p>
+                      </div>
+
+                      <div class="card-bottom">
+                        <button type="button" class="deliver-btn">Deliver Here</button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                <% }) %>
+              <% } %>
+
+              <!-- Add new address -->
+              <div>
+                <div class="add-address-box" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                  <div>
+                    <i class="fa fa-plus-circle fa-2x mb-2"></i>
+                    <h6 class="fw-bold">Add New Address</h6>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <!-- OFFCANVAS SUMMARY -->
+  <div class="offcanvas offcanvas-end offcanvas-width" tabindex="-1" id="orderSummaryCanvas">
+    <div class="offcanvas-header">
+      <h5 class="fw-bold">ORDER SUMMARY</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+
+      <div id="selectedAddressBlock" class="mb-3 p-3 rounded" style="background:#f5f5f5;">
+        <strong>Deliver to:</strong>
+        <div id="selectedAddressContent" class="small text-muted mt-2">No address selected</div>
+      </div>
+
+      <% inStockItems.forEach(item => { %>
+        <div class="d-flex align-items-center mb-3 border-bottom pb-2">
+          <img src="<%= (item.productId.images?.[0]?.url) || item.mainImage || '/placeholder.png' %>"
+               style="width:55px;height:55px;object-fit:cover;" class="rounded me-3">
+
+          <div class="flex-grow-1">
+            <h6 class="m-0"><%= item.productId.name %></h6>
+            <small class="text-muted">Qty: <%= item.quantity %></small>
+          </div>
+
+          <div class="text-end">
+            <small class="text-muted text-decoration-line-through d-block">₹<%= item.variantPrice %></small>
+            <strong>₹<%= item.salePrice * item.quantity %></strong>
+          </div>
+        </div>
+      <% }) %>
+
+      <hr>
+
+      <div class="d-flex justify-content-between mb-2">
+        <span>Subtotal (incl. taxes)</span>
+        <strong>₹<%= grandTotal %></strong>
+      </div>
+
+      <div class="d-flex justify-content-between mb-2">
+        <span>Delivery charge</span>
+        <strong class="text-success">FREE</strong>
+      </div>
+
+      <hr>
+
+      <div class="d-flex justify-content-between mb-3">
+        <span class="fw-bold">Grand Total</span>
+        <span class="fw-bold">₹<%= grandTotal %></span>
+      </div>
+
+      <a id="proceedToPayment" href="/user/checkoutPayment" class="btn btn-dark w-100 mb-2">
+        Proceed to Payment
+      </a>
+
+      <button class="btn btn-outline-dark w-100" data-bs-dismiss="offcanvas">
+        Cancel
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ADD ADDRESS MODAL -->
+  <div class="modal fade" id="addAddressModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="fw-bold">Add New Address</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="addAddressForm">
+            <input type="text" name="fullName" class="form-control mb-2" placeholder="Full Name" required>
+            <input type="text" name="houseNo" class="form-control mb-2" placeholder="House No" required>
+            <input type="text" name="city" class="form-control mb-2" placeholder="City" required>
+            <input type="text" name="landMark" class="form-control mb-2" placeholder="Landmark" required>
+            <input type="text" name="district" class="form-control mb-2" placeholder="District" required>
+            <input type="text" name="state" class="form-control mb-2" placeholder="State" required>
+            <input type="number" name="pincode" class="form-control mb-2" placeholder="Pincode" required>
+            <input type="text" name="phone" class="form-control mb-2" placeholder="Phone">
+            <button type="submit" class="btn btn-dark w-100 mt-3">Save Address</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    // Read data from card
+    function readCardData(card) {
+      if (!card) return null;
+      return {
+        id: card.dataset.addrId,
+        fullName: card.dataset.fullname,
+        house: card.dataset.house,
+        city: card.dataset.city,
+        landmark: card.dataset.landmark,
+        district: card.dataset.district,
+        state: card.dataset.state,
+        pincode: card.dataset.pincode,
+        phone: card.dataset.phone,
+        isDefault: card.dataset.isdefault === 'true'
+      };
+    }
+
+    function formatAddressHtml(data) {
+      if (!data) return 'No address selected';
+      return `
+        <div class="fw-semibold">${data.fullName}</div>
+        <div>${data.house}, ${data.city}</div>
+        <div>${data.landmark}, ${data.district}</div>
+        <div>${data.state} - ${data.pincode}</div>
+        <div class="small text-muted">Phone: ${data.phone || ''}</div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const cards = [...document.querySelectorAll('.address-card')];
+      const deliverButtons = [...document.querySelectorAll('.deliver-btn')];
+      const reviewBtn = document.getElementById('reviewOrderBtn');
+      const selectedAddressContent = document.getElementById('selectedAddressContent');
+      const proceed = document.getElementById('proceedToPayment');
+
+
+      // Select address functionality
+      let selectedCard = null;
+
+      function selectCard(card, scrollIntoView) {
+        if (!card) return;
+
+        cards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedCard = card;
+
+        const data = readCardData(card);
+        selectedAddressContent.innerHTML = formatAddressHtml(data);
+
+        if (data && data.id && proceed) {
+          proceed.href = '/user/checkoutPayment?addressId=' + data.id;
+        }
+
+        if (scrollIntoView) {
+          card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      }
+
+      // Auto-select default or first address
+      const defaultCard = cards.find(c => c.dataset.isdefault === 'true');
+      if (defaultCard) selectCard(defaultCard, false);
+      else if (cards.length > 0) selectCard(cards[0], false);
+
+      // Click on card selects it
+      cards.forEach(card => {
+        card.addEventListener('click', () => selectCard(card, true));
+      });
+
+      // Deliver button selects address
+      deliverButtons.forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const card = e.target.closest('.address-card');
+          selectCard(card, true);
+        });
+      });
+
+      // Add address AJAX
+      const addForm = document.getElementById('addAddressForm');
+      addForm.addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        const body = Object.fromEntries(new FormData(this).entries());
+
+        try {
+          const res = await fetch('/user/addAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          const json = await res.json();
+
+          if (json.success) location.reload();
+          else alert(json.message || 'Failed to add address');
+
+        } catch (err) {
+          alert('Error adding address');
+        }
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <%- include('../partials/user/footer') %>
+</body>
+</html>

@@ -4,9 +4,14 @@ const userController = require('../controllers/user/userController');
 const addressController=require('../controllers/user/addressControll');
 const productController = require('../controllers/user/productController');
 const profileController = require('../controllers/user/profileController');
+const cartController = require('../controllers/user/cartController');
+const checkoutControllers=require("../controllers/user/checkoutControllers")
+const orderController=require("../controllers/user/orderController")
 const passport = require('passport');
 const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
+const validateCartMiddleware=require("../middlewares/validateCartMiddleware")
+
 const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
 router.get('/home', checkBlockedUser,userController.loadHomepage);
@@ -46,8 +51,6 @@ router.post('/change-password', userAuth,profileController.changePassword)
 router.post('/profile-image',userAuth,uploadUserImages.single('profileImage'),profileController.uploadProfileImage
 );
 
-
-
 router.get('/address',userAuth,addressController.getAddress);
 router.get('/addAddress',userAuth,addressController.getAddAddress);
 router.post('/addAddress',userAuth,addressController.postAddAddress);
@@ -55,6 +58,24 @@ router.get('/updateAddress/:addressId',userAuth,addressController.getUpdateAddre
 router.patch('/updateAddress/:addressId', userAuth,addressController.updateAddress);
 router.delete('/deleteAddress/:addressId', userAuth,addressController.deleteAddress);
 
-// router.get('/test',userController.test)
+router.post("/addToCart",userAuth,cartController.addToCart)
+router.get("/cart",userAuth,cartController.getCartPage)
+router.post("/incresecartqty",userAuth,cartController.increseQuantity)
+router.post("/decreasecartqty", userAuth, cartController.decreaseQuantity);
+router.post("/removecartitem", userAuth, cartController.removeCartItem);
+router.post("/emptycart", userAuth, cartController.emptyCart);
+
+router.get("/checkout-address",userAuth,validateCartMiddleware,checkoutControllers.getCheckoutPage)
+router.get("/checkoutPayment", userAuth, validateCartMiddleware,checkoutControllers.loadPaymentPage);
+router.get("/order-review", userAuth,validateCartMiddleware, checkoutControllers.loadOrderReviewPage);
+
+
+router.post("/confirmOrder", userAuth,validateCartMiddleware, orderController.confirmOrder);
+router.get("/orderSuccess/:orderId", userAuth, orderController.loadOrderSuccess);
+
+
+
+
+
 
 module.exports = router;

@@ -484,7 +484,7 @@
       for (let i = 0; i < qtyInputs.length; i++) {
         const qty = qtyInputs[i].value;
         const price = priceInputs[i].value;
-        if (qty && price && qty > 0 && price > 0) {
+        if (qty && price && qty >= 0 && price > 0) {
           variantFilled = true;
           break;
         }

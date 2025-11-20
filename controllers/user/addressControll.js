@@ -123,8 +123,13 @@ const postAddAddress = async (req, res, next) => {
       await userAddress.save();
     }
 
-    req.flash('success_msg', 'Address added successfully');
-    res.redirect('/user/address');
+    if (req.xhr || req.headers["content-type"] === "application/json") {
+          return res.json({ success: true });
+        }
+
+        // If normal form submit → redirect
+        req.flash('success_msg', 'Address added successfully');
+        return res.redirect('/user/address');
 
   } catch (error) {
     next(error);

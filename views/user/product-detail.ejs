@@ -7,6 +7,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easyzoom@2.5.0/css/easyzoom.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     /* Your original CSS here (no changes) */
     :root {
@@ -386,9 +388,34 @@
         <%= (product.averageRating !== undefined && product.averageRating !== null) ? product.averageRating.toFixed(1) : '4.5' %>/5
       </span>
     </div>
-    <div class="product-price mb-1" style="font-size:2.2rem;font-weight:700;color:#222;">
-      ₹ <span id="salePrice"><%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %></span>
-    </div>
+      <div class="product-price mb-1 d-flex align-items-center gap-3" 
+     style="font-size:2.2rem;font-weight:700;color:#222;">
+
+  <!-- Sale Price -->
+  ₹ <span id="salePrice">
+    <%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %>
+  </span>
+
+  <!-- Original Price (Crossed) -->
+  <span id="originalPrice" 
+        style="font-size:1rem;color:#888;text-decoration:line-through;">
+    ₹ <%= product.variants && product.variants[0] ? product.variants[0].variantPrice.toFixed(2) : product.price %>
+  </span>
+
+  <!-- Offer badge -->
+  <span id="offerBadge" 
+        style="background:#ffe5e5;color:#c70000;font-size:0.85rem;
+               padding:4px 10px;border-radius:20px;font-weight:600;">
+    <%
+      let sp = product.variants[0].salePrice;
+      let op = product.variants[0].variantPrice;
+      let off = Math.round(((op - sp) / op) * 100);
+    %>
+    <%= off %>% OFF
+  </span>
+
+</div>
+
     <div class="desc" style="font-size:1.08rem;color:#707070;margin-bottom:18px;"><%= product.description %></div>
       
     <!-- Coupons -->
@@ -413,11 +440,30 @@
     <div class="size-selector-label mb-2" style="font-weight:600;">Choose Size</div>
     <div class="size-row mb-4 d-flex flex-wrap gap-2">
       <% (product.variants || []).forEach(function(variant, i) { %>
-        <span class="size-pill <%= i===0 ? 'active' : '' %>"
-          style="border-radius:50px;border:1px solid #ececec;background:#f3f1ef;font-size:1.05em;padding:9px 28px;font-weight:600;color:#333;cursor:pointer;transition:background .2s,border .2s;"
-          onclick="selectSize('<%= variant.size %>', <%= i %>)">
-          <%= variant.size %>
-        </span>
+        <span class="size-pill 
+      <%= i===0 && variant.variantQuantity > 0 ? 'active' : '' %>"
+      style="<%= variant.variantQuantity <= 0 
+          ? 'opacity:0.5;cursor:not-allowed;position:relative;' 
+          : '' %>"
+      onclick="<%= variant.variantQuantity > 0 
+          ? `selectSize('${variant.size}', ${i})` 
+          : '' %>">
+
+  <%= variant.size %>
+
+  <% if(variant.variantQuantity <= 0) { %>
+    <span style="
+      font-size:0.65rem;
+      color:#c00;
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+    ">Out of stock ✖</span>
+  <% } %>
+
+</span>
+
       <% }); %>
     </div>
     <!-- Color pill, only one color according to logic -->
@@ -597,6 +643,104 @@
   $(document).on('mouseleave', '.write-review-stars', function() {
     $('.write-review-stars i').removeClass('fas').addClass('far');
   });
+
+  const variants = <%- JSON.stringify(product.variants || []) %>;
+
+  function selectSize(size, index) {
+    // Remove active from all
+    document.querySelectorAll(".size-pill").forEach(p => p.classList.remove("active"));
+
+    // Add active to selected size
+    const selectedPill = document.querySelectorAll(".size-pill")[index];
+    selectedPill.classList.add("active");
+
+    const v = variants[index];
+
+    // Update Prices
+    document.getElementById("salePrice").innerText = v.salePrice.toFixed(2);
+    document.getElementById("originalPrice").innerText = "₹ " + v.variantPrice.toFixed(2);
+
+    // Update Offer %
+    const off = Math.round(((v.variantPrice - v.salePrice) / v.variantPrice) * 100);
+    document.getElementById("offerBadge").innerText = off + "% OFF";
+
+    // Update stock button
+    const stockBtn = document.getElementById("stockBtn");
+    if (v.variantQuantity > 0) {
+      stockBtn.classList.remove("btn-secondary");
+      stockBtn.classList.add("btn-primary");
+      stockBtn.innerText = "In Stock";
+    } else {
+      stockBtn.classList.remove("btn-primary");
+      stockBtn.classList.add("btn-secondary");
+      stockBtn.innerText = "Out of Stock";
+    }
+  }
+
+  function getSelectedVariant() {
+    const activeSizeEl = document.querySelector('.size-pill.active');
+    const size = activeSizeEl ? activeSizeEl.textContent.trim() : null;
+    const color = (document.querySelector('.color-pill.active') || document.querySelector('.color-pill'))?.textContent.trim() || null;
+    return { size, color };
+  }
+
+  function updateCartCount(count) {
+    const el = document.getElementById('cartCount');
+    if (el) el.textContent = count;
+  }
+
+  async function addToCartHandler(e) {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+
+    const productId = "<%= product._id %>";
+    const { size, color } = getSelectedVariant();
+    const quantity = 1;
+
+    if (!size || !color) {
+      Swal.fire({ icon: 'warning', title: 'Select variant', text: 'Please select size and color.' });
+      btn.disabled = false;
+      return;
+    }
+
+    try {
+      const res = await fetch('/user/addToCart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, size, color, quantity })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const msg = data?.message || data?.error || 'Failed to add to cart';
+        Swal.fire({ icon: 'error', title: 'Cannot add to cart', text: msg });
+      } else {
+        const cartCount = data.cartCount ?? null;
+        Swal.fire({ icon: 'success', title: 'Added to cart', text: 'Item added successfully.' });
+        if (cartCount !== null) updateCartCount(cartCount);
+      }
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Server error', text: 'Please try again later.' });
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.querySelector('.cart-btn');
+    if (addBtn) addBtn.addEventListener('click', addToCartHandler);
+
+    if (!document.querySelector('.size-pill.active')) {
+      const firstAvail = Array.from(document.querySelectorAll('.size-pill')).find(el => 
+        !el.style.cursor.includes('not-allowed') && 
+        !el.classList.contains('disabled')
+      );
+      if (firstAvail) firstAvail.classList.add('active');
+    }
+  });
+
+
 </script>
 </body>
 </html>
