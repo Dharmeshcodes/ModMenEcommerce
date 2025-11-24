@@ -78,6 +78,9 @@ const orderSchema = new mongoose.Schema(
           type: String,
           default: ""
         },
+        cancelledOn:{
+          type :Number
+        },
 
         returnReason: {
           type: String,
@@ -163,6 +166,13 @@ const orderSchema = new mongoose.Schema(
     updatedOn: {
       type: Date
     },
+    cancelledOn:{
+      type:Date
+    },
+    cancellationReason: {
+          type: String,
+          default: ""
+        },
 
     deliveredOn: {
       type: Date

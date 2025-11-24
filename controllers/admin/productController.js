@@ -304,7 +304,6 @@ const getUpdateProductPage = async (req, res) => {
 };
 const updateProduct = async (req, res) => {
   try {
-    console.log('the updateproduct function hit');
     const productId = req.params.id;
     const {
       name,
@@ -327,24 +326,19 @@ const updateProduct = async (req, res) => {
     };
 
     if (!name || !description || !categoryId || !color || !fitType || !sleeveType) {
-      req.flash(
-        'error_msg',
-        'Please fill all required fields (name, description, category, color, sleeveType, fitType)'
-      );
+      req.flash('error_msg', 'Please fill all required fields');
       return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
     const product = await Product.findById(productId);
     if (!product) {
-      req.flash('error_msg', 'Product not found.');
+      req.flash('error_msg', 'Product not found');
       return res.redirect('/admin/adminProducts');
     }
 
     const category = await Category.findById(categoryId);
     let subCategory = null;
-    if (subCategoryId) {
-      subCategory = await Subcategory.findById(subCategoryId);
-    }
+    if (subCategoryId) subCategory = await Subcategory.findById(subCategoryId);
 
     const productOffer = offer.productOffer;
     const categoryOffer = Number(category?.offer?.offerPercentage) || 0;
@@ -354,6 +348,7 @@ const updateProduct = async (req, res) => {
     let offerSource = 'product';
     if (bestOffer === categoryOffer) offerSource = 'category';
     else if (bestOffer === subcategoryOffer) offerSource = 'subcategory';
+
     const displayOffer = bestOffer || 0;
 
     const productofferData = {
@@ -371,16 +366,13 @@ const updateProduct = async (req, res) => {
       const quantity = Number(req.body.qty?.[size]);
 
       if (!isNaN(price) && price > 0 && !isNaN(quantity) && quantity >= 0) {
-        const { salePrice } = calculateVariantPrice(
-          price,
-          productOffer,
-          categoryOffer,
-          subcategoryOffer
-        );
+        const { salePrice } = calculateVariantPrice(price, productOffer, categoryOffer, subcategoryOffer);
 
         const sku =
           product.variants.find((v) => v.size === size)?.sku ||
-          `${name.slice(0, 3).toUpperCase()}-${color.slice(0, 3).toUpperCase()}-${size}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+          `${name.slice(0, 3).toUpperCase()}-${color.slice(0, 3).toUpperCase()}-${size}-${Date.now()}-${Math.floor(
+            Math.random() * 1000
+          )}`;
 
         variants.push({
           size,
@@ -394,7 +386,7 @@ const updateProduct = async (req, res) => {
     }
 
     if (variants.length === 0) {
-      req.flash('error_msg', 'At least one variant with valid price and quantity is required');
+      req.flash('error_msg', 'At least one variant is required');
       return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
@@ -407,21 +399,23 @@ const updateProduct = async (req, res) => {
     product.displayOffer = displayOffer;
     product.offerSource = offerSource;
 
-    // Merge existing images with newly uploaded images at the same index
     const existingImages = product.images || [];
-    const uploadedFiles = req.files || [];
     const finalImages = [...existingImages];
 
-    uploadedFiles.forEach((file, index) => {
-      finalImages[index] = {
-        url: file.path,
-        thumbnail: file.path,
-        isMain: index === 0,
-      };
-    });
+    const base64Images = req.body.croppedImages || [];
+
+    for (let i = 0; i < base64Images.length; i++) {
+      if (base64Images[i] && base64Images[i].startsWith('data:image')) {
+        finalImages[i] = {
+          url: base64Images[i],
+          thumbnail: base64Images[i],
+          isMain: i === 0,
+        };
+      }
+    }
 
     if (finalImages.length < 4) {
-      req.flash('error_msg', 'Minimum 4 images are required.');
+      req.flash('error_msg', 'Minimum 4 images required');
       return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
@@ -435,15 +429,15 @@ const updateProduct = async (req, res) => {
 
     await product.save();
 
-    req.flash('success_msg','Product updated successfully!');
+    req.flash('success_msg', 'Product updated successfully');
     res.redirect('/admin/adminProducts');
-    
   } catch (error) {
-    console.error('Update product error:', error);
-    req.flash('error_msg', 'Something went wrong while updating the product. Please try again.');
+    console.log('Update product error:', error);
+    req.flash('error_msg', 'Something went wrong');
     return res.redirect(`/admin/updateProduct/${req.params.id}`);
   }
 };
+
 
 const toggleListStatus= async(req,res)=>{
   try{

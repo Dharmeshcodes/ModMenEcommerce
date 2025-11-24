@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice - <%= order.orderId %></title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .title { font-size: 24px; font-weight: bold; }
+        .brand { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        .section-title { margin-top: 30px; font-size: 16px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { border: 1px solid #ccc; padding: 10px; font-size: 14px; }
+        table th { background: #f5f5f5; }
+        .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="title">INVOICE</div>
+    <div class="brand">ModMen – Premium Men's Shirt Store</div>
+</div>
+
+<div>
+    <div class="section-title">Order Details</div>
+    <p><strong>Order ID:</strong> <%= order.orderId %></p>
+    <p><strong>Invoice Date:</strong> <%= new Date(order.invoiceDate).toLocaleDateString("en-GB") %></p>
+    <p><strong>Customer:</strong> <%= order.userId.fullName %></p>
+    <p><strong>Address:</strong> <%= order.address %></p>
+</div>
+
+<div>
+    <div class="section-title">Items</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Shirt Name</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Qty</th>
+                <th>Sale Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% order.orderedItems.forEach(item => { %>
+                <tr>
+                    <td><%= item.productName %></td>
+                    <td><%= item.size %></td>
+                    <td><%= item.color %></td>
+                    <td><%= item.quantity %></td>
+                    <td>₹<%= item.salePrice %></td>
+                    <td>₹<%= item.salePrice * item.quantity %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div class="section-title">Payment Summary</div>
+    <p><strong>Subtotal:</strong> ₹<%= order.subTotal %></p>
+    <p><strong>Discount:</strong> ₹<%= order.discountAmount %></p>
+    <p><strong>Delivery Charge:</strong> ₹<%= order.deliveryCharge %></p>
+    <p><strong style="font-size:16px;">Grand Total:</strong> ₹<%= order.payableAmount %></p>
+</div>
+
+<div class="footer">
+    Thank you for shopping at ModMen!<br>
+    Premium Men's Shirts Delivered to Your Doorstep.
+</div>
+
+</body>
+</html>

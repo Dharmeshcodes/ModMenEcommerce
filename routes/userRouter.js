@@ -72,6 +72,23 @@ router.get("/order-review", userAuth,validateCartMiddleware, checkoutControllers
 
 router.post("/confirmOrder", userAuth,validateCartMiddleware, orderController.confirmOrder);
 router.get("/orderSuccess/:orderId", userAuth, orderController.loadOrderSuccess);
+router.get("/order",userAuth,checkBlockedUser,orderController.getUserOrders)
+router.get("/order/:orderId", userAuth, checkBlockedUser,orderController.getOrderDetails);
+router.post("/cancel-order/:orderId", userAuth,checkBlockedUser,orderController.cancelOrder)
+router.post('/cancelItem/:orderId/:itemId', orderController.cancelSingleItem);
+router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleItem);
+router.post('/order/:orderId/return-order', orderController.returnEntireOrder);
+router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice);
+
+
+
+
+
+
+
+
+
+
 
 
 

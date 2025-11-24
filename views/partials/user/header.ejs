@@ -139,6 +139,7 @@
       margin-left: 1rem;
       font-size: 1.25rem;
     }
+    
   }
   @media (max-width: 767.98px) {
     .navbar-brand { font-size: 1.1rem; }
@@ -183,7 +184,7 @@
         </ul>
       </div>
 
-      <!-- Search Bar -->
+      <!-- Search Bar
       <div class="header-search-wrap">
         <form action="/user/sale" method="GET" class="header-search-form" id="headerSearchForm">
           <input 
@@ -211,7 +212,7 @@
             </button>
           </div>
         </form>
-      </div>
+      </div> -->
 
       <!-- Icons: Wishlist, Cart, Profile -->
       <div class="header-icons d-flex align-items-center ms-auto">
@@ -234,7 +235,7 @@
 
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user-circle me-2"></i>Account</a></li>
-              <li><a class="dropdown-item" href="/user/orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+              <li><a class="dropdown-item" href="/user/order"><i class="fas fa-box me-2"></i>My Orders</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
             </ul>
@@ -249,41 +250,25 @@
     </div>
   </nav>
 </header>
-
 <script>
-  // Search functionality
-  (function() {
-    const searchInput = document.getElementById('headerSearchInput');
-    const searchBtn = document.getElementById('headerSearchBtn');
-    const clearBtn = document.getElementById('headerSearchClear');
-    const searchForm = document.getElementById('headerSearchForm');
+const searchInput = document.getElementById("saleSearchInput");
+const closeIcon = document.getElementById("searchClear");
+const searchForm = document.getElementById("saleSearchForm");
+const searchIcon = document.querySelector(".search-icon");
 
-    if (!searchInput || !searchBtn || !clearBtn) return;
+searchInput.addEventListener("input", () => {
+  closeIcon.style.display = searchInput.value.trim() ? "block" : "none";
+});
 
-    // Function to update button visibility
-    function updateButtons() {
-      const hasValue = searchInput.value.trim().length > 0;
-      searchBtn.style.display = hasValue ? 'block' : 'none';
-      clearBtn.style.display = hasValue ? 'block' : 'none';
-    }
+closeIcon.addEventListener("click", () => {
+  searchInput.value = "";
+  closeIcon.style.display = "none";
+  searchForm.submit();
+});
 
-    // Initial check on page load
-    updateButtons();
-
-    // Show/hide buttons based on input
-    searchInput.addEventListener('input', updateButtons);
-
-    // Clear button functionality - redirects to sale page without search
-    clearBtn.addEventListener('click', function() {
-      window.location.href = '/user/sale';
-    });
-
-    // Form submit validation
-    searchForm.addEventListener('submit', function(e) {
-      if (searchInput.value.trim().length === 0) {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-  })();
+searchIcon.addEventListener("click", () => {
+  searchForm.submit();
+});
 </script>
+
+    

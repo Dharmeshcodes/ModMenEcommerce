@@ -67,11 +67,9 @@ const loadHomepage = async (req, res) => {
 
 const salePage = async (req, res) => {
   try {
-    const user = req.session.user || null;
-    let userDetails = null;
-    if (user && user._id) {
-      userDetails = await User.findById(user._id).lean();
-    }
+    const sessionUser = req.session.user || null;
+    const user = sessionUser? await User.findById(sessionUser._id).lean() : null;
+
     const {
       category,
       subCategory,
@@ -80,8 +78,9 @@ const salePage = async (req, res) => {
       fitType,
       sortBy,
       page = 1,
-      search = ''
+      search = ""
     } = req.query;
+
     const pageSize = 16;
     const skip = (page - 1) * pageSize;
 
@@ -89,43 +88,61 @@ const salePage = async (req, res) => {
 
     let query = {
       isDeleted: false,
-      isListed: true,
+      isListed: true
     };
 
-    if (category) query.categoryId = { $in: Array.isArray(category) ? category : [category] };
-    if (subCategory) query.subCategoryId = { $in: Array.isArray(subCategory) ? subCategory : [subCategory] };
-    if (size) query['variants.size'] = { $in: Array.isArray(size) ? size : [size] };
-    if (sleeveType) query.sleeveType = { $in: Array.isArray(sleeveType) ? sleeveType : [sleeveType] };
-    if (fitType) query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
-    if (search && search.trim()) query.name = { $regex: search.trim(), $options: 'i' };
+    if (category)
+      query.categoryId = { $in: Array.isArray(category) ? category : [category] };
+
+    if (subCategory)
+      query.subCategoryId = { $in: Array.isArray(subCategory) ? subCategory : [subCategory] };
+
+    if (size)
+      query["variants.size"] = { $in: Array.isArray(size) ? size : [size] };
+
+    if (sleeveType)
+      query.sleeveType = { $in: Array.isArray(sleeveType) ? sleeveType : [sleeveType] };
+
+    if (fitType)
+      query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
+
+    if (search && search.trim())
+      query.name = { $regex: search.trim(), $options: "i" };
 
     const totalCount = await Product.countDocuments(query);
 
     let productsQuery = Product.find(query)
-      .populate({ path: 'categoryId', match: { isListed: true, isDeleted: false } })
-      .populate({ path: 'subCategoryId', match: { isListed: true, isDeleted: false } })
+      .populate({
+        path: "categoryId",
+        match: { isListed: true, isDeleted: false },
+      })
+      .populate({
+        path: "subCategoryId",
+        match: { isListed: true, isDeleted: false },
+      })
       .skip(skip)
       .limit(pageSize)
       .lean();
-    
-    if (sortBy === 'pricelowhigh') {
-      productsQuery = productsQuery.sort({ 'variants.salePrice': 1 });
-    } else if (sortBy === 'pricehighlow') {
-      productsQuery = productsQuery.sort({ 'variants.salePrice': -1 });
-    } else if (sortBy === 'newest') {
+
+    if (sortBy === "pricelowhigh")
+      productsQuery = productsQuery.sort({ "variants.salePrice": 1 });
+
+    else if (sortBy === "pricehighlow")
+      productsQuery = productsQuery.sort({ "variants.salePrice": -1 });
+
+    else if (sortBy === "newest")
       productsQuery = productsQuery.sort({ createdAt: -1 });
-    } else {
+
+    else
       productsQuery = productsQuery.sort({ _id: -1 });
-    }
 
     let saleProducts = await productsQuery;
-    
+
     saleProducts = saleProducts.filter(
-      product => product.categoryId && product.subCategoryId
+      (p) => p.categoryId && p.subCategoryId
     );
-   
+
     const totalPages = Math.ceil(totalCount / pageSize);
-    const currentPage = Number(page) || 1;
 
     const params = [];
     if (category) params.push(`category=${category}`);
@@ -135,10 +152,10 @@ const salePage = async (req, res) => {
     if (fitType) params.push(`fitType=${fitType}`);
     if (sortBy) params.push(`sortBy=${sortBy}`);
     if (search) params.push(`search=${encodeURIComponent(search)}`);
-    
-    const paginationQuery = params.length ? `&${params.join('&')}` : '';
 
-    res.render('user/sale', {
+    const paginationQuery = params.length ? `&${params.join("&")}` : "";
+
+    res.render("user/sale", {
       categories,
       saleProducts,
       selectedCategories: Array.isArray(category) ? category : [category].filter(Boolean),
@@ -147,17 +164,21 @@ const salePage = async (req, res) => {
       selectedSleeves: Array.isArray(sleeveType) ? sleeveType : [sleeveType].filter(Boolean),
       selectedFits: Array.isArray(fitType) ? fitType : [fitType].filter(Boolean),
       sortBy,
-      currentPage,
+      currentPage: Number(page),
       totalPages,
       paginationQuery,
-      user: userDetails,
-      search: search
+      user,
+      search
     });
+
   } catch (err) {
-    errorLogger.error('Sale Page Error: %o', err);
-    res.status(500).send('Server error');
+    console.log("Sale Page Error:", err);
+    res.status(500).send("Server error");
   }
 };
+
+
+/////////////////////////////////////////////////////
 
 const PageNotFound = async (req, res) => {
   try {
@@ -261,27 +282,47 @@ async function securePassword(password) {
 const verifyOtp = async (req, res) => {
   try {
     const { otp } = req.body;
-    if (otp === req.session.userOtp) {
-      const user = req.session.userData;
-      const passwordHash = await securePassword(user.password);
-      const saveUserData = new User({
-        fullName: user.fullName,
-        email: user.email,
-        mobile: user.phone,
-        password: passwordHash
+
+    if (otp !== req.session.userOtp) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP, please try again"
       });
-      await saveUserData.save();
-      delete req.session.userOtp;
-      delete req.session.userData;
-      res.status(200).json({ success: true, redirectUrl: '/user/login' });
-    } else {
-      res.status(400).json({ success: false, message: 'Invalid OTP, please try again' });
     }
+
+    const user = req.session.userData;
+    const passwordHash = await securePassword(user.password);
+
+    const saveUserData = new User({
+      fullName: user.fullName,
+      email: user.email,
+      mobile: user.phone,
+      password: passwordHash
+    });
+
+    const newUser = await saveUserData.save();
+
+    req.session.user = {
+      _id: newUser._id,
+      name: newUser.fullName
+    };
+
+    delete req.session.userOtp;
+    delete req.session.userData;
+
+    return res.status(200).json({
+      success: true,
+      redirectUrl: '/user/home'
+    });
+
   } catch (error) {
-    errorLogger.error('Error in verifying OTP: %o', error);
-    res.status(500).json({ success: false, message: 'Error occurred in verifying OTP' });
+    return res.status(500).json({
+      success: false,
+      message: "Error occurred in verifying OTP"
+    });
   }
 };
+
 
 const resendOtp = async (req, res) => {
   try {

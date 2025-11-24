@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders | ModMen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { background: #fafafa; }
+        .sidebar-group { width: 300px; min-width: 300px; margin-top: 40px; display: flex; flex-direction: column; align-items: center; }
+        .sidebar-profile-capsule { width: 100%; height: 130px; background: #fff; border-radius: 32px; padding: 20px; display: flex; align-items: center; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .profile-img { width: 60px; height: 60px; border-radius: 50%; margin-right: 18px; background: #000; object-fit: cover; }
+        .sidebar-menu-box { width: 100%; background: #fff; border-radius: 28px; padding: 20px 0; margin-top: -12px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+        .sidebar-menu-list .list-group-item { background: transparent; border: none; font-size: 1.05rem; padding: 14px 26px; }
+        .main-content-section { padding-top: 40px; padding-left: 20px; }
+        .breadcrumb-small { font-size: 0.9rem; color: #777; margin-bottom: 5px; }
+        .main-title { font-size: 1.9rem; font-weight: 500; margin-bottom: 18px; }
+        .main-content-box { width: 900px; height: 680px; background: #fff; border-radius: 28px; padding: 28px 32px; border: 1px solid #e8e8e8; box-shadow: 0 4px 18px rgba(0,0,0,0.09); overflow-y: auto; }
+        .order-line { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid #eee; }
+        .product-img { width: 95px; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd; }
+        .order-left h6 { font-size: 1.1rem; margin-bottom: 4px; }
+        .order-left div { font-size: 0.92rem; color: #555; }
+        .status-label { font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; }
+        .order-buttons button, .order-buttons a { font-size: 0.85rem; padding: 7px 16px; border-radius: 8px; }
+        .delivery-text { font-weight: 700; margin-top: 14px; font-size: 0.95rem; color: #222; }
+        .orders-pagination { display: flex; justify-content: center; margin-top: 20px; gap: 8px; }
+        .circle-btn { width: 34px; height: 34px; border-radius: 50%; background: black; color: white; display: flex; justify-content: center; align-items: center; }
+        .page-num { font-size: 1.1rem; padding: 6px 12px; }
+        .page-active { font-weight: bold; border-bottom: 2px solid black; }
+    </style>
+</head>
+
+<body>
+
+<%- include('../partials/user/header', {user: user}) %>
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        <div class="col-lg-3 sidebar-group">
+            <div class="sidebar-profile-capsule">
+                <img src="<%= user.profileImage || '/images/default-avatar.png' %>" class="profile-img">
+                <span class="fw-semibold fs-5 text-dark"><%= user.fullName %></span>
+            </div>
+
+            <div class="sidebar-menu-box">
+                <div class="sidebar-menu-list list-group list-group-flush">
+                    <a href="/user/profile" class="list-group-item"><i class="fa fa-user me-3"></i> My Profile</a>
+                    <a href="/user/address" class="list-group-item"><i class="fa fa-location-arrow me-3"></i> My Address</a>
+                    <a href="/user/order" class="list-group-item"><i class="fa fa-bag-shopping me-3"></i> My Order</a>
+                    <a href="/user/wishlist" class="list-group-item"><i class="fa fa-heart me-3"></i> My Wishlist</a>
+                    <a href="/user/wallet" class="list-group-item"><i class="fa fa-wallet me-3"></i> My Wallet</a>
+                    <a href="/user/coupen" class="list-group-item"><i class="fa fa-ticket me-3"></i> My Coupen</a>
+                    <a href="/user/change-password" class="list-group-item"><i class="fa fa-lock me-3"></i> Change Password</a>
+                    <a href="/user/logout" class="list-group-item"><i class="fa fa-arrow-right-from-bracket me-3"></i> Log out</a>
+                    <a href="/user/referral-code" class="list-group-item"><i class="fa fa-users me-3"></i> Referral Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 main-content-section">
+
+            <div class="breadcrumb-small">Profile > my orders</div>
+            <div class="main-title">My Orders</div>
+
+            <div class="main-content-box">
+
+                <% if (!orders || orders.length === 0) { %>
+
+                <div class="text-center p-5">
+                    <h5>No orders yet</h5>
+                    <p class="text-muted small">Your orders will appear here.</p>
+                </div>
+
+                <% } else { orders.forEach(order => { 
+                    const item = order.orderedItems[0]; %>
+
+                <div class="order-line">
+
+                    <div class="d-flex gap-3 order-left">
+                        <img src="<%= order.imageUrl %>" class="product-img">
+
+                        <div>
+                            <h6><%= item.productId.name %></h6>
+                            <div>₹<%= item.salePrice %></div>
+                            <div>Quantity: <%= item.quantity %></div>
+                            <div>Order Id: <%= order.orderId %></div>
+                            <% if(order.moreItems > 0){ %>
+                                <div class="text-muted mt-1">+ <%= order.moreItems %> more items</div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="order-right text-end">
+
+                        <div class="status-label">
+                            Status : <%= order.status.replaceAll("_"," ").toUpperCase() %>
+                        </div>
+
+                        <div class="order-buttons d-flex gap-2 justify-content-end mt-2">
+
+                            <% if(
+                                order.status === "delivered" ||
+                                order.status === "return_requested" ||
+                                order.status === "returned"
+                            ){ %>
+                            <a href="/user/order/<%= order.orderId %>/invoice" class="btn btn-dark btn-sm px-3">
+                                <i class="fa fa-download me-1"></i> Invoice
+                            </a>
+                            <% } %>
+
+                            <a href="/user/order/<%= order.orderId %>" class="btn btn-dark btn-sm px-3">
+                                View Details
+                            </a>
+
+                            <% if(order.status === 'pending' || order.status === 'confirmed') { %>
+                            <button onclick="cancelOrder('<%= order.orderId %>')" class="btn btn-danger btn-sm px-3">
+                                Cancel
+                            </button>
+                            <% } %>
+
+                            <% if(order.status === 'delivered') { %>
+                            <!-- <a href="/user/order/<%= order.orderId %>/return" class="btn btn-dark btn-sm px-3">Return</a> -->
+                            <a href="/user/order/<%= order.orderId %>/review" class="btn btn-outline-dark btn-sm px-3">Review</a>
+                            <% } %>
+
+                        </div>
+
+                        <div class="delivery-text">
+
+    <% if (["pending", "confirmed", "shipped", "out_for_delivery"].includes(order.status)) { %>
+
+        Expect Delivery on <%= order.expectedDelivery %>
+
+    <% } else if (order.status === "delivered") { %>
+
+        Delivered on <%= new Date(order.deliveredOn).toLocaleDateString("en-GB") %>
+
+    <% } else if (order.status === "return_requested" || order.status === "returned") { %>
+
+        Delivered on <%= new Date(order.deliveredOn).toLocaleDateString("en-GB") %>
+
+    <% } else if (order.status === "cancelled") { %>
+
+        Cancelled on <%= new Date(order.cancelledOn).toLocaleDateString("en-GB") %>
+
+    <% } %>
+
+</div>
+
+
+                    </div>
+
+                </div>
+
+                <% }) } %>
+
+                <div class="orders-pagination">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>" class="circle-btn">
+                            <i class="fa fa-chevron-left"></i>
+                        </a>
+                    <% } %>
+
+                    <% for(let p=1; p<=totalPages; p++){ %>
+                        <span class="page-num <%= currentPage === p ? 'page-active' : '' %>">
+                            <a href="?page=<%= p %>" class="text-dark text-decoration-none"><%= p %></a>
+                        </span>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %>" class="circle-btn">
+                            <i class="fa fa-chevron-right"></i>
+                        </a>
+                    <% } %>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/user/footer') %>
+
+<script>
+async function cancelOrder(orderId) {
+    const { value: reason } = await Swal.fire({
+        title: "Cancel Order",
+        input: "text",
+        inputLabel: "Reason for cancellation",
+        inputPlaceholder: "Enter your reason",
+        showCancelButton: true,
+        confirmButtonText: "Submit"
+    });
+
+    if (!reason) {
+        return Swal.fire("Reason required!", "Please enter a reason.", "warning");
+    }
+
+    const res = await fetch(`/user/cancel-order/${orderId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        await Swal.fire("Cancelled!", data.message, "success");
+        location.reload();
+    } else {
+        Swal.fire("Oops!", data.message, "error");
+    }
+}
+</script>
+
+</body>
+</html>

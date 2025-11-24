@@ -377,6 +377,27 @@
   </div>
   <!-- Product Info Section -->
   <div class="col-md-5 d-flex flex-column justify-content-center pt-2 px-4">
+    <!-- BREADCRUMBS -->
+<nav aria-label="breadcrumb" class="mb-2">
+  <ol class="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+    <li class="breadcrumb-item">
+      <a href="/user/home" class="text-decoration-none text-dark fw-semibold">
+        <i class="fa fa-house me-1"></i> Home
+      </a>
+    </li>
+
+    <li class="breadcrumb-item">
+      <a href="/user/sale" class="text-decoration-none text-dark fw-semibold">
+        Sale
+      </a>
+    </li>
+
+    <li class="breadcrumb-item active text-dark fw-semibold" aria-current="page">
+      <%= product.name.length > 25 ? product.name.substring(0,25) + '...' : product.name %>
+    </li>
+  </ol>
+</nav>
+
     <h1 class="mb-1" style="font-family: 'Poppins', serif; font-size:2.1rem;font-weight:700;"><%= product.name %></h1>
     <div class="mb-2 d-flex align-items-center gap-2" style="margin-bottom:10px;">
       <span>
@@ -486,7 +507,10 @@
         <% } %>
 
       <button class="cart-btn" style="padding:12px 90px;border-radius:30px;font-weight:700;font-size:1.15em;background:#111;color:#fff;border:none;">Add to Cart</button>
-      <button class="wishlist-btn" title="Wishlist" style="background:#fff;color:#111;border:2px solid #101010;font-size:1.43em;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;margin-left:6px;"><i class="far fa-heart"></i></button>
+      <a href="/user/wishlist" class="wishlist-btn" title="Wishlist">
+  <i class="far fa-heart"></i>
+</a>
+
     </div>
   </div>
 </div>

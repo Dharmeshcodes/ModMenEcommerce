@@ -4,6 +4,7 @@ const customerController=require('../controllers/admin/customerController');
 const adminController=require('../controllers/admin/adminController');
 const categoryController=require('../controllers/admin/categoryController');
 const subcategoryController=require('../controllers/admin/subcategoryController');
+const orderController=require("../controllers/admin/orderController")
 const productController=require('../controllers/admin/productController');
 const {
   uploadProductImages,
@@ -66,6 +67,18 @@ router.delete('/deleteProduct/:id', adminAuth, productController.softDeleteProdu
 router.post('/product/:id/offer', adminAuth, productController.addOffer);
 router.patch('/product/:productId/offer', adminAuth, productController.editOffer);
 router.delete('/product/:productId/offer', adminAuth, productController.deleteOffer);
+
+
+//order
+router.get("/orders",adminAuth,orderController.getAdminOrderlist)
+router.get("/order/:orderId", adminAuth, orderController.getAdminOrderDetails);
+router.post('/order/:orderId/editStatus', adminAuth, orderController.updateOrderStatus);
+router.post("/order/:orderId/item/:itemId/editStatus", adminAuth, orderController.updateOrderItemStatus);
+router.post("/order/:orderId/item/:itemId/return-decision",adminAuth, orderController.returnItemDecision);
+router.post("/order/:orderId/return-decision",adminAuth, orderController.returnFullOrderDecision);
+
+
+
 
 router.get('/pageerror',(req, res) => res.render('admin/pageerror', { error: req.query.error || 'An unexpected error occurred' }));
 
