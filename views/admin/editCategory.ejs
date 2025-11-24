@@ -94,6 +94,7 @@
               <button type="button" class="img-upload-btn-edit" onclick="document.getElementById('imageInput').click();">
                 Change Image
               </button>
+              <div class="text-danger small" id="imageError"></div>
             </div>
 
             <div class="edit-row-flex">
@@ -110,6 +111,7 @@
                   value="<%= category.offer ? category.offer.offerPercentage : '' %>"
                   placeholder="Offer..."
                 />
+                <div class="text-danger small" id="offerPercentError"></div>
               </div>
               <div class="edit-col-flex">
                 <label for="maxRedeemable" class="form-label-edit">Max Redeemable</label>
@@ -117,11 +119,13 @@
                   type="number"
                   min="0"
                   class="form-input-edit"
+
                   id="maxRedeemable"
                   name="offer[maxRedeem]"
                   value="<%= category.offer ? category.offer.maxRedeem : '' %>"
                   placeholder="Max Redeem..."
                 />
+                <div class="text-danger small" id="maxRedeemError"></div>
               </div>
             </div>
 
@@ -135,6 +139,7 @@
                   name="offer[startDate]"
                   value="<%= category.offer && category.offer.startDate ? new Date(category.offer.startDate).toISOString().slice(0,10) : '' %>"
                 />
+                  
               </div>
               <div class="edit-col-flex">
                 <label for="validUntil" class="form-label-edit">Offer Valid Until</label>
@@ -158,6 +163,7 @@
               value="<%= category.name || '' %>"
               placeholder="e.g. Formals"
             />
+              <div class="text-danger small" id="nameError"></div>
 
             <label class="form-label-edit">Subcategories</label>
             <div>
@@ -178,6 +184,7 @@
               rows="2"
               class="desc-edit-box"
               placeholder="Category description..."><%= category.description || '' %></textarea>
+                <div class="text-danger small" id="descriptionError"></div>
 
             <div class="btn-edit-row">
               <button type="submit" class="btn btn-update btn-edit-cat">
@@ -238,10 +245,68 @@
       }
     });
   }
-   
 
 
+document.querySelector("form").addEventListener("submit", function(e) {
 
+  document.getElementById("nameError").innerText = "";
+  document.getElementById("descriptionError").innerText = "";
+  document.getElementById("offerPercentError").innerText = "";
+  document.getElementById("maxRedeemError").innerText = "";
+  document.getElementById("imageError").innerText = "";
+
+  let isValid = true;
+
+  const name = document.getElementById("name").value.trim();
+  if (name.length < 3) {
+    document.getElementById("nameError").innerText = "Category name must have at least 3 characters.";
+    isValid = false;
+  }
+
+
+  const description = document.getElementById("description").value.trim();
+  if (description.length < 3) {
+    document.getElementById("descriptionError").innerText = "Description must have at least 3 characters.";
+    isValid = false;
+  }
+
+  const offerValue = document.getElementById("categoryOffer").value.trim();
+  if (offerValue !== "") {
+    const offerNum = Number(offerValue);
+    if (offerNum < 1 || offerNum > 100) {
+      document.getElementById("offerPercentError").innerText = "Offer must be between 1 and 100.";
+      isValid = false;
+    }
+  }
+
+
+  const maxRedeemValue = document.getElementById("maxRedeemable").value.trim();
+  if (maxRedeemValue !== "" && Number(maxRedeemValue) < 0) {
+    document.getElementById("maxRedeemError").innerText = "Max redeem value cannot be negative.";
+    isValid = false;
+  }
+
+ 
+  const imageInput = document.getElementById("imageInput");
+  if (imageInput.files.length > 0) {
+    const file = imageInput.files[0];
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+      document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG, and WEBP images are allowed.";
+      isValid = false;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      document.getElementById("imageError").innerText = "Image size must be less than 2MB.";
+      isValid = false;
+    }
+  }
+
+  if (!isValid) {
+    e.preventDefault();
+  }
+});
 
 </script>
 </body>

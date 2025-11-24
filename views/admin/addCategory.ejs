@@ -57,33 +57,39 @@
           <% } %>
         <% } %>
         
-        <form action="/admin/addCategory" method="POST" enctype="multipart/form-data" autocomplete="off" class="category-card">
+        <form novalidate action="/admin/addCategory" method="POST" enctype="multipart/form-data" autocomplete="off" class="category-card">
           <!-- Header Image Upload -->
           <div id="imageUploadZone" class="header-image-upload" tabindex="0">
             <div id="previewHolder"></div>
             <span id="image-placeholder">Drag and drop an image, or click "Add Image"</span>
             <input type="file" name="categoryImage" id="headerImage" accept="image/*"/>
+            <div class="text-danger small mt-1" id="imageError"></div>
             <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="triggerImageBtn">Add Image</button>
           </div>
           <!-- Category Name -->
           <div class="mb-3">
             <label class="form-label">Category Name</label>
-            <input type="text" class="form-control" name="name" required placeholder="Type category name here..." autocomplete="off"/>
+            <input type="text" class="form-control" name="name" id="name" required placeholder="Type category name here..." autocomplete="off"/>
+            <div class="text-danger small" id="nameError"></div>
           </div>
           <!-- Description -->
           <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea class="form-control" rows="4" name="description" required placeholder="Type category description here..." autocomplete="off"></textarea>
+            <textarea class="form-control" rows="4" name="description" id ="description" required placeholder="Type category description here..." autocomplete="off"></textarea>
+            <div class="text-danger small" id="descriptionError"></div>
+
           </div>
           <!-- Offer -->
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Category Offer (%)</label>
-              <input type="number" min="0" max="99" step="1" class="form-control" name="offer[offerPercentage]" placeholder="%" autocomplete="off"/>
+              <input type="number" min="0" max="99" step="1" class="form-control" name="offer[offerPercentage]" id="offer[offerPercentage]" placeholder="%" autocomplete="off"/>
+              <div class="text-danger small" id="offerPercentError"></div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Max Redeemable</label>
-              <input type="number" min="0" class="form-control" name="offer[maxRedeem]" placeholder="₹" autocomplete="off"/>
+              <input type="number" min="0" class="form-control" name="offer[maxRedeem]" id="offer[maxRedeem]" placeholder="₹" autocomplete="off"/>
+              <div class="text-danger small" id="maxRedeemError"></div>
             </div>
           </div>
           <div class="row mb-3">
@@ -158,6 +164,65 @@
         document.getElementById('image-placeholder').style.display = '';
       }
     }
+
+document.querySelector("form").addEventListener("submit", function(e) {
+
+  document.getElementById("nameError").innerText = "";
+  document.getElementById("descriptionError").innerText = "";
+  document.getElementById("offerPercentError").innerText = "";
+  document.getElementById("maxRedeemError").innerText = "";
+  document.getElementById("imageError").innerText = "";
+
+  let isValid = true;
+
+
+  const name = document.getElementById("name").value.trim();
+  if (name.length < 3) {
+    document.getElementById("nameError").innerText = "Category name must be at least 3 characters";
+    isValid = false;
+  }
+
+
+  const description = document.getElementById("description").value.trim();
+  if (!description) {
+    document.getElementById("descriptionError").innerText = "Category description is required";
+    isValid = false;
+  }
+
+  const offerPercentage = document.getElementById("offer[offerPercentage]").value;
+  if (offerPercentage !== "" && (offerPercentage < 0 || offerPercentage > 99)) {
+    document.getElementById("offerPercentError").innerText = "Offer must be between 0 and 99";
+    isValid = false;
+  }
+
+
+  const maxRedeem = document.getElementById("offer[maxRedeem]").value;
+  if (maxRedeem !== "" && maxRedeem < 0) {
+    document.getElementById("maxRedeemError").innerText = "Max redeem cannot be negative";
+    isValid = false;
+  }
+
+ 
+  const imageElement = document.getElementById("headerImage");
+  const files = imageElement.files;
+
+  if (files.length === 0) {
+    document.getElementById("imageError").innerText = "Please upload an image";
+    isValid = false;
+  } else {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const file = files[0];
+
+    if (!allowedTypes.includes(file.type)) {
+      document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG or WEBP files are allowed";
+      isValid = false;
+    }
+  }
+
+
+  if (!isValid) e.preventDefault();
+});
+    
   </script>
 </body>
 </html>

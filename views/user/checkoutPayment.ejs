@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Payment | ModMen</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body { background: #f8f8f8; color: #111; }
+    .main-box { background:#fff; border-radius:18px; padding:28px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .payment-card { background:#fff; border-radius:14px; padding:22px; border:1px solid #eee; }
+    .method-item { display:flex; align-items:center; gap:12px; padding:14px; border-radius:10px; margin-bottom:12px; background:#fafafa; border:1px solid #f0f0f0; }
+    .method-item.disabled { opacity:0.6; cursor:not-allowed; }
+    .method-label { font-weight:600; font-size:15px; }
+    .summary-card { background:#fff; border-radius:14px; padding:22px; border:1px solid #eee; }
+    .product-row { display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px dashed #eee; }
+    .product-row img { width:64px; height:64px; object-fit:cover; border-radius:8px; }
+    .place-order-btn { background:#000; color:#fff; border-radius:8px; padding:12px 18px; border:none; font-weight:600; width:100%; }
+    .section-title { font-weight:700; font-size:18px; margin-bottom:12px; }
+    .small-muted { color:#6c757d; font-size:13px; }
+  </style>
+
+</head>
+<body>
+
+  <%- include('../partials/user/header') %>
+
+  <% 
+    const inStockItems = cartItems.filter(i => i.productId.stock > 0);
+    const hasOOS = cartItems.some(i => i.productId.stock === 0);
+  %>
+
+  <div class="container my-4">
+    <div class="main-box">
+
+      <div class="row gx-4 gy-4">
+
+        <!-- PAYMENT METHODS -->
+        <div class="col-lg-6">
+          <div class="payment-card">
+
+            <div class="section-title">Payment Methods</div>
+            <p class="small-muted">This week only <b>Cash on Delivery</b> is available.</p>
+
+            <form id="paymentForm">
+              <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
+              <input type="hidden" name="paymentMethod" value="COD">
+
+              <label class="method-item disabled">
+                <input type="radio" disabled>
+                <div class="method-label">Debit / Credit Card</div>
+              </label>
+
+              <label class="method-item disabled">
+                <input type="radio" disabled>
+                <div class="method-label">Bank Transfer</div>
+              </label>
+
+              <label class="method-item disabled">
+                <input type="radio" disabled>
+                <div class="method-label">UPI Method</div>
+              </label>
+
+              <label class="method-item" id="codMethod">
+                <input type="radio" name="method" value="COD" checked>
+                <div>
+                  <div class="method-label">Cash on Delivery</div>
+                  <div class="small-muted">Pay after receiving your order</div>
+                </div>
+              </label>
+
+              <label class="method-item disabled">
+                <input type="radio" disabled>
+                <div class="method-label">Wallet</div>
+              </label>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="col-lg-6">
+          <div class="summary-card">
+
+            <div class="d-flex justify-content-between mb-3">
+              <div>
+                <div class="section-title mb-0">Order Details</div>
+
+                <div class="small-muted">
+                  <b><%= address.fullName %></b>
+                </div>
+
+                <div class="small-muted">
+                  <%= address.houseNo %>, <%= address.city %>, <%= address.state %> - <%= address.pincode %>
+                </div>
+              </div>
+
+              <div class="text-end small-muted">
+                Items: <%= inStockItems.length %>
+              </div>
+            </div>
+
+            <% inStockItems.forEach(item => { %>
+              <div class="product-row">
+                <img src="<%= (item.productId.images?.[0]?.url) || item.mainImage || '/placeholder.png' %>">
+
+                <div style="flex:1;">
+                  <div style="font-weight:700;"><%= item.productId.name %></div>
+                  <div class="small-muted">Qty: <%= item.quantity %></div>
+                </div>
+
+                <div class="text-end">
+                  <div class="small-muted text-decoration-line-through">₹<%= item.variantPrice %></div>
+                  <div style="font-weight:700;">₹<%= item.salePrice * item.quantity %></div>
+                </div>
+              </div>
+            <% }) %>
+
+            <div class="mt-3">
+
+              <div class="d-flex justify-content-between">
+                <div class="small-muted">Subtotal</div>
+                <div>₹<%= grandTotal %></div>
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <div class="small-muted">GST (18%)</div>
+                <div>₹<%= tax.toFixed(0) %></div>
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <div class="small-muted">Delivery Charge</div>
+                <div><%= shippingCharge > 0 ? "₹" + shippingCharge : "Free" %></div>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-between">
+                <div class="section-title mb-0">Total</div>
+                <div style="font-size:20px; font-weight:700;">₹<%= payableTotal.toFixed(0) %></div>
+              </div>
+
+              <div class="mt-3">
+                <button id="placeOrderBtn" class="place-order-btn" type="button">Proceed</button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('../partials/user/footer') %>
+
+  <!-- FIXED SCRIPT -->
+  <script>
+  
+document.addEventListener("DOMContentLoaded", () => {
+
+  const placeBtn = document.getElementById("placeOrderBtn");
+  const form = document.getElementById("paymentForm");
+
+  placeBtn.addEventListener("click", () => {
+
+    const addressId = form.addressId.value;
+
+    if (!addressId) {
+      Swal.fire({
+        icon: "warning",
+        title: "Address Missing",
+        text: "Please select a delivery address first.",
+      });
+      return;
+    }
+
+    window.location.href = "/user/order-review?addressId=" + addressId;
+
+  });
+
+});
+
+
+  </script>
+
+</body>
+</html>

@@ -114,7 +114,7 @@
           .lean();
 
         if (!category) {
-          return res.status(404).render("admin/Page-404", { messages: "Category not found" });
+          return res.status(404).render('admin/Page-404', { messages: 'Category not found' });
         }
 
         category.subcategories = Array.isArray(category.subcategories) ? category.subcategories : [];
@@ -125,10 +125,10 @@
           validUntil: null
         };
 
-        return res.render("admin/viewCategory", { category });
+        return res.render('admin/viewCategory', { category });
       } catch (error) {
         console.error('Error in viewCategory:', error);
-        return res.status(500).send("Server error in viewCategory");
+        return res.status(500).send('Server error in viewCategory');
       }
     };
 const loadEditCategory = async (req, res) => {
@@ -160,7 +160,6 @@ const updateCategory = async (req, res) => {
       isListed,
     } = req.body;
     const image = req.file ? req.file.path : null;
-
     
     const existingCategory = await Category.findOne({ name: name.trim(), _id: { $ne: categoryId } });
     if (existingCategory) {
@@ -210,13 +209,12 @@ module.exports = {
   updateCategory,
 };
 
-
     const updateCategoryOffer = async (req, res) => {
       try {
         const { categoryId, offer, maxRedeemable, startDate, validUntil } = req.body;
 
         if (!categoryId || offer === undefined || !startDate || !validUntil) {
-          return res.status(400).json({ success: false, message: "Missing required fields" });
+          return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
         const category = await Category.findById(categoryId);
         if (!category) {
@@ -234,13 +232,13 @@ module.exports = {
 
         res.status(200).json({
           success: true,
-          message: "Offer updated successfully",
+          message: 'Offer updated successfully',
           data: category
         });
 
       } catch (error) {
-        console.error("Offer update error:", error);
-        res.status(500).json({ success: false, message: "Server error while updating offer" });
+        console.error('Offer update error:', error);
+        res.status(500).json({ success: false, message: 'Server error while updating offer' });
       }
     };
 
@@ -256,10 +254,10 @@ module.exports = {
         category.offer = undefined;
 
         await category.save();
-        res.status(200).json({ success: true, message: "Category offer deleted successfully" });
+        res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
       } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: "Server error while deleting the offer" });
+        res.status(500).json({ success: false, message: 'Server error while deleting the offer' });
       }
     };
 

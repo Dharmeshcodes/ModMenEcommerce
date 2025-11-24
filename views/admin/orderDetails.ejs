@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Order Details | ModMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#f6f7fb; }
+    .admin-page { min-height:100vh; }
+    .content-area { padding:28px; }
+    .breadcrumb-small { font-size:0.9rem; color:#777; }
+    .page-title { font-size:1.4rem; font-weight:600; margin-bottom:10px; }
+
+    .card-sm { border-radius:12px; background:#fff; border:1px solid #ececec; box-shadow:0 6px 18px rgba(2,6,23,0.04); padding:16px; }
+
+    .product-thumb { width:64px; height:72px; object-fit:cover; border-radius:8px; background:#f2f2f2; }
+
+    .table-order thead th { background:#fafafa; border-bottom:1px solid #eee; font-weight:600; font-size:0.92rem; }
+    .table-order tbody td { vertical-align:middle; padding:12px; font-size:0.9rem; border-top:1px solid #f6f6f6; }
+
+    .summary-row { display:flex; justify-content:space-between; padding:8px 0; color:#333; }
+
+    .status-badge { padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.85rem; }
+    .status-pending { background:#fff8e6; color:#d49c00; }
+    .status-confirmed { background:#e8f4ff; color:#0b66ff; }
+    .status-shipped { background:#eef9ff; color:#0288d1; }
+    .status-out_for_delivery { background:#f3e9ff; color:#7b1fa2; }
+    .status-delivered { background:#e7f9ee; color:#138000; }
+    .status-cancelled { background:#ffecec; color:#e53935; }
+    .status-return_requested { background:#fff3e6; color:#ff6f00; }
+    .status-returned { background:#f6efe6; color:#6d4c41; }
+    .status-failed { background:#fdecea; color:#7f0000; }
+
+    .item-status { font-weight:600; font-size:0.88rem; display:inline-block; margin-right:8px; vertical-align:middle; }
+    .item-edit-btn { background:transparent; border:0; color:#666; padding:4px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:6px; }
+    .item-edit-btn:hover { background:#f4f4f6; color:#111; }
+
+    .bottom-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:18px; }
+    .btn-back { background:#111; color:#fff; border:0; padding:10px 16px; border-radius:8px; }
+    .btn-invoice { background:#fff; color:#111; border:1px solid #111; padding:10px 16px; border-radius:8px; }
+    .btn-cancel { background:#dc3545; color:#fff; border:0; padding:10px 16px; border-radius:8px; }
+
+    .order-header { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+    .order-meta { display:flex; gap:12px; align-items:center; color:#555; font-size:0.95rem; }
+    .order-meta .meta-label { font-weight:700; color:#222; }
+
+    @media (max-width:992px) {
+      .order-header { flex-direction:column; align-items:flex-start; }
+      .bottom-actions { justify-content:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page d-flex">
+    <%- include('../partials/admin/sidebar') %>
+    <div class="flex-grow-1">
+      <%- include('../partials/admin/header') %>
+
+      <main class="content-area container-fluid">
+        <div class="mb-3">
+          <div class="breadcrumb-small"><a href="/admin/dashboard" class="text-decoration-none">Dashboard</a> &gt; <a href="/admin/orders" class="text-decoration-none">Order List</a> &gt; Order Details</div>
+          <div class="page-title">Order Details</div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card-sm mb-3">
+              <div class="order-header mb-2">
+                <div>
+                  <div style="font-weight:700; font-size:1rem;">Order #<%= order.orderId %></div>
+                  <div class="mt-2"><span class="status-badge status-<%= order.status %>"><%= order.status.replaceAll("_"," ") %></span></div>
+                </div>
+                <div class="order-meta">
+                  <div><span class="meta-label">Date:</span> <strong style="font-weight:700; margin-left:6px;"><%= (new Date(order.createdOn || order.createdAt)).toLocaleDateString('en-GB') %></strong></div>
+                  <div><span class="meta-label">Payment:</span> <span style="margin-left:6px;"><%= order.paymentMethod ? order.paymentMethod.toUpperCase() : 'COD' %></span></div>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-2">
+                <div class="col-md-6">
+                  <div style="font-weight:700; margin-bottom:8px;">Customer</div>
+                  <div style="font-weight:600;"><%= order.userId?.fullName || order.customerName || 'Customer' %></div>
+                  <div class="text-muted"><%= order.userId?.email || order.customerEmail || '' %></div>
+                  <div class="text-muted"><%= order.userId?.mobile || order.customerPhone || '' %></div>
+                </div>
+
+                <div class="col-md-6">
+                  <div style="font-weight:700; margin-bottom:8px;">Address</div>
+                  <div class="text-muted"><%= order.address %></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-sm mb-3">
+              <div style="font-weight:700; margin-bottom:12px;">Order Items</div>
+              <div class="table-responsive">
+                <table class="table table-order mb-0">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>SKU</th>
+                      <th>QTY</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% items.forEach(it => { %>
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center gap-3">
+                            <img src="<%= it.image %>" class="product-thumb" alt="img">
+                            <div>
+                              <div style="font-weight:600; display:flex; align-items:center; gap:8px;">
+                                <span><%= it.productName %></span>
+                                <span class="item-status status-<%= it.status %>"><%= (it.status).toString().replaceAll("_"," ") %></span>
+                                <button class="item-edit-btn" title="Edit item status" onclick="changeItemStatus('<%= order.orderId %>', '<%= it.itemId %>')">
+                                  <i class="fa fa-pen"></i>
+                                </button>
+                              </div>
+                              <% if(it.size || it.color){ %>
+                                <div class="text-muted small">
+                                  <% if(it.size){ %>Size: <%= it.size %><% } %>
+                                  <% if(it.color){ %> &nbsp; Color: <%= it.color %><% } %>
+                                </div>
+                              <% } %>
+
+                              <% if (it.status === "return_requested") { %>
+                                <div class="mt-2 p-2 border rounded bg-light" style="max-width:320px;">
+                                  <div style="font-size:0.85rem; font-weight:600;">Return Reason:</div>
+                                  <div style="font-size:0.85rem;" class="text-muted"><%= it.returnReason %></div>
+                                  <div class="mt-2 d-flex gap-2">
+                                    <button class="btn btn-sm btn-success" onclick="handleItemReturnDecision('<%= order.orderId %>','<%= it.itemId %>','accept')">Accept</button>
+                                    <button class="btn btn-sm btn-danger" onclick="handleItemReturnDecision('<%= order.orderId %>','<%= it.itemId %>','reject')">Reject</button>
+                                  </div>
+                                </div>
+                              <% } %>
+
+                            </div>
+                          </div>
+                        </td>
+                        <td><%= it.sku || '' %></td>
+                        <td><%= it.quantity %></td>
+                        <td>₹<%= it.price %></td>
+                        <td>₹<%= it.total %></td>
+                      </tr>
+                    <% }) %>
+
+                    <tr>
+                      <td colspan="4" class="text-end text-muted">Subtotal</td>
+                      <td>₹<%= order.subTotal %></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card-sm mb-3">
+              <div style="font-weight:700; margin-bottom:10px;">Order Summary</div>
+              <div class="mb-2">
+                <div class="summary-row"><div>Payment Status</div><div><strong><%= order.paymentStatus || '' %></strong></div></div>
+                <div class="summary-row"><div>Expected Delivery</div><div><strong><%= expectedDelivery %></strong></div></div>
+                <div class="summary-row"><div>Subtotal</div><div>₹<%= order.subTotal %></div></div>
+                <div class="summary-row"><div>CGST (9%)</div><div>₹<%= cgst %></div></div>
+                <div class="summary-row"><div>SGST (9%)</div><div>₹<%= sgst %></div></div>
+                <div class="summary-row"><div>Delivery Charge</div><div>₹<%= order.deliveryCharge || 0 %></div></div>
+                <% if(order.discountAmount && order.discountAmount > 0) { %>
+                  <div class="summary-row"><div>Discount</div><div>- ₹<%= order.discountAmount %></div></div>
+                <% } %>
+                <div class="summary-row fw-bold"><div>Grand Total</div><div>₹<%= order.payableAmount %></div></div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="text-muted">Order created: <%= (new Date(order.createdOn || order.createdAt)).toLocaleString('en-GB') %></div>
+            </div>
+
+            <div class="bottom-actions">
+              <a href="/admin/orders" class="btn btn-back">Back</a>
+              <a href="/admin/order/<%= order.orderId %>/invoice" class="btn btn-invoice">Invoice</a>
+            </div>
+
+            <% if (order.status === 'return_requested') { %>
+              <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-success" onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'accept')">Accept Full Return</button>
+                <button class="btn btn-danger" onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'reject')">Reject Full Return</button>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    async function changeItemStatus(orderId, itemId) {
+      const { value: status } = await Swal.fire({
+        title: "Update Item Status",
+        input: "select",
+        inputOptions: {
+          pending: "Pending",
+          confirmed: "Confirmed",
+          shipped: "Shipped",
+          out_for_delivery: "Out For Delivery",
+          delivered: "Delivered",
+          cancelled: "Cancelled"
+        },
+        inputPlaceholder: "Select status",
+        showCancelButton: true
+      });
+
+      if (!status) return;
+
+      const res = await fetch(`/admin/order/${orderId}/item/${itemId}/editStatus`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newStatus: status })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Success", "Item status updated", "success").then(() => location.reload());
+      } else {
+        Swal.fire("Error", data.msg || "Update failed", "error");
+      }
+    }
+
+    async function handleItemReturnDecision(orderId, itemId, decision) {
+      const res = await fetch(`/admin/order/${orderId}/item/${itemId}/return-decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ decision })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Success", data.message, "success").then(() => location.reload());
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    }
+
+    async function handleFullOrderReturnDecision(orderId, decision) {
+      const res = await fetch(`/admin/order/${orderId}/return-decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ decision })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Success", data.message, "success").then(() => location.reload());
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    }
+  </script>
+</body>
+</html>

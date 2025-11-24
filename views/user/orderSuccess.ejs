@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Success</title>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .success-left-box, .success-right-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 35px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.12);
+    }
+
+    .success-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .green-circle {
+      width: 55px;
+      height: 55px;
+      background-color: #28a745;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      margin: 0 auto 10px auto;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    .detail-key {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #000;
+    }
+
+    .success-image {
+      width: 100%;
+      max-width: 320px;
+      margin: auto;
+      display: block;
+    }
+
+    .btn-custom {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 8px 20px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Header -->
+  <%- include('../partials/user/header') %>
+
+  <div class="container my-5">
+
+    <div class="row g-4">
+
+      <!-- LEFT SIDE -->
+      <div class="col-lg-6">
+        <div class="success-left-box text-center">
+
+          <img src="/user/images/orderSuccess/1.png" class="success-image" alt="Order Success">
+
+
+          <div class="mt-4">
+            <a href="/user/order" class="btn btn-primary btn-custom me-2">View Orders</a>
+            <a href="/user/sale" class="btn btn-outline-dark btn-custom">Continue Shopping</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="col-lg-6">
+        <div class="success-right-box">
+
+          <div class="green-circle">
+            <i class="fa fa-check"></i>
+          </div>
+
+          <h4 class="text-center fw-bold mb-3">Payment Success!</h4>
+
+          <hr>
+
+          <div class="detail-row">
+            <span class="detail-key">Order ID</span>
+            <span class="detail-value"><%= order.orderId %></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-key">Order Time</span>
+            <span class="detail-value"><%= order.createdAt.toLocaleString() %></span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-key">Payment Method</span>
+            <span class="detail-value">
+              <%= order.paymentMethod === 'cod' ? 'Cash on Delivery' : (order.paymentMethod === 'razorpay' ? 'Razorpay' : 'Wallet') %>
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-key">Amount</span>
+            <span class="detail-value">₹ <%= order.payableAmount %></span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('../partials/user/footer') %>
+
+</body>
+</html>

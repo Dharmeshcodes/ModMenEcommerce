@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Order List | ModMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#f6f7fb; }
+    .admin-page { min-height:100vh; }
+    .content-area { padding:34px 28px; }
+
+    .page-head { display:flex; justify-content:space-between; margin-bottom:18px; }
+    .page-title { font-size:1.4rem; font-weight:600; }
+    .breadcrumb-small { font-size:0.85rem; color:#777; }
+
+    .search-wrap { position:relative; flex:1; max-width:560px; }
+    .search-wrap .form-control {
+      padding-left:40px; padding-right:40px;
+      height:42px; border-radius:10px; background:#fff;
+      font-size:0.85rem;
+    }
+    .search-icon {
+      position:absolute; left:12px; top:50%;
+      transform:translateY(-50%); color:#777; font-size:0.9rem;
+    }
+    .search-clear {
+      position:absolute; right:10px; top:50%;
+      transform:translateY(-50%); border:0; background:transparent;
+      color:#777; display:none; font-size:0.9rem;
+    }
+
+    .filter-btn {
+      height:42px; border-radius:10px; background:#fff;
+      border:1px solid #eee; padding:6px 12px; font-size:0.85rem;
+    }
+
+    .orders-card { background:#fff; border-radius:12px; padding:16px;
+      box-shadow:0 0 8px rgba(0,0,0,0.05); }
+
+    .orders-table thead th {
+      background:#000; color:#fff; padding:12px; font-size:0.82rem;
+    }
+    .orders-table tbody td {
+      padding:12px 10px; font-size:0.8rem;
+      vertical-align:middle;
+    }
+
+    .product-thumb {
+      width:45px; height:55px;
+      object-fit:cover; border-radius:6px;
+    }
+
+    .fw-semibold { font-size:0.82rem !important; }
+    .text-muted.small { font-size:0.7rem !important; }
+
+    .status-badge {
+      padding:4px 8px; border-radius:999px;
+      font-weight:600; font-size:0.7rem;
+    }
+
+    .status-pending { background:#fff3e0; color:#ff9800; }
+    .status-confirmed { background:#e8f4ff; color:#0b66ff; }
+    .status-shipped { background:#eef9ff; color:#0288d1; }
+    .status-out_for_delivery { background:#f3e9ff; color:#7b1fa2; }
+    .status-delivered { background:#e7f9ee; color:#138000; }
+    .status-cancelled { background:#ffecec; color:#e53935; }
+
+    .action-btn {
+      padding:5px 8px; border-radius:6px;
+      background:#fff; border:1px solid #eee;
+      font-size:0.75rem;
+    }
+
+    .orders-table tbody td:first-child a {
+      font-size:0.78rem;
+    }
+  </style>
+</head>
+
+<body>
+<div class="admin-page d-flex">
+  <%- include('../partials/admin/sidebar') %>
+
+  <div class="flex-grow-1">
+    <%- include('../partials/admin/header') %>
+
+    <main class="content-area">
+
+      <div class="page-head">
+        <div>
+          <div class="breadcrumb-small">Dashboard > Order List</div>
+          <div class="page-title">Order List</div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="search-wrap">
+            <i class="fa fa-search search-icon"></i>
+
+            <input
+              id="searchInput"
+              class="form-control"
+              placeholder="Search Order, customer, product..."
+              value="<%= search || '' %>"
+            />
+
+            <button id="clearSearch" class="search-clear">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+
+          <div class="filter-btn position-relative" id="filterWrapper">
+            <i class="fa fa-filter me-2"></i> Filter
+            <div class="dropdown-menu p-2" id="filterMenu" style="min-width:160px;">
+              <button class="dropdown-item" data-filter="">All</button>
+              <button class="dropdown-item" data-filter="pending">Pending</button>
+              <button class="dropdown-item" data-filter="confirmed">Confirmed</button>
+              <button class="dropdown-item" data-filter="shipped">Shipped</button>
+              <button class="dropdown-item" data-filter="out_for_delivery">Out For Delivery</button>
+              <button class="dropdown-item" data-filter="delivered">Delivered</button>
+              <button class="dropdown-item" data-filter="cancelled">Cancelled</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="orders-card mt-3">
+
+        <table class="table orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% if (!orders || orders.length === 0) { %>
+              <tr>
+                <td colspan="8" class="text-center text-muted py-5">No Orders Found</td>
+              </tr>
+            <% } else { orders.forEach(order => { %>
+
+              <% 
+                const first = order.orderedItems[0];
+                const more = order.orderedItems.length - 1;
+                const dateObj = new Date(order.createdOn || order.createdAt);
+                const dateStr = dateObj.toLocaleDateString("en-GB", {
+                  day:"numeric", month:"short", year:"numeric"
+                });
+              %>
+
+              <tr>
+                <td>
+                  <a href="/admin/order/<%= order.orderId %>" class="text-primary text-decoration-none">
+                    #<%= order.orderId %>
+                  </a>
+                </td>
+
+                <td>
+                  <div class="d-flex align-items-center gap-2 product-col">
+                    <img src="<%= order.imageUrl %>" class="product-thumb">
+
+                    <div>
+                      <div class="fw-semibold"><%= first.productName %></div>
+                      <% if(more > 0) { %>
+                        <div class="text-muted small">+ <%= more %> more</div>
+                      <% } %>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="text-muted"><%= dateStr %></td>
+
+                <td>
+                  <div class="fw-semibold"><%= order.customerName %></div>
+                </td>
+
+                <td>₹<%= order.payableAmount %></td>
+
+                <td class="text-muted text-capitalize"><%= order.paymentMethod %></td>
+
+                <td>
+                  <span class="status-badge status-<%= order.status %>">
+                    <%= order.status.replaceAll("_"," ") %>
+                  </span>
+                </td>
+
+                <td>
+                    <!-- VIEW ORDER DETAILS -->
+                    <a href="/admin/order/<%= order.orderId %>" class="action-btn me-2">
+                        <i class="fa fa-eye"></i>
+                    </a>
+
+                    <!-- UPDATE ORDER STATUS -->
+                    <button class="action-btn" onclick="changeStatus('<%= order.orderId %>')">
+                        <i class="fa fa-pen"></i>
+                    </button>
+                </td>
+
+              </tr>
+
+            <% }) } %>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div class="text-muted small">
+            Showing <%= (currentPage-1)*limit+1 %>–
+            <%= Math.min(currentPage*limit, totalOrders) %>
+            of <%= totalOrders %>
+          </div>
+
+          <div class="pagination-wrap d-flex align-items-center">
+
+            <% if(currentPage > 1){ %>
+              <a href="?page=<%= currentPage-1 %><%= search ? '&search='+search : '' %><%= status ? '&status='+status : '' %>" class="btn btn-light btn-sm">
+                <i class="fa fa-chevron-left"></i>
+              </a>
+            <% } %>
+
+            <% for(let p=1; p<=totalPages; p++){ %>
+              <% if(p === currentPage){ %>
+                <span class="btn btn-dark btn-sm"><%= p %></span>
+              <% } else { %>
+                <a href="?page=<%= p %><%= search ? '&search='+search : '' %><%= status ? '&status='+status: '' %>" class="btn btn-outline-dark btn-sm"><%= p %></a>
+              <% } %>
+            <% } %>
+
+            <% if(currentPage < totalPages){ %>
+              <a href="?page=<%= currentPage+1 %><%= search ? '&search='+search : '' %><%= status ? '&status='+status : '' %>" class="btn btn-light btn-sm">
+                <i class="fa fa-chevron-right"></i>
+              </a>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+  const searchInput=document.getElementById("searchInput");
+  const clearBtn=document.getElementById("clearSearch");
+
+  function updateClearBtn(){
+    clearBtn.style.display=searchInput.value.trim() ? "block" : "none";
+  }
+  updateClearBtn();
+
+  searchInput.addEventListener("input",updateClearBtn);
+
+  searchInput.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      const val=searchInput.value.trim();
+      const url=new URL(window.location.href);
+
+      if(val) url.searchParams.set("search",val);
+      else url.searchParams.delete("search");
+
+      url.searchParams.delete("page");
+      window.location.href=url.toString();
+    }
+  });
+
+  clearBtn.addEventListener("click",()=>{
+    const url=new URL(window.location.href);
+    url.searchParams.delete("search");
+    url.searchParams.delete("page");
+
+    searchInput.value="";
+    window.location.href=url.toString();
+  });
+
+  const filterMenu=document.getElementById("filterMenu");
+  const filterWrapper=document.getElementById("filterWrapper");
+
+  filterWrapper.addEventListener("click",()=>{
+    filterMenu.classList.toggle("show");
+  });
+
+  filterMenu.querySelectorAll(".dropdown-item").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const filter=btn.dataset.filter;
+      const url=new URL(window.location.href);
+
+      if(filter) url.searchParams.set("status",filter);
+      else url.searchParams.delete("status");
+
+      url.searchParams.delete("page");
+      window.location.href=url.toString();
+    });
+  });
+
+  document.addEventListener("click",e=>{
+    if(!filterWrapper.contains(e.target)){
+      filterMenu.classList.remove("show");
+    }
+  });
+
+  async function changeStatus(orderId) {
+  const { value: status } = await Swal.fire({
+    title: "Update Order Status",
+    input: "select",
+    inputOptions: {
+      pending: "Pending",
+      confirmed: "Confirmed",
+      shipped: "Shipped",
+      out_for_delivery: "Out For Delivery",
+      delivered: "Delivered",
+      cancelled: "Cancelled"
+    },
+    inputPlaceholder: "Select status",
+    showCancelButton: true
+  });
+
+  if (!status) return;
+
+  const res = await fetch(`/admin/order/${orderId}/editStatus`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newStatus: status })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    Swal.fire("Success", "Order status updated", "success")
+      .then(() => location.reload());
+  } else {
+    Swal.fire("Error", data.msg || "Update failed", "error");
+  }
+}
+
+
+
+
+
+
+</script>
+</body>
+</html>

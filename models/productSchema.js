@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const imageSchema = new Schema({
@@ -79,12 +79,12 @@ const productSchema = new Schema({
     },
     categoryId: {
       type: Schema.Types.ObjectId,
-      ref: "Category",
+      ref: 'Category',
       required: true,
     },
     subCategoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
+      ref: 'Subcategory',
       required: false
     },
     color: {
@@ -101,12 +101,12 @@ const productSchema = new Schema({
     },
     offerSource: {
       type: String,
-      enum: ["product", "category","subcategory"],
-      default: "product",
+      enum: ['product', 'category','subcategory'],
+      default: 'product',
     },
     images: {
       type: [imageSchema],
-      validate: [arrayLimit, "Minimum 4 images required"],
+      validate: [arrayLimit, 'Minimum 4 images required'],
     }, 
 
     variants: [variantSchema],
@@ -153,7 +153,7 @@ const productSchema = new Schema({
     },
 });
 
-productSchema.pre("save", function (next) {
+productSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
@@ -162,5 +162,5 @@ function arrayLimit(val) {
   return val.length >= 4;
 }
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

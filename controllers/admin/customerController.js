@@ -4,16 +4,15 @@ const mongoose = require('mongoose');
 
 const customerInfo = async (req, res) => {
   try {
-    // Extract query parameters
     let { search, page, status } = req.query;
     search = search ? search.trim() : '';
     page = parseInt(page) || 1;
-    const limit = 6;
+    const perPage = 6; 
 
-    // Build query object
+    if (page < 1) page = 1;
+
     let query = { role: 'user' };
 
-    // Add search filter
     if (search) {
       query.$or = [
         { fullName: { $regex: search, $options: 'i' } },
@@ -21,34 +20,46 @@ const customerInfo = async (req, res) => {
       ];
     }
 
-    // Add status filter
     if (status === 'active') {
       query.isBlocked = false;
     } else if (status === 'blocked') {
       query.isBlocked = true;
     }
-
-    // Fetch users
     const userData = await User.find(query)
       .sort({ createdDate: -1 })
-      .limit(limit)
-      .skip((page - 1) * limit)
+      .limit(perPage)
+      .skip((page - 1) * perPage)
       .exec();
 
-    const count = await User.countDocuments(query);
+    const totalCustomers = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalCustomers / perPage);
+  
+    if (page > totalPages && totalPages > 0) {
+      page = totalPages;
+    }
 
     res.render('admin/customers', {
       data: userData,
-      totalPages: Math.ceil(count / limit),
+      totalPages,
       currentPage: page,
       search,
       status: status || '',
-      count,
+      totalCustomers, 
+      perPage, 
     });
   } catch (error) {
     console.error('Error in customerInfo:', error);
     res.redirect('/admin/pageerror');
   }
+};
+
+const customerDetails= async (req,res)=>{
+  const customerId=req.params.id;
+  
+  const customer= await User.findById(customerId);
+  console.log('customer is :',customer);
+
+  res.render('admin/customerDetails',{customer});
 };
 
 const customerBlocked = async (req, res) => {
@@ -83,4 +94,5 @@ module.exports = {
   customerInfo,
   customerBlocked,
   customerunBlocked,
+  customerDetails
 };

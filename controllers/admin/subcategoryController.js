@@ -12,6 +12,7 @@ async function getSubcategory(req, res) {
       : { isDeleted: false };
 
     const total = await Subcategory.countDocuments(filter);
+    
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.min(page, totalPages || 1);
 
@@ -33,7 +34,6 @@ async function getSubcategory(req, res) {
     res.status(500).send('Server Error while fetching subcaategory list');
   }
 }
-
 
 async function getAddSubcategoryPage(req, res) {
   try {
@@ -265,8 +265,6 @@ async function softDeleteSubcategory(req, res) {
     return res.status(500).json({ success: false, message: 'Server error occurred when deleting.' });
   }
 }
-
-
 
 module.exports = {
   getSubcategory,

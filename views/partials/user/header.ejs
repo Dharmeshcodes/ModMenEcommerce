@@ -1,56 +1,274 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="/user/css/style.css">
+<style>
+  .main-header-bg {
+    background: #000 !important;
+  }
+  .navbar-brand {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.45rem;
+    letter-spacing: 1px;
+    color: #fff !important;
+  }
+  .navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 1.07rem;
+    margin: 0 0.9rem;
+    font-weight: 400;
+  }
+  .nav-link.active, .nav-link:focus, .nav-link:hover {
+    text-decoration: underline;
+    color: #fff !important;
+  }
+  .header-search-wrap {
+    position: relative;
+    max-width: 250px;
+    margin-left: auto;
+  }
+  .header-search-form {
+    position: relative;
+    width: 100%;
+  }
+  .header-search-input {
+    background: #f5f5f5;
+    color: #333;
+    border: none;
+    border-radius: 1.1em;
+    padding: 0.5em 4.5em 0.5em 1em;
+    font-weight: 500;
+    width: 100%;
+    font-size: 0.95em;
+    outline: none;
+    box-shadow: none;
+  }
+  .header-search-input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .header-search-buttons {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .header-search-clear {
+    color: #666;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0 4px;
+    display: none;
+  }
+  .header-search-clear:hover {
+    color: #333;
+  }
+  .header-search-btn {
+    color: #333;
+    border: none;
+    background: none;
+    font-size: 1.15rem;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0 4px;
+    display: none;
+  }
+  .header-search-btn:hover {
+    color: #000;
+  }
+  .header-icons .btn-link, .header-icons .fa-heart, .header-icons .fa-shopping-cart, .header-icons .fa-user {
+    color: #fff !important;
+    font-size: 1.4rem;
+    margin-left: 1.2rem;
+    margin-right: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .header-icons .btn-link:hover {
+    opacity: 0.75;
+  }
+  .profile-dropdown .dropdown-menu {
+    min-width: 185px;
+    font-size: 1.01rem;
+    background: #181818;
+    color: #fff;
+    border-radius: 0.56rem;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
+  .profile-dropdown .dropdown-item, .dropdown-menu-dark .dropdown-item {
+    color: #fff;
+  }
+  .profile-dropdown .dropdown-item:hover {
+    background: #222;
+    color: #fff;
+  }
+  .dropdown-divider {
+    border-color: #333;
+  }
+  .hamburger-btn {
+    font-size: 2rem;
+    color: #fff;
+    border: none;
+    background: none;
+    outline: none;
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+  .hamburger-btn:focus { outline: none; }
+  @media (max-width: 1199.98px) {
+    .header-search-wrap {
+      max-width: 200px;
+      margin-right: 1rem;
+    }
+  }
+  @media (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+      margin: 0 0.5rem;
+    }
+    .header-search-wrap {
+      max-width: 180px;
+      margin-right: 1rem;
+    }
+    .header-icons .btn-link, .header-icons .fa-heart, .header-icons .fa-shopping-cart, .header-icons .fa-user {
+      margin-left: 1rem;
+      font-size: 1.25rem;
+    }
+    
+  }
+  @media (max-width: 767.98px) {
+    .navbar-brand { font-size: 1.1rem; }
+    .header-search-wrap { 
+      max-width: 100%; 
+      margin: 10px 0 10px 0;
+    }
+    .header-icons { margin-top: 10px; }
+  }
+  @media (max-width: 575.98px) {
+    .navbar-brand { font-size: 0.95rem; }
+  }
+</style>
 
-<header class="header">
-  <div class="nav-container">
-    <a href="/" class="logo">MODMEN</a>
+<header class="main-header-bg">
+  <nav class="navbar navbar-expand-lg main-header-bg py-2">
+    <div class="container-fluid d-flex align-items-center">
+      <!-- Hamburger Menu -->
+      <div class="dropdown">
+        <button class="hamburger-btn" type="button" id="menuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark mt-2" aria-labelledby="menuDropdown">
+          <li><a class="dropdown-item" href="user/about">About</a></li>
+          <li><a class="dropdown-item" href="user/contact">Contact</a></li>
+          <li><a class="dropdown-item" href="/user/sale">All Products</a></li>
+        </ul>
+      </div>
 
-    <!-- LEFT: Nav Menu -->
-    <nav class="nav-menu" id="navMenu">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/shirts">Sale</a></li>
-      </ul>
-    </nav>
+      <!-- LOGO -->
+      <a class="navbar-brand ms-1 fst-italic fw-bold" href="home">MODMEN</a>
 
-    <!-- CENTER: Search -->
-    <div class="search-container">
-      <input type="text" class="search-input" placeholder="What are you looking for?">
-      <button class="search-btn">
-        <i class="fas fa-search"></i>
+      <!-- Main Navigation -->
+      <div class="collapse navbar-collapse justify-content-start ms-3" id="headermain-links">
+        <ul class="navbar-nav flex-row align-items-center">
+          <li class="nav-item"><a class="nav-link" href="/user/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/user/sale">SALE</a></li>
+          <% if (!(user && user._id)) { %>
+            <li class="nav-item"><a class="nav-link" href="/user/signup">Sign Up</a></li>
+            <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
+          <% } %>
+        </ul>
+      </div>
+
+      <!-- Search Bar
+      <div class="header-search-wrap">
+        <form action="/user/sale" method="GET" class="header-search-form" id="headerSearchForm">
+          <input 
+            type="text" 
+            name="search" 
+            id="headerSearchInput"
+            class="header-search-input" 
+            placeholder="Search products..." 
+            value="<%= typeof search !== 'undefined' && search ? search : '' %>"
+            autocomplete="off">
+          <div class="header-search-buttons">
+            <button 
+              type="button" 
+              class="header-search-clear" 
+              id="headerSearchClear"
+              aria-label="Clear search">
+              <i class="fas fa-times"></i>
+            </button>
+            <button 
+              type="submit" 
+              class="header-search-btn" 
+              id="headerSearchBtn"
+              aria-label="Search">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+      </div> -->
+
+      <!-- Icons: Wishlist, Cart, Profile -->
+      <div class="header-icons d-flex align-items-center ms-auto">
+        <% if (user && user._id) { %>
+          <a href="/user/wishlist" class="btn btn-link" title="Wishlist">
+            <i class="fas fa-heart"></i>
+          </a>
+          <a href="/user/cart" class="btn btn-link" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+          <div class="dropdown profile-dropdown">
+          <button class="btn btn-link dropdown-toggle d-flex align-items-center" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Profile">
+            <img 
+              src="<%= user.profileImage ? user.profileImage + '?w=35&h=35&c=fill' : '/images/default-avatar.png' %>" 
+              alt="Profile" 
+              class="rounded-circle me-2" 
+              style="width:35px; height:35px; object-fit:cover;">
+            <span class="d-none d-md-inline"><%= user.fullName %></span>
+          </button>
+
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="profileDropdown">
+              <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user-circle me-2"></i>Account</a></li>
+              <li><a class="dropdown-item" href="/user/order"><i class="fas fa-box me-2"></i>My Orders</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/user/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Responsive Burger for navbar collapse -->
+      <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#headermain-links" aria-controls="headermain-links" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
       </button>
     </div>
-
-    <!-- RIGHT: Auth & User Links -->
-    <div class="user-actions">
-      <% if (user && user._id) { %>
-        <!-- Wishlist -->
-        <a href="/user/wishlist" title="Wishlist"><i class="fas fa-heart"></i></a>
-
-        <!-- Cart -->
-        <a href="/user/cart" title="Cart"><i class="fas fa-shopping-cart"></i></a>
-
-        <!-- Profile Dropdown -->
-        <div class="dropdown">
-          <button class="dropbtn">
-            <i class="fas fa-user"></i> <%= user.name %>
-          </button>
-          <div class="dropdown-content">
-            <a href="/user/profile"><i class="fas fa-user-circle"></i> Account</a>
-            <a href="/user/orders"><i class="fas fa-box"></i> My Orders</a>
-            <a href="/user/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </div>
-        </div>
-      <% } else { %>
-        <!-- If not logged in -->
-        <a href="/user/login" class="btn-link">Sign In</a>
-        <a href="/user/signup" class="btn-link">Sign Up</a>
-      <% } %>
-    </div>
-
-    <!-- Mobile Nav Toggle -->
-    <button class="mobile-toggle" id="mobileToggle">
-      <i class="fas fa-bars"></i>
-    </button>
-  </div>
+  </nav>
 </header>
+<script>
+const searchInput = document.getElementById("saleSearchInput");
+const closeIcon = document.getElementById("searchClear");
+const searchForm = document.getElementById("saleSearchForm");
+const searchIcon = document.querySelector(".search-icon");
+
+searchInput.addEventListener("input", () => {
+  closeIcon.style.display = searchInput.value.trim() ? "block" : "none";
+});
+
+closeIcon.addEventListener("click", () => {
+  searchInput.value = "";
+  closeIcon.style.display = "none";
+  searchForm.submit();
+});
+
+searchIcon.addEventListener("click", () => {
+  searchForm.submit();
+});
+</script>
+
+    
