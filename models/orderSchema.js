@@ -3,9 +3,15 @@ const { v4: uuidv4 } = require("uuid");
 
 const orderSchema = new mongoose.Schema(
   {
+    // orderId: {
+    //   // type: String,
+    //   // default: () => uuidv4(),
+    //   // unique: true
+    // },
     orderId: {
       type: String,
-      default: () => uuidv4(),
+      default: () =>
+        "MM" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 1000),
       unique: true
     },
 
@@ -134,6 +140,18 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "completed", "failed", "refunded"],
       default: "pending"
+    },
+    razorpayOrderId: {
+      type: String,
+      default: null
+    },
+    razorpayPaymentId: {
+      type: String,
+      default: null
+    },
+    razorpaySignature: {
+      type: String,
+      default: null
     },
 
     status: {

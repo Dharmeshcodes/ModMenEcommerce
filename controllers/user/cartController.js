@@ -6,96 +6,102 @@ const Cart = require("../../models/cartSchema");
 
 const addToCart = async (req, res) => {
   try {
-    const userId = req.session.user._id;
-    const { productId, size, color, quantity = 1 } = req.body;
+      const userId = req.session.user._id;
+      const { productId, size, color, quantity = 1 } = req.body;
 
-    if (!productId || !color || !size) {
-      return res.status(400).json({ success: false, message: "Missing fields" });
-    }
-
-    const product = await Product.findById(productId)
-      .populate("categoryId")
-      .populate("subCategoryId");
-
-    if (!product || product.isDeleted || !product.isListed) {
-      return res.status(400).json({ success: false, message: "Product not available" });
-    }
-
-    if (product.categoryId && (product.categoryId.isDeleted || !product.categoryId.isListed)) {
-      return res.status(400).json({ success: false, message: "Category inactive" });
-    }
-
-    if (product.subCategoryId && (product.subCategoryId.isDeleted || !product.subCategoryId.isListed)) {
-      return res.status(400).json({ success: false, message: "Subcategory inactive" });
-    }
-
-    const variant = product.variants.find(v => v.color === color && v.size === size);
-
-    if (!variant) {
-      return res.status(400).json({ success: false, message: "Variant not available" });
-    }
-
-    if (variant.variantQuantity < 1) {
-      return res.status(400).json({ success: false, message: "Out of stock" });
-    }
-
-    let cart = await Cart.findOne({ userId });
-
-    if (!cart) {
-      cart = new Cart({ userId, items: [] });
-    }
-
-    let existingItem = cart.items.find(
-      item =>
-        item.productId.toString() === productId &&
-        item.size === size &&
-        item.color === color
-    );
-
-    if (existingItem) {
-      const newQty = existingItem.quantity + quantity;
-      if (newQty > 5) {
-        return res.status(400).json({ success: false, message: "Max 5 allowed" });
+      if (!productId || !color || !size) {
+        return res.status(400).json({ success: false, message: "Missing fields" });
       }
-      existingItem.quantity = newQty;
-    } else {
-      cart.items.push({
-        productId,
-        color,
-        size,
-        quantity,
-        variantPrice: variant.variantPrice,
-        salePrice: variant.salePrice,
-        sku: variant.sku || ""
+
+      const product = await Product.findById(productId)
+        .populate("categoryId")
+        .populate("subCategoryId");
+
+      if (!product || product.isDeleted || !product.isListed) {
+        return res.status(400).json({ success: false, message: "Product not available" });
+      }
+
+      if (product.categoryId && (product.categoryId.isDeleted || !product.categoryId.isListed)) {
+        return res.status(400).json({ success: false, message: "Category inactive" });
+      }
+
+      if (product.subCategoryId && (product.subCategoryId.isDeleted || !product.subCategoryId.isListed)) {
+        return res.status(400).json({ success: false, message: "Subcategory inactive" });
+      }
+
+      const variant = product.variants.find(v => v.color === color && v.size === size);
+
+      if (!variant) {
+        return res.status(400).json({ success: false, message: "Variant not available" });
+      }
+
+      if (variant.variantQuantity < 1) {
+        return res.status(400).json({ success: false, message: "Out of stock" });
+      }
+
+      let cart = await Cart.findOne({ userId });
+      if (!cart) {
+        cart = new Cart({ userId, items: [] });
+      }
+
+      let existingItem = cart.items.find(
+        item =>
+          item.productId.toString() === productId &&
+          item.size === size &&
+          item.color === color
+      );
+
+      if (existingItem) {
+        const newQty = existingItem.quantity + quantity;
+        if (newQty > 5) {
+          return res.status(400).json({ success: false, message: "Max 5 allowed" });
+        }
+        existingItem.quantity = newQty;
+      } else {
+        cart.items.push({
+          productId,
+          color,
+          size,
+          quantity,
+          variantPrice: variant.variantPrice,
+          salePrice: variant.salePrice,
+          sku: variant.sku || ""
+        });
+      }
+
+    
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { wishlist: productId } }
+      );
+
+      let grandTotal = 0;
+      cart.items.forEach(item => {
+        grandTotal += item.salePrice * item.quantity;
       });
-    }
 
-    let grandTotal = 0;
-    cart.items.forEach(item => {
-      grandTotal += item.salePrice * item.quantity;
-    });
+      const shippingCharge = grandTotal < 1000 ? 50 : 0;
+      const tax = grandTotal * 0.18;
+      const payableTotal = grandTotal + tax + shippingCharge;
 
-    const shippingCharge = grandTotal < 1000 ? 50 : 0;
-    const tax = grandTotal * 0.18;
-    const payableTotal = grandTotal + tax + shippingCharge;
+      await cart.save();
 
-    await cart.save();
-
-    return res.status(200).json({
-      success: true,
-      message: existingItem ? "Cart updated" : "Added to cart",
-      cartCount: cart.items.length,
-      updatedTotal: {
-        grandTotal,
-        shippingCharge,
-        payableTotal
-      }
-    });
+      return res.status(200).json({
+        success: true,
+        message: existingItem ? "Cart updated" : "Added to cart",
+        cartCount: cart.items.length,
+        updatedTotal: {
+          grandTotal,
+          shippingCharge,
+          payableTotal
+        }
+      });
 
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const getCartPage = async (req, res) => {
   try {

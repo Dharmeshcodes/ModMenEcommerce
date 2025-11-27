@@ -88,8 +88,23 @@
 
             <hr class="my-4">
 
+
             <h5 class="fw-bold mb-3">Payment Method</h5>
-            <p class="mb-0 fw-semibold">Cash on Delivery</p>
+<p class="mb-0 fw-semibold">
+
+  <% const payMethod = typeof paymentMethod !== "undefined" ? paymentMethod : "cod"; %>
+
+  <% if (payMethod === 'online') { %>
+    Online Payment (Razorpay)
+  <% } else if (payMethod === 'wallet') { %>
+    Wallet Payment
+  <% } else { %>
+    Cash on Delivery
+  <% } %>
+
+</p>
+
+
 
           </div>
         </div>
@@ -154,7 +169,7 @@
 
             <div class="d-flex justify-content-between fs-5 fw-bold">
               <span>Total Payable</span>
-              <span>₹<%= finalTotal.toFixed(2) %></span>
+              <span>₹<%= payableTotal.toFixed(2) %></span>
             </div>
 
           </div>
@@ -165,6 +180,7 @@
         <div class="col-lg-6">
           <form action="/user/confirmOrder" method="POST">
             <input type="hidden" name="addressId" value="<%= address._id %>">
+            <input type="hidden" name="paymentMethod" value="<%= payMethod %>">
             <button type="submit" class="place-btn">Confirm Order</button>
           </form>
         </div>

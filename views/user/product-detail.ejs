@@ -507,9 +507,10 @@
         <% } %>
 
       <button class="cart-btn" style="padding:12px 90px;border-radius:30px;font-weight:700;font-size:1.15em;background:#111;color:#fff;border:none;">Add to Cart</button>
-      <a href="/user/wishlist" class="wishlist-btn" title="Wishlist">
+      <button class="wishlist-btn" id="addToWishlistBtn" title="Wishlist">
   <i class="far fa-heart"></i>
-</a>
+</button>
+
 
     </div>
   </div>
@@ -763,6 +764,46 @@
       if (firstAvail) firstAvail.classList.add('active');
     }
   });
+
+  document.getElementById("addToWishlistBtn").addEventListener("click", async () => {
+  const productId = "<%= product._id %>";
+
+  try {
+    const response = await fetch("/user/wishlist/add", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ productId })
+    });
+
+    const data = await response.json();
+
+    if (data.status) {
+      Swal.fire({
+        icon: "success",
+        title: "Added to Wishlist",
+        text: data.message || "Product saved."
+      });
+
+      document.querySelector("#addToWishlistBtn i").classList.remove("far");
+      document.querySelector("#addToWishlistBtn i").classList.add("fas");
+      document.querySelector("#addToWishlistBtn").style.color = "red";
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "Wishlist",
+        text: data.message
+      });
+    }
+
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Something went wrong"
+    });
+  }
+});
+
 
 
 </script>

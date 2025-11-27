@@ -200,6 +200,21 @@
       border-color: #101010;
       font-weight: 600;
     }
+    .wishlist-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
+  color: #ccc;
+  cursor: pointer;
+  z-index: 10;
+  transition: color .2s ease;
+}
+
+.wishlist-heart.active {
+  color: red;
+}
+
     @media (max-width: 991.98px) {
       .product-image-wrapper {
         height: 210px;
@@ -363,11 +378,20 @@
             <div class="col-6 col-md-3">
               <div class="product-card">
                 <div class="product-image-wrapper">
-                  <img src="<%= product.images && product.images[0] ? product.images[0].url : '/user/images/no-image.png' %>" alt="<%= product.name %>">
-                  <% if (product.displayOffer && product.displayOffer > 0) { %>
-                    <div class="offer-badge"><%= product.displayOffer %>% OFF</div>
-                  <% } %>
-                </div>
+
+  <!-- ❤️ Wishlist Heart -->
+  <i class="fas fa-heart wishlist-heart"
+     onclick="addToWishlist('<%= product._id %>', this)">
+  </i>
+
+  <img src="<%= product.images && product.images[0] ? product.images[0].url : '/user/images/no-image.png' %>" alt="<%= product.name %>">
+
+  <% if (product.displayOffer && product.displayOffer > 0) { %>
+    <div class="offer-badge"><%= product.displayOffer %>% OFF</div>
+  <% } %>
+
+</div>
+
                 <div class="p-3 text-center">
                   <div class="product-title">
                     <a href="/user/product/<%= product._id %>" class="text-decoration-none text-dark"><%= product.name %></a>

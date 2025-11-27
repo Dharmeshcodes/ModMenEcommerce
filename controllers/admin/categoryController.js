@@ -62,49 +62,65 @@
       }
     };
 
-    const addCategory = async (req, res) => {
-      try {
-        const { name, description, offer = {}, isListed } = req.body;
+  const addCategory = async (req, res) => {
+  try {
+    const { name, description, offer = {}, isListed } = req.body;
 
-        const existingCategory = await Category.findOne({ name: name.trim() });
-        if (existingCategory) {
-      req.flash('error_msg', 'Category already exists');
+  
+    const formData = {
+      ...req.body,
+      offer: {
+        offerPercentage: offer.offerPercentage || '',
+        maxRedeem: offer.maxRedeem || '',
+        startDate: offer.startDate || '',
+        validUntil: offer.validUntil || ''
+      },
+      isListed: isListed
+    };
+
+    if (!req.file) {
       return res.render('admin/addCategory', {
-        messages: { error_msg: 'Category already exists' },
-        formData: req.body 
+        messages: { error_msg: 'Please upload an image' },
+        formData
       });
     }
 
-        let imageUrl = '';
-        if (req.file) {
-          imageUrl = req.file.path;
-        }
+    const existingCategory = await Category.findOne({ name: name.trim() });
+    if (existingCategory) {
+      return res.render('admin/addCategory', {
+        messages: { error_msg: 'Category already exists' },
+        formData
+      });
+    }
 
-        const offerParsed = {
-          offerPercentage: Number(offer.offerPercentage) || 0,
-          maxRedeem: Number(offer.maxRedeem) || 0,
-          startDate: offer.startDate ? new Date(offer.startDate) : undefined,
-          validUntil: offer.validUntil ? new Date(offer.validUntil) : undefined,
-        };
+    const imageUrl = req.file.path;
 
-        const newCategory = new Category({
-          name: name.trim(),
-          description: description || '',
-          offer: offerParsed,
-          isListed: isListed === 'true' || isListed === true,
-          image: imageUrl
-        });
-
-        await newCategory.save();
-        req.flash('success_msg', 'Category added successfully');
-        return res.redirect('/admin/category');
-
-      } catch (error) {
-        console.error('Error in addCategory:', error);
-        req.flash('error_msg', 'Server error saving new category');
-        return res.redirect('/admin/category');
-      }
+    const offerParsed = {
+      offerPercentage: Number(offer.offerPercentage) || 0,
+      maxRedeem: Number(offer.maxRedeem) || 0,
+      startDate: offer.startDate ? new Date(offer.startDate) : null,
+      validUntil: offer.validUntil ? new Date(offer.validUntil) : null,
     };
+
+    const newCategory = new Category({
+      name: name.trim(),
+      description: description || '',
+      offer: offerParsed,
+      isListed: isListed === 'true',
+      image: imageUrl
+    });
+
+    await newCategory.save();
+    req.flash('success_msg', 'Category added successfully');
+    return res.redirect('/admin/category');
+
+  } catch (error) {
+    console.error('Error in addCategory:', error);
+    req.flash('error_msg', 'Server error saving new category');
+    return res.redirect('/admin/category');
+  }
+};
+
 
     const viewCategory = async (req, res) => {
       try {

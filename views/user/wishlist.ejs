@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Wishlist | ModMen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <style>
+        body { background: #fafafa; }
+
+        .sidebar-group {
+            width: 320px; min-width: 320px; max-width: 320px;
+            margin-top: 40px; display: flex;
+            flex-direction: column; align-items: center;
+        }
+        .sidebar-profile-capsule {
+            width: 100%; height: 130px; background: #fff;
+            box-shadow: 0 4px 16px rgba(50,50,50,0.09);
+            border-radius: 32px; padding: 20px 18px 15px 18px;
+            display: flex; border: 1px solid #f0f0f0;
+        }
+        .profile-img { width:64px; height:64px; border-radius:50%; background:#111; margin-right: 22px; }
+
+        .sidebar-menu-box {
+            width: 100%; background:#fff; border-radius: 32px;
+            box-shadow: 0 4px 16px rgba(40,40,40,0.08);
+            border: 1px solid #f0f0f0; padding: 24px 0 10px 0;
+            margin-top: -16px;
+        }
+        .sidebar-menu-list .list-group-item {
+            font-size: 1.13rem; background:transparent;
+            border:0; padding-left: 24px; padding-right: 24px; margin-bottom:1px;
+        }
+
+        .main-content-section {
+            display: flex; flex-direction: column;
+            align-items: center; min-height: 820px;
+            padding-bottom: 40px;
+        }
+        .main-content-fullname {
+            margin-top: 58px; margin-bottom: 18px; font-size: 2rem; font-weight: 500;
+        }
+
+        .wishlist-box {
+            width: 826px; max-width: 98vw; height: 520px;
+            background:#fff; border-radius:28px; padding:20px;
+            border: 1px solid #e1e1e1;
+            box-shadow: 0 6px 32px rgba(45,45,45,0.11);
+            display:flex; flex-direction:column; overflow:hidden;
+        }
+
+        .wishlist-header {
+            display:flex; justify-content:space-between;
+            align-items:center; margin-bottom:12px;
+        }
+        .wishlist-title { font-size:1.15rem; font-weight:600; }
+        .btn-empty-wishlist {
+            background:#ff4d4f; color:#fff; border:none;
+            padding:8px 14px; border-radius:8px; font-weight:600;
+            box-shadow:0 4px 12px rgba(255,77,79,0.14);
+        }
+
+        .wishlist-scroll {
+            flex:1 1 auto; overflow-y:auto; padding-right:12px;
+        }
+        .wishlist-grid {
+            display:grid; grid-template-columns:repeat(2,1fr); gap:20px;
+        }
+
+        .wish-card {
+            background:#fff; border-radius:18px; border:1px solid #f0f0f0;
+            padding:14px; box-shadow:0 6px 18px rgba(0,0,0,0.06);
+            text-align:center; min-height:260px;
+        }
+        .wish-card img {
+            width:120px; height:140px; object-fit:cover; border-radius:8px;
+            margin-bottom:12px;
+        }
+        .product-title {
+            font-size:0.98rem; min-height:40px;
+            -webkit-line-clamp:2;
+            -webkit-box-orient:vertical; display:-webkit-box;
+            overflow:hidden; margin-bottom:6px;
+        }
+        .price { font-weight:700; margin-bottom:6px; }
+        .discount { font-size:0.9rem; margin-bottom:12px; color:#777; }
+
+        .btn-add-cart, .btn-remove {
+            width:100%; padding:8px 10px; border:none;
+            border-radius:6px; font-weight:600;
+        }
+        .btn-add-cart { background:#000; color:#fff; margin-bottom:6px; }
+        .btn-remove { background:#ff4d4f; color:#fff; }
+
+        @media (max-width:900px){
+            .wishlist-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<%- include('../partials/user/header', { user: user }) %>
+
+<div class="container-fluid">
+    <div class="row flex-nowrap justify-content-start">
+        
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4 sidebar-group">
+            <div class="sidebar-profile-capsule d-flex align-items-center">
+                <img src="<%= user.profileImage || '/images/default-avatar.png' %>" class="profile-img">
+                <span class="fw-semibold fs-5"><%= user.fullName %></span>
+            </div>
+
+            <div class="sidebar-menu-box">
+                <div class="sidebar-menu-list list-group list-group-flush">
+                    <a href="/user/profile" class="list-group-item"><i class="bi bi-person me-3"></i> My Profile</a>
+                    <a href="/user/address" class="list-group-item"><i class="bi bi-geo-alt me-3"></i> My Address</a>
+                    <a href="/user/order" class="list-group-item"><i class="bi bi-bag-check me-3"></i> My Order</a>
+                    <a href="/user/wishlist" class="list-group-item ">
+                        <i class="bi bi-heart me-3"></i> My Wishlist (<%= wishlist.length %>)
+                    </a>
+                    <a href="/user/wallet" class="list-group-item"><i class="bi bi-wallet2 me-3"></i> My Wallet</a>
+                    <a href="/user/coupen" class="list-group-item"><i class="bi bi-ticket me-3"></i> My Coupen</a>
+                    <a href="/user/change-password" class="list-group-item"><i class="bi bi-key me-3"></i> Change password</a>
+                    <a href="/user/logout" class="list-group-item"><i class="bi bi-box-arrow-right me-3"></i> Log out</a>
+                    <a href="/user/referral-code" class="list-group-item"><i class="bi bi-stars me-3"></i> Referral Code</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Wishlist Section -->
+        <div class="col-lg-9 col-md-8 main-content-section">
+            
+            <div class="main-content-fullname">Hi, <%= user.fullName %></div>
+
+            <div class="wishlist-box">
+
+                <div class="wishlist-header">
+                    <div class="wishlist-title">Wishlist (<%= wishlist.length %>)</div>
+
+                    
+                        <button type="button" class="btn-empty-wishlist" onclick="emptyWishlist('<%= user._id %>')">Empty my Wishlist</button>
+                    
+                </div>
+
+                <div class="wishlist-scroll">
+                    <div class="wishlist-grid">
+
+                        <% if (wishlist.length > 0) { %>
+                            <% wishlist.forEach(p => { %>
+
+                                <div class="wish-card" id="wish_<%= p._id %>">
+
+                                    <img src="<%= p.images[0].url %>" alt="<%= p.name %>">
+
+                                    <div class="product-title"><%= p.name %></div>
+
+                                    <div class="price">
+                                        ₹<%= p.variants[0].salePrice.toLocaleString('en-IN') %>
+                                    </div>
+
+                                    <div class="discount">
+                                        <%= p.offer && p.offer.productOffer ? p.offer.productOffer + '% off' : '' %>
+                                    </div>
+
+                                    <button class="btn-add-cart"
+                                        onclick="addToCartFromWishlist(
+                                            '<%= p._id %>',
+                                            '<%= p.variants[0].size %>',
+                                            '<%= p.variants[0].color %>'
+                                        )">
+                                        Add To Cart
+                                    </button>
+
+                                    <button class="btn-remove"
+                                        onclick="removeFromWishlist('<%= p._id %>')">
+                                        Remove from wishlist
+                                    </button>
+
+                                </div>
+
+                            <% }) %>
+
+                        <% } else { %>
+
+                            <% for(let i=0;i<4;i++){ %>
+                                <div class="wish-card">
+                                    <img src="/images/product-placeholder.png">
+                                    <div class="product-title">No items</div>
+                                    <div class="price">—</div>
+                                    <button class="btn-add-cart" disabled>Add To Cart</button>
+                                    <button class="btn-remove" disabled>Remove</button>
+                                </div>
+                            <% } %>
+
+                        <% } %>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/user/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+/* -----------------------------------------
+   ADD TO CART FROM WISHLIST
+----------------------------------------- */
+
+async function addToCartFromWishlist(productId, size, color) {
+    try {
+        const res = await fetch('/user/addToCart', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId, size, color, quantity: 1 })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            return Swal.fire({ icon: "error", title: "Failed", text: data.message });
+        }
+
+        Swal.fire({ icon: "success", title: "Added to Cart", text: "Product moved to cart!" })
+            .then(() => location.reload());
+
+    } catch (err) {
+        Swal.fire({ icon: "error", title: "Server Error", text: "Try again later." });
+    }
+}
+
+
+async function removeFromWishlist(productId) {
+    try {
+        const res = await fetch(`/user/wishlist/remove?productId=${productId}`, {
+            method: "GET"
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            return Swal.fire({ icon: "error", title: "Failed", text: data.message });
+        }
+
+        Swal.fire({ icon: "success", title: "Removed", text: "Product removed!" });
+
+        // remove card from UI
+        const card = document.getElementById(`wish_${productId}`);
+        if (card) card.remove();
+
+        // update wishlist counter
+        const title = document.querySelector(".wishlist-title");
+        if (title) {
+            const count = parseInt(title.innerText.match(/\d+/)[0]);
+            title.innerText = `Wishlist (${count - 1})`;
+        }
+
+    } catch (err) {
+        Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
+    }
+}
+async function emptyWishlist(userId){
+    try{
+        const response=await fetch(`/user/wishlist/emptyWishlist/${userId}`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"}
+        })
+
+
+        const data = await response.json();
+
+    if (data.success) {
+      Swal.fire("Success", data.message, "success");
+    } else {
+      Swal.fire("Error", data.message, "error");
+    }
+
+  } catch (error) {
+    Swal.fire("Error", "Server error", "error");
+  }
+}
+
+    
+
+</script>
+
+</body>
+</html>

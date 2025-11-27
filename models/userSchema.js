@@ -45,7 +45,13 @@ const userSchema = new mongoose.Schema({
   profileImage: { 
     type: String, 
     default: null
-  }
+  },
+   wishlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    }
+  ]
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -256,7 +256,41 @@
 
             <div class="fw-bold mt-2">Payable Amount: ₹<%= order.payableAmount %></div>
             <div class="mt-2">Payment Method: <%= order.paymentMethod %></div>
-          </div>
+            <div class="fw-bold mt-2">Payable Amount: ₹<%= order.payableAmount %></div>
+              <!-- Payment Status -->
+<!-- Payment Status -->  
+<!-- Payment Status -->  
+<div class="mt-2 d-flex align-items-center">
+  <span class="fw-semibold me-2">Payment Status:</span>
+
+  <% if (order.paymentStatus === 'completed') { %>
+      <span class="badge bg-success">Success</span>
+
+  <% } else if (order.paymentStatus === 'pending') { %>
+      <span class="badge bg-warning text-dark">Pending</span>
+
+  <% } else if (order.paymentStatus === 'failed') { %>
+      <span class="badge bg-danger">Failed</span>
+
+  <% } else if (order.paymentStatus === 'refunded') { %>
+      <span class="badge bg-primary">Refunded</span>
+  <% } %>
+</div>
+
+<!-- Retry Payment Button (Uses fetch + SweetAlert) -->
+<% if (order.paymentStatus === 'failed') { %>
+  <div class="mt-3">
+    <button 
+      class="btn btn-primary px-4 py-2 rounded-pill"
+      id="retryPaymentBtn"
+      data-order-id="<%= order.orderId %>">
+      Retry Payment
+    </button>
+  </div>
+<% } %>
+
+ 
+
 
           <div class="section-title mt-3">Delivery Address</div>
           <div class="info-box" style="padding:12px; border-radius:8px;"> <%= order.address %> </div>
@@ -486,6 +520,32 @@ document.querySelectorAll('.return-order-btn').forEach(btn => {
     location.reload();
   });
 });
+
+// Retry Payment Handler
+document.getElementById("retryPaymentBtn")?.addEventListener("click", async () => {
+  const orderId = document.getElementById("retryPaymentBtn").dataset.orderId;
+
+  const res = await fetch(`/user/retry-payment/${orderId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+
+  const data = await res.json();
+
+  // Retry Not Allowed
+  if (!data.success) {
+    return Swal.fire({
+      icon: "error",
+      title: "Retry Not Allowed",
+      text: data.message || "Retry option is not available for this order."
+    });
+  }
+
+  // Redirect to payment page
+  window.location.href = data.redirectURL;
+});
+
+
 
 
 

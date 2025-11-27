@@ -4221,3 +4221,1225 @@
 {"level":"info","message":"Request: GET /admin/updateProduct/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-24 01:31:18"}
 {"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-11-24 01:31:34"}
 {"level":"info","message":"Request: GET /admin/login - Body: undefined","timestamp":"2025-11-24 01:40:55"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 10:48:26"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 10:48:26"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 10:48:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 10:48:39"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-24 10:48:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:24:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:24:23"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 11:24:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:24:24"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 11:24:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:24:44"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 11:24:48"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:24:48"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-24 11:24:58"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:24:58"}
+{"level":"info","message":"Request: GET /user/addAddress - Body: undefined","timestamp":"2025-11-24 11:25:00"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:25:01"}
+{"level":"info","message":"Request: POST /user/addAddress - Body: {\n  fullName: 'shajahan',\n  houseNo: '122a',\n  landMark: 'karamel lp school',\n  district: 'Ernakulam',\n  state: 'Kerala',\n  city: 'payyanur',\n  pincode: '670307',\n  phone: '9961118317'\n}","timestamp":"2025-11-24 11:25:43"}
+{"level":"info","message":"Request: GET /user/address - Body: undefined","timestamp":"2025-11-24 11:25:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:25:44"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-24 11:25:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:25:53"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-24 11:26:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:26:02"}
+{"level":"info","message":"Request: GET /user/updateProfile - Body: undefined","timestamp":"2025-11-24 11:26:06"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 11:26:06"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-24 11:26:44"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-24 11:26:48"}
+{"level":"info","message":"Request: POST /user/profile-image - Body: undefined","timestamp":"2025-11-24 11:26:50"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 11:27:01"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 11:27:04"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 11:27:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:55:08"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:55:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:55:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:55:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:56:32"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:56:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:56:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:56:41"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:58:57"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:58:57"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 11:59:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 11:59:01"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:01:26"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:01:59"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:04:10"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-24 12:04:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:05:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:05:31"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-24 12:06:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:08:18"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:08:18"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:08:22"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916847e464c8c99c10720dd',\n  size: 'S',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-11-24 12:08:25"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-24 12:08:29"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 12:08:34"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: { productId: '6916847e464c8c99c10720dd', size: 'S', color: 'brown' }","timestamp":"2025-11-24 12:08:36"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:08:42"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-24 12:08:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:21:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:21:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:21:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:21:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:22:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:22:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:23:11"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:23:11"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:23:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:23:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:23:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:23:39"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:23:47"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:26:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:26:25"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:26:28"}
+{"level":"info","message":"Request: GET /user/%7B%20%20url:%20'https://res.cloudinary.com/dowlhusht/image/upload/v1763574553/MODMAN/Products/kxqlyfansbkjcddnuabb.jpg',%20%20thumbnail:%20'https://res.cloudinary.com/dowlhusht/image/upload/v1763574553/MODMAN/Products/kxqlyfansbkjcddnuabb.jpg',%20%20isMain:%20true,%20%20_id:%20new%20ObjectId('691e031b5350cadf372c3c38')%7D - Body: undefined","timestamp":"2025-11-24 12:26:29"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:33:13"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:35:41"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-11-24 12:35:49"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 12:35:51"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:36:00"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 12:36:03"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:36:06"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-24 12:36:09"}
+{"level":"info","message":"Request: GET /user/product/68c53c833f0c0fad695a57e6 - Body: undefined","timestamp":"2025-11-24 12:36:15"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '68c53c833f0c0fad695a57e6' }","timestamp":"2025-11-24 12:36:19"}
+{"level":"info","message":"Request: GET /user/product/68c54f033f0c0fad695a590e - Body: undefined","timestamp":"2025-11-24 12:36:23"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '68c54f033f0c0fad695a590e' }","timestamp":"2025-11-24 12:36:26"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:36:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:05"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:05"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:10"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:24"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:26"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:26"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:28"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:41:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:41:37"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:50:14"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c54f033f0c0fad695a590e',\n  size: 'S',\n  color: 'grey',\n  quantity: 1\n}","timestamp":"2025-11-24 12:50:16"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:50:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:51:58"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:51:58"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:14"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:14"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:52:56"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:52:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 12:53:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 12:53:06"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:54:09"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:54:53"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:55:12"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:59:07"}
+{"level":"info","message":"Request: GET /user/wishlist/remove?productId=6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 12:59:10"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 12:59:14"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 12:59:16"}
+{"level":"info","message":"Request: GET /images/product-placeholder.png - Body: undefined","timestamp":"2025-11-24 12:59:16"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 12:59:27"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-24 12:59:31"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '69143a80563634a46ac8658f' }","timestamp":"2025-11-24 12:59:36"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 12:59:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 13:24:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 13:24:23"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:24:25"}
+{"level":"info","message":"Request: GET /admin/login - Body: undefined","timestamp":"2025-11-24 13:25:12"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-11-24 13:25:12"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 13:36:53"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 13:37:00"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:37:05"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:37:34"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-24 13:37:47"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:37:59"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:38:09"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-24 13:38:11"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=6923f35f12320070acc05d1a - Body: undefined","timestamp":"2025-11-24 13:38:16"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=6923f35f12320070acc05d1a - Body: undefined","timestamp":"2025-11-24 13:38:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 13:38:26"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '6923f35f12320070acc05d1a' }","timestamp":"2025-11-24 13:38:29"}
+{"level":"info","message":"Request: GET /user/orderSuccess/ef67340f-d690-4155-bf6e-595de43687eb - Body: undefined","timestamp":"2025-11-24 13:38:30"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 13:38:32"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:38:40"}
+{"level":"info","message":"Request: GET /user/logout - Body: undefined","timestamp":"2025-11-24 13:38:46"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-11-24 13:38:46"}
+{"level":"info","message":"Request: POST /user/login - Body: { email: 'tom123@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-11-24 13:38:56"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:38:56"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 13:39:08"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 13:39:18"}
+{"level":"info","message":"Request: GET /user/product/68c5579a3f0c0fad695a5b22 - Body: undefined","timestamp":"2025-11-24 13:39:21"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c5579a3f0c0fad695a5b22',\n  size: 'M',\n  color: 'blue',\n  quantity: 1\n}","timestamp":"2025-11-24 13:39:24"}
+{"level":"info","message":"Request: GET /user/product/68c5560b3f0c0fad695a5b12 - Body: undefined","timestamp":"2025-11-24 13:39:31"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c5560b3f0c0fad695a5b12',\n  size: 'L',\n  color: 'multicolor10',\n  quantity: 1\n}","timestamp":"2025-11-24 13:39:36"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:39:41"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-24 13:39:44"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-24 13:39:48"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-24 13:39:52"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 13:39:53"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926' }","timestamp":"2025-11-24 13:40:02"}
+{"level":"info","message":"Request: GET /user/orderSuccess/1ed02e01-f5e3-4378-b71c-2112d050f822 - Body: undefined","timestamp":"2025-11-24 13:40:03"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 13:40:07"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 13:40:22"}
+{"level":"info","message":"Request: POST /admin/order/946f7ea7-004b-475c-8451-774f2df61a0b/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-11-24 13:40:38"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 13:40:40"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:43:49"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 13:44:03"}
+{"level":"info","message":"Request: GET /user/sale?search=men - Body: undefined","timestamp":"2025-11-24 13:44:41"}
+{"level":"info","message":"Request: GET /user/sale?category=689f73ee770cc0778e53c24f - Body: undefined","timestamp":"2025-11-24 13:45:01"}
+{"level":"info","message":"Request: GET /user/sale?search=men - Body: undefined","timestamp":"2025-11-24 13:45:30"}
+{"level":"info","message":"Request: GET /user/sale?category=689f73ee770cc0778e53c24f - Body: undefined","timestamp":"2025-11-24 13:45:52"}
+{"level":"info","message":"Request: GET /user/product/68c54c393f0c0fad695a5844 - Body: undefined","timestamp":"2025-11-24 13:46:14"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 13:46:22"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 13:46:41"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 13:48:53"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 13:48:54"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 13:49:04"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 13:50:03"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 13:52:56"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 13:53:03"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 13:53:18"}
+{"level":"info","message":"Request: GET /admin/updateProduct/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-24 13:53:22"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 13:53:34"}
+{"level":"info","message":"Request: GET /admin/editCategory/692415e7c753c9c50911c11e - Body: undefined","timestamp":"2025-11-24 13:53:42"}
+{"level":"info","message":"Request: POST /admin/editCategory/692415e7c753c9c50911c11e - Body: undefined","timestamp":"2025-11-24 13:53:58"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 13:53:58"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 13:54:30"}
+{"level":"info","message":"Request: GET /admin/updateProduct/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-24 13:54:34"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/6916aa231d899c48060e96ba?_method=PATCH - Body: undefined","timestamp":"2025-11-24 13:55:42"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 13:55:47"}
+{"level":"info","message":"Request: GET /admin/updateProduct/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-24 13:55:51"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:56:05"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 13:56:16"}
+{"level":"info","message":"Request: GET /user/product/68c559533f0c0fad695a5b87 - Body: undefined","timestamp":"2025-11-24 13:56:24"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 13:56:32"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 13:56:34"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 13:56:40"}
+{"level":"info","message":"Request: POST /user/decreasecartqty - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 13:56:47"}
+{"level":"info","message":"Request: POST /user/decreasecartqty - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 13:56:50"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 14:02:56"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-24 14:02:59"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 14:03:02"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 14:03:11"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:03:13"}
+{"level":"info","message":"Request: POST /user/decreasecartqty - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:03:15"}
+{"level":"info","message":"Request: POST /user/decreasecartqty - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:03:16"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 14:03:31"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 14:05:25"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-24 14:05:40"}
+{"level":"info","message":"Request: GET /user/product/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-11-24 14:05:43"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 14:05:46"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-24 14:05:50"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-24 14:05:54"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:05:58"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:05:59"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:06:00"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-24 14:06:03"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-24 14:08:01"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-24 14:08:19"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-24 14:08:26"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-24 14:08:27"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926' }","timestamp":"2025-11-24 14:08:43"}
+{"level":"info","message":"Request: GET /user/orderSuccess/abbb64c0-ae52-4e09-a5e0-b80603f259a9 - Body: undefined","timestamp":"2025-11-24 14:08:45"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 14:08:54"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 14:09:02"}
+{"level":"info","message":"Request: POST /admin/order/abbb64c0-ae52-4e09-a5e0-b80603f259a9/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-11-24 14:09:23"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 14:09:25"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-24 14:09:33"}
+{"level":"info","message":"Request: GET /user/order/abbb64c0-ae52-4e09-a5e0-b80603f259a9/invoice - Body: undefined","timestamp":"2025-11-24 14:09:38"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 14:10:47"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 14:10:51"}
+{"level":"info","message":"Request: GET /admin/orders?page=2 - Body: undefined","timestamp":"2025-11-24 14:11:22"}
+{"level":"info","message":"Request: GET /admin/orders?page=1 - Body: undefined","timestamp":"2025-11-24 14:11:38"}
+{"level":"info","message":"Request: GET /admin/order/1ed02e01-f5e3-4378-b71c-2112d050f822 - Body: undefined","timestamp":"2025-11-24 14:11:43"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 14:12:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 18:20:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 18:20:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 18:22:58"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 18:22:58"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 18:23:26"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-24 18:23:29"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-11-24 18:23:31"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-11-24 18:23:42"}
+{"level":"info","message":"Request: GET /admin/orders?status=cancelled - Body: undefined","timestamp":"2025-11-24 18:23:54"}
+{"level":"info","message":"Request: GET /admin/orders?status=cancelled&search=hi - Body: undefined","timestamp":"2025-11-24 18:24:08"}
+{"level":"info","message":"Request: GET /admin/orders?status=cancelled - Body: undefined","timestamp":"2025-11-24 18:24:12"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 18:24:16"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=rev - Body: undefined","timestamp":"2025-11-24 18:24:23"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men - Body: undefined","timestamp":"2025-11-24 18:24:36"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=createdAt&sortOrder=desc&category=689f747d770cc0778e53c27f&priceRange= - Body: undefined","timestamp":"2025-11-24 18:24:44"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=createdAt&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 18:24:51"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=variants.variantPrice&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 18:24:57"}
+{"level":"info","message":"Request: GET /admin/customers - Body: undefined","timestamp":"2025-11-24 18:25:10"}
+{"level":"info","message":"Request: GET /admin/customers?search=vish - Body: undefined","timestamp":"2025-11-24 18:25:17"}
+{"level":"info","message":"Request: GET /admin/customers?search=vish - Body: undefined","timestamp":"2025-11-24 18:25:35"}
+{"level":"info","message":"Request: GET /admin/customers? - Body: undefined","timestamp":"2025-11-24 18:25:44"}
+{"level":"info","message":"Request: GET /admin/customers?page=2 - Body: undefined","timestamp":"2025-11-24 18:25:55"}
+{"level":"info","message":"Request: GET /admin/blockCustomer?id=6904da8cbfc62cbd5bfd527e - Body: undefined","timestamp":"2025-11-24 18:26:04"}
+{"level":"info","message":"Request: GET /admin/customers?page=2 - Body: undefined","timestamp":"2025-11-24 18:26:06"}
+{"level":"info","message":"Request: GET /admin/blockCustomer?id=69168102464c8c99c1071f1c - Body: undefined","timestamp":"2025-11-24 18:26:09"}
+{"level":"info","message":"Request: GET /admin/customers?page=2 - Body: undefined","timestamp":"2025-11-24 18:26:11"}
+{"level":"info","message":"Request: GET /admin/customers?search=a - Body: undefined","timestamp":"2025-11-24 18:26:15"}
+{"level":"info","message":"Request: GET /admin/customers?search=a - Body: undefined","timestamp":"2025-11-24 18:26:45"}
+{"level":"info","message":"Request: GET /admin/customers?page=2&search=a - Body: undefined","timestamp":"2025-11-24 18:26:51"}
+{"level":"info","message":"Request: GET /admin/customers?search=an - Body: undefined","timestamp":"2025-11-24 18:27:01"}
+{"level":"info","message":"Request: GET /admin/customers?status=blocked - Body: undefined","timestamp":"2025-11-24 18:27:09"}
+{"level":"info","message":"Request: GET /admin/customers?search=an&amp;status=blocked - Body: undefined","timestamp":"2025-11-24 18:27:25"}
+{"level":"info","message":"Request: GET /admin/customers? - Body: undefined","timestamp":"2025-11-24 18:27:34"}
+{"level":"info","message":"Request: GET /admin/sales - Body: undefined","timestamp":"2025-11-24 18:27:44"}
+{"level":"info","message":"Request: GET /admin/customers? - Body: undefined","timestamp":"2025-11-24 18:27:48"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 18:27:51"}
+{"level":"info","message":"Request: GET /admin/category?search=ab - Body: undefined","timestamp":"2025-11-24 18:28:13"}
+{"level":"info","message":"Request: GET /admin/category?sort=price-high - Body: undefined","timestamp":"2025-11-24 18:28:26"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-11-24 18:28:39"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 18:28:45"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men - Body: undefined","timestamp":"2025-11-24 18:28:52"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=createdAt&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 18:29:03"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=variants.variantPrice&sortOrder=asc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 18:29:08"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-24 18:29:42"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-11-24 18:29:43"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 18:29:43"}
+{"level":"info","message":"Request: GET /user/login?blocked=true - Body: undefined","timestamp":"2025-11-24 18:29:43"}
+{"level":"info","message":"Request: GET /admin/customers - Body: undefined","timestamp":"2025-11-24 18:29:50"}
+{"level":"info","message":"Request: GET /admin/customers?status=blocked - Body: undefined","timestamp":"2025-11-24 18:29:56"}
+{"level":"info","message":"Request: GET /admin/unblockCustomer?id=69168102464c8c99c1071f1c - Body: undefined","timestamp":"2025-11-24 18:30:00"}
+{"level":"info","message":"Request: GET /admin/customers?status=blocked - Body: undefined","timestamp":"2025-11-24 18:30:02"}
+{"level":"info","message":"Request: GET /admin/unblockCustomer?id=6904da8cbfc62cbd5bfd527e - Body: undefined","timestamp":"2025-11-24 18:30:08"}
+{"level":"info","message":"Request: GET /admin/customers?status=blocked - Body: undefined","timestamp":"2025-11-24 18:30:10"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 18:30:12"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 18:30:32"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 18:30:36"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 18:31:02"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 18:31:02"}
+{"level":"info","message":"Request: POST /user/login - Body: { email: 'tom123@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-11-24 18:32:45"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-24 18:32:46"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 20:32:02"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 20:32:55"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:06:23"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:06:42"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 21:06:47"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:06:52"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:07:02"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 21:07:02"}
+{"level":"info","message":"Request: GET /admin/category?page=2&sort=latest - Body: undefined","timestamp":"2025-11-24 21:07:06"}
+{"level":"info","message":"Request: GET /admin/category?page=1&sort=latest - Body: undefined","timestamp":"2025-11-24 21:07:10"}
+{"level":"info","message":"Request: GET /admin/category?page=1&sort=latest - Body: undefined","timestamp":"2025-11-24 21:07:28"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:07:33"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:33:47"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:37:52"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 21:38:06"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:38:33"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 21:38:33"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:46:27"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 21:46:30"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:48:30"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 21:48:30"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 21:50:12"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 21:50:12"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 22:16:28"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-24 22:16:29"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 22:17:59"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 22:18:04"}
+{"level":"info","message":"Request: GET /admin/subcategory - Body: undefined","timestamp":"2025-11-24 22:18:14"}
+{"level":"info","message":"Request: GET /admin/addSubcategory - Body: undefined","timestamp":"2025-11-24 22:18:17"}
+{"level":"info","message":"Request: GET /admin/addSubcategory - Body: undefined","timestamp":"2025-11-24 23:03:55"}
+{"level":"info","message":"Request: GET /admin/subcategory - Body: undefined","timestamp":"2025-11-24 23:06:29"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 23:06:36"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 23:09:02"}
+{"level":"info","message":"Request: GET /admin/subcategory - Body: undefined","timestamp":"2025-11-24 23:09:06"}
+{"level":"info","message":"Request: GET /admin/addSubcategory - Body: undefined","timestamp":"2025-11-24 23:09:11"}
+{"level":"info","message":"Request: POST /admin/addSubcategory - Body: undefined","timestamp":"2025-11-24 23:12:12"}
+{"level":"info","message":"Request: GET /admin/subcategory - Body: undefined","timestamp":"2025-11-24 23:12:17"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-11-24 23:12:24"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 23:12:27"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:12:30"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:17:13"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:18:40"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:18:41"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 23:18:46"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 23:19:18"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-11-24 23:19:21"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men - Body: undefined","timestamp":"2025-11-24 23:19:30"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=createdAt&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 23:19:37"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=men&page=1&sortBy=variants.variantPrice&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 23:19:40"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search= - Body: undefined","timestamp":"2025-11-24 23:19:51"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=&page=1&sortBy=createdAt&sortOrder=desc&category=689f735c770cc0778e53c223&priceRange= - Body: undefined","timestamp":"2025-11-24 23:19:56"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta - Body: undefined","timestamp":"2025-11-24 23:20:07"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta&page=1&sortBy=createdAt&sortOrder=desc&category=689f73ee770cc0778e53c24f&priceRange= - Body: undefined","timestamp":"2025-11-24 23:20:15"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search= - Body: undefined","timestamp":"2025-11-24 23:20:25"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=&page=1&sortBy=createdAt&sortOrder=desc&category=689f735c770cc0778e53c223&priceRange= - Body: undefined","timestamp":"2025-11-24 23:20:32"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurt - Body: undefined","timestamp":"2025-11-24 23:20:41"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta - Body: undefined","timestamp":"2025-11-24 23:20:49"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta&page=1&sortBy=createdAt&sortOrder=desc&category=689f735c770cc0778e53c223&priceRange= - Body: undefined","timestamp":"2025-11-24 23:20:55"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta&page=1&sortBy=variants.variantPrice&sortOrder=desc&category=689f735c770cc0778e53c223&priceRange= - Body: undefined","timestamp":"2025-11-24 23:20:58"}
+{"level":"info","message":"Request: GET /admin/adminProducts?search=kurta&page=1&sortBy=variants.variantPrice&sortOrder=desc&category=689f735c770cc0778e53c223&priceRange=501-1000 - Body: undefined","timestamp":"2025-11-24 23:21:02"}
+{"level":"info","message":"Request: GET /admin/customers - Body: undefined","timestamp":"2025-11-24 23:21:17"}
+{"level":"info","message":"Request: GET /admin/customers?search=biju - Body: undefined","timestamp":"2025-11-24 23:21:29"}
+{"level":"info","message":"Request: GET /admin/customers?status=blocked - Body: undefined","timestamp":"2025-11-24 23:21:34"}
+{"level":"info","message":"Request: GET /admin/category - Body: undefined","timestamp":"2025-11-24 23:32:32"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:32:36"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:54:00"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-24 23:56:08"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-24 23:56:08"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:56:11"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:56:55"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-24 23:59:15"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-25 00:00:43"}
+{"level":"info","message":"Request: POST /admin/addCategory - Body: undefined","timestamp":"2025-11-25 00:01:23"}
+{"level":"info","message":"Request: GET /admin/addCategory - Body: undefined","timestamp":"2025-11-25 00:01:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 00:01:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 00:01:54"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 09:35:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 09:35:19"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-25 09:35:31"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-25 09:35:32"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 09:36:13"}
+{"level":"info","message":"Request: GET /images/product-placeholder.png - Body: undefined","timestamp":"2025-11-25 09:36:13"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 09:42:59"}
+{"level":"info","message":"Request: GET /images/product-placeholder.png - Body: undefined","timestamp":"2025-11-25 09:43:00"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 09:43:34"}
+{"level":"info","message":"Request: GET /images/product-placeholder.png - Body: undefined","timestamp":"2025-11-25 09:43:34"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:24:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:24:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:24:07"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:24:07"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:24:15"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-25 12:24:20"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-25 12:24:24"}
+{"level":"info","message":"Request: GET /user/product/68c53c833f0c0fad695a57e6 - Body: undefined","timestamp":"2025-11-25 12:24:29"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '68c53c833f0c0fad695a57e6' }","timestamp":"2025-11-25 12:24:32"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:24:37"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/userId - Body: undefined","timestamp":"2025-11-25 12:24:40"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:27:15"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/userId - Body: undefined","timestamp":"2025-11-25 12:27:18"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:32:16"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/$%7BuserId%7D - Body: {}","timestamp":"2025-11-25 12:32:18"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/$%7BuserId%7D - Body: {}","timestamp":"2025-11-25 12:33:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:34:18"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:34:18"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:34:21"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:34:24"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:37:44"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:41:36"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:41:36"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:41:39"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:41"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:43"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:45"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:46"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:48"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:41:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:42:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:42:10"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:42:16"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:42:17"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:42:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:42:45"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:42:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:43:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:43:03"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:43:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:43:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:43:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:43:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:43:51"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:43:55"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:43:57"}
+{"level":"info","message":"Request: GET /user/wishlist/emptyWishlist/user/wishlist - Body: undefined","timestamp":"2025-11-25 12:43:57"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:45:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:45:19"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:45:20"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:21"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:45:22"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:45:22"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:45:22"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:45:22"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:23"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:23"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:23"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:45:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:46:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:46:41"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:47:02"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:47:02"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:47:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:47:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:47:57"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:47:57"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:48:01"}
+{"level":"info","message":"Request: POST /user/wishlist/emptyWishlist/69168102464c8c99c1071f1c - Body: {}","timestamp":"2025-11-25 12:48:03"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-25 12:48:10"}
+{"level":"info","message":"Request: GET /images/product-placeholder.png - Body: undefined","timestamp":"2025-11-25 12:48:10"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-25 12:58:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-25 12:58:16"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-25 12:58:18"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-25 12:58:25"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '6916847e464c8c99c10720dd' }","timestamp":"2025-11-25 12:58:28"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:58:35"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:58:42"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:59:12"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-25 12:59:16"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '69143a80563634a46ac8658f' }","timestamp":"2025-11-25 12:59:19"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:59:23"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-25 12:59:26"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 12:59:37"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-25 13:02:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 09:42:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 09:42:06"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-26 09:43:07"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-26 09:43:10"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-26 09:43:14"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-26 09:43:18"}
+{"level":"info","message":"Request: GET /user/product/68c535803f0c0fad695a56e8 - Body: undefined","timestamp":"2025-11-26 09:43:31"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '68c535803f0c0fad695a56e8' }","timestamp":"2025-11-26 09:43:35"}
+{"level":"info","message":"Request: GET /user/product/68c52fe23f0c0fad695a5655 - Body: undefined","timestamp":"2025-11-26 09:43:40"}
+{"level":"info","message":"Request: POST /user/wishlist/add - Body: { productId: '68c52fe23f0c0fad695a5655' }","timestamp":"2025-11-26 09:43:43"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-26 09:43:48"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c535803f0c0fad695a56e8',\n  size: 'L',\n  color: 'white',\n  quantity: 1\n}","timestamp":"2025-11-26 09:43:50"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-26 09:43:52"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-26 09:43:55"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c52fe23f0c0fad695a5655',\n  size: 'S',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-11-26 09:43:58"}
+{"level":"info","message":"Request: GET /user/wishlist - Body: undefined","timestamp":"2025-11-26 09:44:01"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 09:44:02"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '68c52fe23f0c0fad695a5655', size: 'S', color: 'brown' }","timestamp":"2025-11-26 09:44:06"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 09:44:09"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 09:44:14"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 09:44:42"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 09:44:43"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-26 11:26:50"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 11:31:30"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 11:31:33"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 11:31:40"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 11:31:41"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 11:31:43"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 11:31:55"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 11:31:56"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 11:32:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 11:32:16"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 11:33:36"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 11:38:41"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 11:38:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:20:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:20:45"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:25:01"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-26 13:25:03"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 13:47:15"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:47:20"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=ONLINE - Body: undefined","timestamp":"2025-11-26 13:47:27"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:47:37"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=WALLET - Body: undefined","timestamp":"2025-11-26 13:47:42"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:47:47"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:47:51"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:51:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:53:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:53:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:53:18"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:53:18"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:53:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:53:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:53:34"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:53:34"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:53:36"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:53:39"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:53:43"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 13:55:43"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:55:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:56:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:56:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:56:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:56:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 13:56:26"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 13:56:26"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 13:56:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:11:49"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:11:49"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 14:11:49"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 14:11:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:14:32"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:14:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:14:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:14:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:17:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:17:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:17:56"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:17:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:18:07"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:18:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:18:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:18:10"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:18:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:18:22"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 14:19:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 14:19:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:19:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:19:37"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:19:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:19:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:19:52"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:19:52"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:20:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:20:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:20:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:20:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:20:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:20:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:20:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:20:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 14:21:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 14:21:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 16:08:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 16:08:10"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 16:08:48"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 16:08:49"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-26 16:08:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 17:49:40"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 17:49:40"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 17:50:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 17:50:54"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 17:52:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 17:52:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 17:53:12"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 17:53:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:14:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:14:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:14:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:14:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:14:32"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:14:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:14:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:14:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:00"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:00"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:17"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:36"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:36"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:41"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:15:56"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:15:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:16:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:16:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:16:12"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:16:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:16:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:16:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:16:35"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:16:35"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:16:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:16:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:17:00"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:17:00"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:17:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:17:06"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:17:12"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:17:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:17:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:17:28"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:17:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:17:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:18:14"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:18:14"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:18:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:18:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:18:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:18:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:18:44"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:18:44"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:18:59"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:18:59"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:19:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:19:06"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:19:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:19:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:19:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:19:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:19:48"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:19:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:26:57"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:26:57"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:27:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:27:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 20:30:18"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 20:30:18"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=COD - Body: undefined","timestamp":"2025-11-26 20:33:30"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 20:33:32"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'COD' }","timestamp":"2025-11-26 20:34:10"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 20:35:11"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 20:35:11"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 20:35:18"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 21:54:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 21:54:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 21:55:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 21:55:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 21:56:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 21:56:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:01:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:01:54"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:32:08"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:32:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:34:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:34:10"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:42:20"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:42:20"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-26 22:42:29"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 22:42:36"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 22:42:39"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 22:42:46"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 22:44:59"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 22:45:56"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-26 22:45:58"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 22:45:59"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 22:46:09"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 22:46:15"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 22:46:15"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'COD' }","timestamp":"2025-11-26 22:46:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:11"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:11"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:48"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 22:51:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 22:51:53"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 22:54:45"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 22:54:46"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 22:54:48"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 22:54:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 22:54:54"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'cod' }","timestamp":"2025-11-26 22:55:00"}
+{"level":"info","message":"Request: GET /user/orderSuccess/c1a0b004-9cb4-4fe9-a17b-24c6f62fe1e9 - Body: undefined","timestamp":"2025-11-26 22:55:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:00:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:00:22"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-26 23:00:30"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-26 23:00:33"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916847e464c8c99c10720dd',\n  size: 'S',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-11-26 23:00:36"}
+{"level":"info","message":"Request: GET /user/product/68c53c833f0c0fad695a57e6 - Body: undefined","timestamp":"2025-11-26 23:00:43"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-26 23:00:45"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 23:00:50"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 23:00:52"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:00:57"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:01:07"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:01:27"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:01:28"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:01:28"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:07:55"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:07:56"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:08:01"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:08:02"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:08:02"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'online' }","timestamp":"2025-11-26 23:08:14"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:16:24"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:16:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:16:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:16:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:16:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:16:54"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:17:01"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:17:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:17:02"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:17:25"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:17:26"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 23:17:45"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:17:46"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:17:54"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:17:55"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-26 23:17:56"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:17:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:17:57"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'cod' }","timestamp":"2025-11-26 23:18:04"}
+{"level":"info","message":"Request: GET /user/orderSuccess/35cf1c3a-2642-4e3b-b50b-62e5d0b74643 - Body: undefined","timestamp":"2025-11-26 23:18:05"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:18:05"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-26 23:18:14"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:18:14"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:19:52"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:19:52"}
+{"level":"info","message":"Request: GET /shop - Body: undefined","timestamp":"2025-11-26 23:24:00"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-26 23:24:08"}
+{"level":"info","message":"Request: GET /shop - Body: undefined","timestamp":"2025-11-26 23:24:12"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-26 23:24:14"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-26 23:24:21"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-26 23:24:25"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-26 23:24:28"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-26 23:24:34"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 23:24:36"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:24:46"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:25:18"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:25:56"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:25:57"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:26:02"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:26:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:26:03"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:27:57"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:27:57"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:27:59"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:28:00"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:28:00"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:28:17"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:28:18"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 23:30:29"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:30:30"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-26 23:30:36"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:30:36"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:35:09"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:35:10"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:37:03"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:37:04"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:37:09"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:37:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:37:09"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'online' }","timestamp":"2025-11-26 23:37:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:40:15"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:40:15"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:40:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:40:25"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:40:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:40:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:40:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:40:38"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:40:43"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:40:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:40:44"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'online' }","timestamp":"2025-11-26 23:40:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:41:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:41:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:42:58"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:42:58"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:43:00"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:43:00"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=online - Body: undefined","timestamp":"2025-11-26 23:43:54"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:43:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:43:56"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:44:05"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:44:06"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:44:13"}
+{"level":"info","message":"Request: GET /.well-known/appspecific/com.chrome.devtools.json - Body: undefined","timestamp":"2025-11-26 23:44:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:44:14"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-26 23:44:18"}
+{"level":"info","message":"Request: GET /user/online-payment/ae83d36a-1684-4f42-b79d-c4ef22b9e3bd - Body: undefined","timestamp":"2025-11-26 23:44:18"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:46:40"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:46:40"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:46:41"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:46:41"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:46:44"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:46:45"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-26 23:46:48"}
+{"level":"info","message":"Request: GET /user/online-payment/b3ac3705-1225-474a-a256-4548f834ffe7 - Body: undefined","timestamp":"2025-11-26 23:46:49"}
+{"level":"info","message":"Request: GET /500 - Body: undefined","timestamp":"2025-11-26 23:46:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:47:26"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:47:26"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:47:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:47:38"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:47:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:47:45"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:47:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:47:55"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-26 23:48:42"}
+{"level":"info","message":"Request: GET /user/online-payment/b0d5d697-fcf3-4176-bfd5-96ee92829d8e - Body: undefined","timestamp":"2025-11-26 23:48:43"}
+{"level":"info","message":"Request: GET /500 - Body: undefined","timestamp":"2025-11-26 23:48:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:36"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:36"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-26 23:57:55"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-26 23:57:55"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:59:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:59:24"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-26 23:59:30"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-26 23:59:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-26 23:59:33"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-26 23:59:42"}
+{"level":"info","message":"Request: GET /user/online-payment/MM782639200 - Body: undefined","timestamp":"2025-11-26 23:59:42"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 00:14:06"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 00:14:07"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 00:14:12"}
+{"level":"info","message":"Request: GET /user/online-payment/MM652864478 - Body: undefined","timestamp":"2025-11-27 00:14:13"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_RkTK9YmsRwTVly',\n  razorpay_payment_id: 'pay_RkTOmTppSgPGmy',\n  razorpay_signature: '5e170c163faa93628be4c8bab31fc651b066e9a471366ba3c497d80430277d74',\n  orderId: 'MM652864478'\n}","timestamp":"2025-11-27 00:18:48"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM652864478 - Body: undefined","timestamp":"2025-11-27 00:18:48"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 00:20:18"}
+{"level":"info","message":"Request: GET /user/order/MM652864478 - Body: undefined","timestamp":"2025-11-27 00:20:22"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 00:20:22"}
+{"level":"info","message":"Request: GET /user/order/MM652864478/invoice - Body: undefined","timestamp":"2025-11-27 00:20:33"}
+{"level":"info","message":"Request: GET /user/order/MM652864478 - Body: undefined","timestamp":"2025-11-27 00:20:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 00:20:40"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:43:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:43:25"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-27 10:44:01"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-27 10:44:04"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-27 10:44:16"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 10:44:19"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 10:44:25"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 10:44:29"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 10:44:35"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 10:44:41"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 10:44:43"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 10:44:46"}
+{"level":"info","message":"Request: GET /user/online-payment/MM487185961 - Body: undefined","timestamp":"2025-11-27 10:44:47"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_Rke4GoZpJT2qac',\n  razorpay_payment_id: 'pay_Rke4asorbMMuqg',\n  razorpay_signature: 'ed4f6d76d8babfa19f8892fa691bcac274a9f40325f16e69845b04a14040ef10',\n  orderId: 'MM487185961'\n}","timestamp":"2025-11-27 10:45:19"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM487185961 - Body: undefined","timestamp":"2025-11-27 10:45:20"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 10:45:26"}
+{"level":"info","message":"Request: GET /user/order/MM487185961 - Body: undefined","timestamp":"2025-11-27 10:45:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 10:45:38"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 10:45:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:46:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:46:37"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:47:15"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:47:15"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:47:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:47:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:48:09"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:48:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:48:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:48:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:48:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:48:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:48:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:48:41"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:48:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:48:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:49:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:49:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:49:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:49:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:56:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:56:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:56:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:56:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 10:56:49"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 10:56:49"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:11:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:11:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:11:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:11:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:12:08"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:12:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:12:20"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:12:20"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:12:52"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:12:52"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:13:24"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:13:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:13:59"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:13:59"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:14:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:14:28"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:15:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:15:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:15:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:15:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:15:31"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:15:31"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:15:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:15:38"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 11:15:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 11:15:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:22:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:22:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:25:59"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:25:59"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:26:47"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:26:47"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:26:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:26:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:27:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:27:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:28:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:28:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:28:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:28:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:28:29"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:28:29"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:29:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:29:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:29:04"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:29:04"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 12:29:15"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 12:29:15"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 13:06:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 13:06:14"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-27 13:08:46"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-27 13:08:50"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-27 13:08:53"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 13:08:59"}
+{"level":"info","message":"Request: GET /user/product/68c55a613f0c0fad695a5bcc - Body: undefined","timestamp":"2025-11-27 13:09:04"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c55a613f0c0fad695a5bcc',\n  size: 'M',\n  color: 'white',\n  quantity: 1\n}","timestamp":"2025-11-27 13:09:07"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 13:09:13"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 13:09:16"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 13:09:23"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=cod - Body: undefined","timestamp":"2025-11-27 13:10:36"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 13:10:38"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 13:10:40"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 13:10:45"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 13:10:47"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 13:10:50"}
+{"level":"info","message":"Request: GET /user/online-payment/MM251886512 - Body: undefined","timestamp":"2025-11-27 13:10:52"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_RkgYaflfyjB38q',\n  razorpay_payment_id: 'pay_RkgaaDWzO6whD8',\n  razorpay_signature: '45141126e884871915d94de380a7951c1379b6ffbdd81f1e12567aa4ccb264f3',\n  orderId: 'MM251886512'\n}","timestamp":"2025-11-27 13:13:00"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM251886512 - Body: undefined","timestamp":"2025-11-27 13:13:01"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 13:13:04"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-27 13:13:10"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916847e464c8c99c10720dd',\n  size: 'S',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-11-27 13:13:13"}
+{"level":"info","message":"Request: GET /user/product/68c54c393f0c0fad695a5844 - Body: undefined","timestamp":"2025-11-27 13:13:22"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c54c393f0c0fad695a5844',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 13:13:25"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 13:13:31"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 13:13:35"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 13:13:47"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 13:14:51"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 13:14:53"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 13:14:56"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:14:57"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:23:55"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:25:05"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 13:25:35"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 13:25:35"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:25:39"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:26:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 13:27:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 13:27:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 13:28:47"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 13:28:47"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:30:12"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:31:36"}
+{"level":"info","message":"Request: GET /user/orderDetails/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:31:46"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:32:28"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-27 13:34:02"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 13:34:10"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:34:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 13:34:14"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:36:53"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 13:36:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 13:36:56"}
+{"level":"info","message":"Request: GET /user/order/MM497762773/invoice - Body: undefined","timestamp":"2025-11-27 14:19:58"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 14:20:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 14:20:02"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 14:27:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 14:27:44"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 14:28:01"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 14:28:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 16:53:55"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 16:53:55"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:41:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:41:17"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:41:23"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-11-27 17:41:24"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:41:29"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:14"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:43:20"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:43:20"}
+{"level":"info","message":"Request: GET /user/order/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:43:25"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:36"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:40"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:44"}
+{"level":"info","message":"Request: GET /user/online-payment/MM497762773 - Body: undefined","timestamp":"2025-11-27 17:43:47"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-27 17:43:54"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-11-27 17:44:01"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916847e464c8c99c10720dd',\n  size: 'S',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-11-27 17:44:05"}
+{"level":"info","message":"Request: GET /user/product/68c53c833f0c0fad695a57e6 - Body: undefined","timestamp":"2025-11-27 17:44:10"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 17:44:13"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 17:44:54"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 17:44:58"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 17:45:06"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 17:45:13"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:45:14"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 17:45:17"}
+{"level":"info","message":"Request: GET /user/online-payment/MM719247355 - Body: undefined","timestamp":"2025-11-27 17:45:19"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM719247355 - Body: undefined","timestamp":"2025-11-27 17:46:28"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-11-27 17:46:43"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 17:46:48"}
+{"level":"info","message":"Request: GET /user/order/MM719247355 - Body: undefined","timestamp":"2025-11-27 17:46:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:46:55"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:49:55"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:49:55"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:53:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:53:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:53:34"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:53:34"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 17:53:40"}
+{"level":"info","message":"Request: GET /user/product/68c559533f0c0fad695a5b87 - Body: undefined","timestamp":"2025-11-27 17:53:46"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 17:53:50"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 17:53:57"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor'\n}","timestamp":"2025-11-27 17:54:02"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: {\n  productId: '68c54c393f0c0fad695a5844',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-27 17:54:05"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 17:54:11"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 17:54:17"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 17:54:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:54:25"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 17:54:28"}
+{"level":"info","message":"Request: GET /user/online-payment/MM269519551 - Body: undefined","timestamp":"2025-11-27 17:54:29"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM269519551 - Body: undefined","timestamp":"2025-11-27 17:55:17"}
+{"level":"info","message":"Request: GET /user/order/MM269519551 - Body: undefined","timestamp":"2025-11-27 17:55:20"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 17:55:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:57:09"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:57:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 17:57:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 17:57:39"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:00:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:00:10"}
+{"level":"info","message":"Request: GET /user/retryPayment/MM719247355 - Body: undefined","timestamp":"2025-11-27 21:02:02"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM719247355 - Body: undefined","timestamp":"2025-11-27 21:02:04"}
+{"level":"info","message":"Request: GET /user/online-payment/MM719247355 - Body: undefined","timestamp":"2025-11-27 21:02:07"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 21:02:15"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-11-27 21:02:19"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 21:02:23"}
+{"level":"info","message":"Request: GET /user/product/68c55a613f0c0fad695a5bcc - Body: undefined","timestamp":"2025-11-27 21:02:28"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c55a613f0c0fad695a5bcc',\n  size: 'L',\n  color: 'white',\n  quantity: 1\n}","timestamp":"2025-11-27 21:02:32"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 21:03:03"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: { productId: '68c55a613f0c0fad695a5bcc', size: 'L', color: 'white' }","timestamp":"2025-11-27 21:03:08"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-27 21:03:12"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 21:03:15"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 21:03:21"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 21:03:27"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:03:29"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 21:03:31"}
+{"level":"info","message":"Request: GET /user/online-payment/MM613088538 - Body: undefined","timestamp":"2025-11-27 21:03:33"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM613088538 - Body: undefined","timestamp":"2025-11-27 21:04:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:06:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:06:03"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 21:06:16"}
+{"level":"info","message":"Request: GET /user/product/68f1ef85427bddf29a00d825 - Body: undefined","timestamp":"2025-11-27 21:06:26"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68f1ef85427bddf29a00d825',\n  size: 'M',\n  color: 'pink',\n  quantity: 1\n}","timestamp":"2025-11-27 21:06:30"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 21:06:36"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:06:59"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:06:59"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 21:07:13"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 21:07:19"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 21:07:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:07:26"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 21:07:30"}
+{"level":"info","message":"Request: GET /user/online-payment/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:07:32"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:08:08"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:14:12"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:14:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:14:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:14:17"}
+{"level":"info","message":"Request: GET /user/online-payment/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:14:20"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_RkonH6quQfYHXo',\n  razorpay_payment_id: 'pay_RkontGtbrmmofl',\n  razorpay_signature: null,\n  orderId: 'MM852179198'\n}","timestamp":"2025-11-27 21:15:01"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:15:02"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:15:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:15:05"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:20:20"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:20:20"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:20:24"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:20:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:20:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:20:38"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:20:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:20:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:21:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:21:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:21:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:21:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:22:56"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:22:56"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:23:04"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:23:04"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:23:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:23:33"}
+{"level":"info","message":"Request: POST /user/cancel-order/MM852179198 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-11-27 21:24:37"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:24:39"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:24:40"}
+{"level":"info","message":"Request: POST /user/cancelItem/6928703c7ea043c71a4e4706/6928703c7ea043c71a4e4708 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-11-27 21:25:03"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:25:52"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:25:52"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:31:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:31:53"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:36:15"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:18"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:36:19"}
+{"level":"info","message":"Request: GET /user/retry-payment/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:23"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:36:24"}
+{"level":"info","message":"Request: GET /user/retry-payment/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:31"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:36:31"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:36:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:42:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:42:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:43:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:43:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-11-27 21:43:34"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-11-27 21:43:34"}
+{"level":"info","message":"Request: GET /user/order/MM852179198 - Body: undefined","timestamp":"2025-11-27 21:43:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:43:54"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 21:44:01"}
+{"level":"info","message":"Request: GET /user/order/MM613088538 - Body: undefined","timestamp":"2025-11-27 21:44:06"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:44:07"}
+{"level":"info","message":"Request: GET /user/order/MM613088538 - Body: undefined","timestamp":"2025-11-27 21:44:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:44:13"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 21:44:19"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 21:44:23"}
+{"level":"info","message":"Request: GET /user/product/68c536d83f0c0fad695a5763 - Body: undefined","timestamp":"2025-11-27 21:44:32"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c536d83f0c0fad695a5763',\n  size: 'L',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 21:44:39"}
+{"level":"info","message":"Request: GET /user/product/68c53c833f0c0fad695a57e6 - Body: undefined","timestamp":"2025-11-27 21:44:44"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 21:44:48"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 21:45:28"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: { productId: '68f1ef85427bddf29a00d825', size: 'M', color: 'pink' }","timestamp":"2025-11-27 21:45:33"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: {\n  productId: '68c53c833f0c0fad695a57e6',\n  size: 'S',\n  color: 'multicolor'\n}","timestamp":"2025-11-27 21:45:37"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 21:45:41"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 21:45:47"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 21:45:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:45:56"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 21:45:59"}
+{"level":"info","message":"Request: GET /user/online-payment/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:01"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: null,\n  razorpay_payment_id: null,\n  razorpay_signature: null,\n  orderId: 'MM160824525'\n}","timestamp":"2025-11-27 21:46:19"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:19"}
+{"level":"info","message":"Request: GET /user/order/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:22"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 21:46:23"}
+{"level":"info","message":"Request: GET /user/retry-payment/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:27"}
+{"level":"info","message":"Request: GET /user/online-payment/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:28"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_RkpLCup3dp1O2H',\n  razorpay_payment_id: 'pay_RkpLP2i3rI2waG',\n  razorpay_signature: '7a9bac501e7d43cf3af339a72edddb9633f30feeb1d6d9ab6cac6586f301ea1f',\n  orderId: 'MM160824525'\n}","timestamp":"2025-11-27 21:46:52"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM160824525 - Body: undefined","timestamp":"2025-11-27 21:46:53"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-11-27 21:46:57"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 22:00:49"}
+{"level":"info","message":"Request: GET /user/product/68c54c393f0c0fad695a5844 - Body: undefined","timestamp":"2025-11-27 22:00:59"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c54c393f0c0fad695a5844',\n  size: 'L',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-11-27 22:01:04"}
+{"level":"info","message":"Request: GET /user/product/68c54f033f0c0fad695a590e - Body: undefined","timestamp":"2025-11-27 22:01:10"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c54f033f0c0fad695a590e',\n  size: 'S',\n  color: 'grey',\n  quantity: 1\n}","timestamp":"2025-11-27 22:01:13"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-11-27 22:01:43"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-11-27 22:01:47"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69189ae95436fd6117925926 - Body: undefined","timestamp":"2025-11-27 22:01:53"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69189ae95436fd6117925926&paymentMethod=razorpay - Body: undefined","timestamp":"2025-11-27 22:01:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-11-27 22:02:00"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69189ae95436fd6117925926', paymentMethod: 'razorpay' }","timestamp":"2025-11-27 22:02:04"}
+{"level":"info","message":"Request: GET /user/online-payment/MM125529694 - Body: undefined","timestamp":"2025-11-27 22:02:05"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: null,\n  razorpay_payment_id: null,\n  razorpay_signature: null,\n  orderId: 'MM125529694'\n}","timestamp":"2025-11-27 22:02:21"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM125529694 - Body: undefined","timestamp":"2025-11-27 22:02:21"}
+{"level":"info","message":"Request: GET /user/retry-payment/MM125529694 - Body: undefined","timestamp":"2025-11-27 22:02:24"}
+{"level":"info","message":"Request: GET /user/online-payment/MM125529694 - Body: undefined","timestamp":"2025-11-27 22:02:25"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_Rkpc3EK1Xlr5JT',\n  razorpay_payment_id: 'pay_RkpcEcSADTD7Mo',\n  razorpay_signature: '69ece485be919c0302c1e30e121b7374719c0f192443b3b84923f7e428e57bd3',\n  orderId: 'MM125529694'\n}","timestamp":"2025-11-27 22:02:48"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM125529694 - Body: undefined","timestamp":"2025-11-27 22:02:50"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-11-27 22:03:00"}

@@ -7,6 +7,7 @@ const profileController = require('../controllers/user/profileController');
 const cartController = require('../controllers/user/cartController');
 const checkoutControllers=require("../controllers/user/checkoutControllers")
 const orderController=require("../controllers/user/orderController")
+const wishlistController=require("../controllers/user/wishlistController")
 const passport = require('passport');
 const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
@@ -78,7 +79,24 @@ router.post("/cancel-order/:orderId", userAuth,checkBlockedUser,orderController.
 router.post('/cancelItem/:orderId/:itemId', orderController.cancelSingleItem);
 router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleItem);
 router.post('/order/:orderId/return-order', orderController.returnEntireOrder);
-router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice);
+router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice)
+
+router.get("/online-payment/:orderId",userAuth,orderController.loadOnlinePaymentPage)
+router.post("/verify-payment",userAuth,orderController.verifyRazorpayPayment);
+router.get("/orderFailed/:orderId",userAuth, orderController.getOrderFailedPage);
+router.get("/retry-payment/:orderId",userAuth, orderController.retryPayment);
+
+
+
+
+
+router.post("/wishlist/add",userAuth, wishlistController.addToWishlist);
+router.get("/wishlist",userAuth, wishlistController.getWishlist)
+router.get('/wishlist/remove',userAuth, wishlistController.removeFromWishlist)
+router.post("/wishlist/emptyWishlist/:userId", userAuth, wishlistController.emptyWishlist);
+
+
+
 
 
 

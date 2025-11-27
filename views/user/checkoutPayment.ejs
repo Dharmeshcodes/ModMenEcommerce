@@ -47,39 +47,40 @@
             <div class="section-title">Payment Methods</div>
             <p class="small-muted">This week only <b>Cash on Delivery</b> is available.</p>
 
+           
             <form id="paymentForm">
-              <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
-              <input type="hidden" name="paymentMethod" value="COD">
+  <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
 
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Debit / Credit Card</div>
-              </label>
+  <!-- ONLINE PAYMENT (RAZORPAY) -->
+  <label class="method-item" id="onlineMethod">
+    <input type="radio" name="method" value="razorpay">
+    <div>
+      <div class="method-label">Online Payment (UPI / Card via Razorpay)</div>
+      <div class="small-muted">Secure payment powered by Razorpay</div>
+    </div>
+  </label>
 
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Bank Transfer</div>
-              </label>
+  <!-- COD -->
+  <label class="method-item" id="codMethod">
+    <input type="radio" name="method" value="cod" checked>
+    <div>
+      <div class="method-label">Cash on Delivery</div>
+      <div class="small-muted">Pay after receiving your order</div>
+    </div>
+  </label>
 
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">UPI Method</div>
-              </label>
+  <!-- WALLET -->
+  <label class="method-item" id="walletMethod">
+    <input type="radio" name="method" value="wallet">
+    <div>
+      <div class="method-label">Payment using Wallet</div>
+      <div class="small-muted">Use Your Wallet for payment</div>
+    </div>
+  </label>
+</form>
 
-              <label class="method-item" id="codMethod">
-                <input type="radio" name="method" value="COD" checked>
-                <div>
-                  <div class="method-label">Cash on Delivery</div>
-                  <div class="small-muted">Pay after receiving your order</div>
-                </div>
-              </label>
 
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Wallet</div>
-              </label>
-
-            </form>
+        
           </div>
         </div>
 
@@ -162,12 +163,13 @@
   <%- include('../partials/user/footer') %>
 
   <!-- FIXED SCRIPT -->
-  <script>
   
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
   const placeBtn = document.getElementById("placeOrderBtn");
   const form = document.getElementById("paymentForm");
+  if (!placeBtn) return;
 
   placeBtn.addEventListener("click", () => {
 
@@ -182,14 +184,22 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    window.location.href = "/user/order-review?addressId=" + addressId;
+    let selectedMethod = "cod";
+    const methodRadios = document.querySelectorAll('input[name="method"]');
 
+    methodRadios.forEach(radio => {
+      if (radio.checked) {
+        selectedMethod = radio.value;
+      }
+    });
+    console.log("script hit and adress id and selected method:" ,addressId,selectedMethod)
+    window.location.href =
+     "/user/order-review?addressId=" + addressId + "&paymentMethod=" + selectedMethod;
+      
   });
 
 });
-
-
-  </script>
+</script>
 
 </body>
 </html>

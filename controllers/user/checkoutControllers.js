@@ -256,12 +256,14 @@ const loadPaymentPage = async (req, res) => {
 };
 const loadOrderReviewPage = async (req, res) => {
   try {
+    const paymentMethod = req.query.paymentMethod?.toLowerCase() || "cod";
+
     const user = req.session.user;
     const userId = user._id;
 
     const cart = await Cart.findOne({ userId }).populate("items.productId");
     if (!cart || cart.items.length === 0) {
-      return res.redirect("/user/cart");
+      return res.redirect("/user/cart")
     }
 
     const validItems = [];
@@ -314,7 +316,7 @@ const loadOrderReviewPage = async (req, res) => {
     const cgst = subtotal * 0.09;
     const sgst = subtotal * 0.09;
     const shippingCharge = subtotal < 1000 ? 50 : 0;
-    const finalTotal = subtotal + cgst + sgst + shippingCharge - discount;
+    const payableTotal = subtotal + cgst + sgst + shippingCharge - discount;
 
     const addressId = req.query.addressId;
     let address = await Address.findById(addressId);
@@ -333,6 +335,17 @@ const loadOrderReviewPage = async (req, res) => {
       return res.redirect("/user/checkout-address");
     }
 
+    req.session.chekoutData={
+      subtotal,
+      cgst,
+      sgst,
+      shippingCharge,
+      discount,
+      payableTotal,
+      addressId:address._id,
+
+    }
+
     res.render("user/orderReview", {
       user,
       items: validItems,
@@ -341,8 +354,9 @@ const loadOrderReviewPage = async (req, res) => {
       sgst,
       shippingCharge,
       discount,
-      finalTotal,
-      address
+      payableTotal,
+      address,
+      paymentMethod
     });
 
   } catch (err) {
