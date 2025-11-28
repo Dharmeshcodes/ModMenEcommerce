@@ -12,6 +12,7 @@ const passport = require('passport');
 const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
 const validateCartMiddleware=require("../middlewares/validateCartMiddleware")
+const walletController=require("../controllers/user/walletController")
 
 const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
@@ -87,13 +88,14 @@ router.get("/orderFailed/:orderId",userAuth, orderController.getOrderFailedPage)
 router.get("/retry-payment/:orderId",userAuth, orderController.retryPayment);
 
 
-
-
-
 router.post("/wishlist/add",userAuth, wishlistController.addToWishlist);
 router.get("/wishlist",userAuth, wishlistController.getWishlist)
 router.get('/wishlist/remove',userAuth, wishlistController.removeFromWishlist)
 router.post("/wishlist/emptyWishlist/:userId", userAuth, wishlistController.emptyWishlist);
+
+router.get("/wallet",userAuth,walletController.getWalletPage)
+router.post("/wallet/create-order",walletController.createWalletOrder);
+router.post("/wallet/verify-payment",walletController.verifyWalletPayment)
 
 
 

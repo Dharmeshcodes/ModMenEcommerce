@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Wallet | ModMen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body { background: #fafafa; }
+    .sidebar-group { width: 300px; min-width: 300px; margin-top: 40px; display:flex; flex-direction:column; align-items:center; }
+    .sidebar-profile-capsule { width: 100%; height: 130px; background: #fff; border-radius: 32px; padding: 20px; display:flex; align-items:center; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+    .profile-img { width: 60px; height: 60px; border-radius:50%; margin-right:18px; object-fit:cover; }
+    .sidebar-menu-box { width:100%; background:#fff; border-radius:28px; padding:20px 0; margin-top:-12px; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.07); }
+    .sidebar-menu-list .list-group-item { background: transparent; border: none; font-size:1.05rem; padding:14px 26px; }
+    .main-content-section { padding-top:40px; padding-left:20px; }
+    .breadcrumb-small { font-size:0.9rem; color:#777; margin-bottom:5px; }
+    .main-title { font-size:1.9rem; font-weight:500; margin-bottom:18px; }
+    .main-content-box { width: 100%; background: #fff; border-radius: 28px; padding: 22px 26px; border:1px solid #e8e8e8; box-shadow: 0 4px 18px rgba(0,0,0,0.09); min-height: 520px; }
+
+    /* search/filter row */
+    .search-filter-row { display:flex; gap:12px; align-items:center; margin-bottom:16px; }
+    .search-box {
+      position: relative;
+      width: 420px;
+      max-width: 100%;
+    }
+    .search-box input {
+      width:100%;
+      padding:12px 44px 12px 40px;
+      border-radius: 999px;
+      border: 1px solid #e6e6e6;
+      box-shadow: 0 4px 14px rgba(10,30,60,0.04);
+    }
+    .search-box .fa-search { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#888; }
+    .search-box .fa-times { position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#888; cursor:pointer; display:none; }
+
+    .filter-btn {
+      background:#fff;
+      border:1px solid #e1e1e1;
+      padding:8px 14px;
+      border-radius:10px;
+      box-shadow:0 4px 14px rgba(10,30,60,0.03);
+      cursor:pointer;
+    }
+
+    .wallet-card { background:#fff; border-radius:16px; padding:18px; margin-bottom:16px; border:1px solid #f0f0f0; box-shadow:0 6px 20px rgba(0,0,0,0.03); display:flex; justify-content:space-between; align-items:center; }
+    .wallet-left h6 { margin:0; color:#666; }
+    .wallet-left h2 { margin:0; font-weight:700; }
+
+    .transactions-table { margin-top:12px; border-radius:12px; overflow:hidden; border:1px solid #f0f0f0; }
+    .transactions-table table { margin-bottom:0; }
+    .transactions-table thead th { background:#fafafa; font-weight:700; border-bottom:1px solid #eee; }
+    .transactions-table tbody tr td { vertical-align: middle; }
+
+    .custom-pagination a, .custom-pagination span { padding: 6px 12px; margin: 0 4px; border-radius: 50%; background: #fff; border: 1px solid #ddd; color: #000; text-decoration:none; }
+    .custom-pagination .active-page { background: #000; color: #fff; border:1px solid #000; }
+
+    .add-money-btn { background:#000; color:#fff; padding:10px 24px; border-radius:30px; border:none; }
+    @media (max-width: 900px) {
+      .search-filter-row { flex-direction:column; align-items:stretch; }
+      .wallet-card { flex-direction:column; gap:10px; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('../partials/user/header', {user: user}) %>
+
+  <div class="container-fluid">
+    <div class="row flex-nowrap">
+      <!-- sidebar -->
+      <div class="col-lg-3 sidebar-group">
+        <div class="sidebar-profile-capsule">
+          <img src="<%= user.profileImage || '/images/default-avatar.png' %>" class="profile-img">
+          <span class="fw-semibold fs-5 text-dark"><%= user.fullName %></span>
+        </div>
+
+        <div class="sidebar-menu-box">
+          <div class="sidebar-menu-list list-group list-group-flush">
+            <a href="/user/profile" class="list-group-item"><i class="fa fa-user me-3"></i> My Profile</a>
+            <a href="/user/address" class="list-group-item"><i class="fa fa-location-arrow me-3"></i> My Address</a>
+            <a href="/user/order" class="list-group-item"><i class="fa fa-bag-shopping me-3"></i> My Order</a>
+            <a href="/user/wishlist" class="list-group-item"><i class="fa fa-heart me-3"></i> My Wishlist</a>
+            <a href="/user/wallet" class="list-group-item"><i class="fa fa-wallet me-3"></i> My Wallet</a>
+            <a href="/user/coupen" class="list-group-item"><i class="fa fa-ticket me-3"></i> My Coupen</a>
+            <a href="/user/change-password" class="list-group-item"><i class="fa fa-lock me-3"></i> Change Password</a>
+            <a href="/user/logout" class="list-group-item"><i class="fa fa-arrow-right-from-bracket me-3"></i> Log out</a>
+            <a href="/user/referral-code" class="list-group-item"><i class="fa fa-users me-3"></i> Referral Code</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- main area -->
+      <div class="col-lg-9 main-content-section">
+        <div class="breadcrumb-small"><a href="/user/profile" class="text-decoration-none text-muted">Profile</a> &gt; <strong>Wallet</strong></div>
+        <div class="main-title">Wallet</div>
+
+        <div class="main-content-box">
+
+          <!-- top row: search + filter + add money -->
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+            <div class="search-filter-row">
+              <form id="searchForm" method="GET" action="/user/wallet" class="d-flex align-items-center" role="search">
+                <div class="search-box me-2">
+                  <i class="fa fa-search"></i>
+                  <input id="searchInput" name="search" value="<%= search %>" placeholder="Search transaction id, description or type" />
+                  <i id="clearSearch" class="fa fa-times"></i>
+                </div>
+
+                <div class="dropdown">
+                  <button id="filterBtn" class="filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter: <span id="filterLabel"><%= filterType === 'all' ? 'All' : (filterType === 'credit' ? 'Credit' : 'Debit') %></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item filter-option" data-type="all" href="#">All</a></li>
+                    <li><a class="dropdown-item filter-option" data-type="credit" href="#">Credit</a></li>
+                    <li><a class="dropdown-item filter-option" data-type="debit" href="#">Debit</a></li>
+                  </ul>
+                </div>
+
+                <!-- hidden fields kept for filter + page reset -->
+                <input type="hidden" name="type" id="filterInput" value="<%= filterType %>">
+              </form>
+            </div>
+
+            <div>
+              <button class="add-money-btn" data-bs-toggle="modal" data-bs-target="#addMoneyModal">Add Money</button>
+            </div>
+          </div>
+
+          <!-- wallet balance -->
+          <div class="wallet-card">
+            <div class="wallet-left">
+              <h6>Available Balance</h6>
+              <h2>₹ <%= (wallet.balance || 0).toFixed(2) %></h2>
+            </div>
+            <div class="wallet-right text-end">
+              <div class="text-muted">Last updated: <%= new Date().toLocaleDateString("en-GB") %></div>
+            </div>
+          </div>
+
+          <!-- transactions -->
+          <div class="transactions-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Date</th>
+                  <th>Amount (₹)</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (!wallet.transactions || wallet.transactions.length === 0) { %>
+                  <tr>
+                    <td colspan="5" class="text-center py-4">No transactions found</td>
+                  </tr>
+                <% } %>
+
+                <% wallet.transactions.forEach(tr => { %>
+                  <tr>
+                    <td><%= tr.transactionId || tr.orderid %></td>
+                    <td><%= new Date(tr.createdAt).toLocaleString("en-GB") %></td>
+                    <td><%= tr.amount %></td>
+                    <td><%= tr.description %></td>
+                    <td>
+                      <% if ((tr.type||'').toLowerCase() === 'credit') { %>
+                        <span class="badge bg-success">Credit</span>
+                      <% } else { %>
+                        <span class="badge bg-danger">Debit</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- pagination -->
+          <div class="custom-pagination mt-3 text-center">
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %>&search=<%= encodeURIComponent(search) %>&type=<%= filterType %>">&lt;</a>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="?page=<%= i %>&search=<%= encodeURIComponent(search) %>&type=<%= filterType %>" class="<%= i === currentPage ? 'active-page' : '' %>"><%= i %></a>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>&search=<%= encodeURIComponent(search) %>&type=<%= filterType %>">&gt;</a>
+            <% } %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Money Modal -->
+  <div class="modal fade" id="addMoneyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <h5 class="mb-3">Add Money to Wallet</h5>
+        <input id="walletAmount" type="number" class="form-control" placeholder="Enter amount (₹)" min="1">
+        <button id="proceedPay" class="btn btn-dark w-100 mt-3">Proceed to Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/user/footer') %>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // search input UX
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const searchForm = document.getElementById('searchForm');
+    const filterInput = document.getElementById('filterInput');
+    const filterLabel = document.getElementById('filterLabel');
+
+    function updateClearIcon() {
+      if (searchInput.value && searchInput.value.trim() !== '') {
+        clearSearch.style.display = 'block';
+      } else {
+        clearSearch.style.display = 'none';
+      }
+    }
+
+    searchInput.addEventListener('input', () => {
+      updateClearIcon();
+    });
+
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      updateClearIcon();
+      // submit form to reset search (keeps filter)
+      searchForm.submit();
+    });
+
+    // filter dropdown clicks
+    document.querySelectorAll('.filter-option').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const t = el.dataset.type;
+        filterInput.value = t;
+        filterLabel.innerText = t === 'all' ? 'All' : (t === 'credit' ? 'Credit' : 'Debit');
+        // reset page to 1 and submit
+        searchForm.submit();
+      });
+    });
+
+    // submit on Enter key in search
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchForm.submit();
+      }
+    });
+
+    // init clear icon display
+    updateClearIcon();
+
+    // Add money -> create order -> open Razorpay
+    document.getElementById('proceedPay').addEventListener('click', async () => {
+      const amount = Number(document.getElementById('walletAmount').value);
+      if (!amount || amount <= 0) {
+        return Swal.fire({ icon: 'warning', title: 'Enter a valid amount' });
+      }
+
+      const res = await fetch('/user/wallet/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+
+      const data = await res.json();
+      if (!data.success) {
+        return Swal.fire({ icon: 'error', title: 'Could not create order' });
+      }
+
+      const options = {
+        key: "<%= razorpayKey %>",
+        amount: data.amount,
+        currency: "INR",
+        name: "ModMen Wallet",
+        order_id: data.orderId,
+        handler: function(response) {
+          // send verification to backend
+          fetch('/user/wallet/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              amount: amount
+            })
+          }).then(r => r.json()).then(json => {
+            if (json.success) {
+              Swal.fire({ icon: 'success', title: 'Wallet recharged' }).then(() => location.reload());
+            } else {
+              Swal.fire({ icon: 'error', title: 'Payment failed', text: json.message || '' });
+            }
+          }).catch(err => {
+            Swal.fire({ icon: 'error', title: 'Server error' });
+          });
+        },
+        modal: {
+          ondismiss: function() {
+            // if user closes popup treat as cancelled (optional)
+          }
+        },
+        theme: { color: "#000" }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    });
+  </script>
+</body>
+</html>

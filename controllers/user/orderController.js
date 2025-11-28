@@ -11,6 +11,9 @@ const ejs = require("ejs");
 const puppeteer = require("puppeteer");
 const Razorpay = require("razorpay");
 const crypto=require("crypto")
+const Wallet=require("../../models/walletSchema")
+const { addMoneyToWallet, deductMoneyFromWallet } = require("../../utils/walletUtils");
+
 
 
 const razorpayInstance = new Razorpay({
@@ -18,12 +21,13 @@ const razorpayInstance = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
+///////////////////////////////////////////////////////////////
 const confirmOrder = async (req, res) => { 
   try {
       
     const userId = req.session.user._id;
     const { addressId, paymentMethod } = req.body;
-    console.log("request body is ",req.body)
+    
 
     const cart = await Cart.findOne({ userId }).populate("items.productId");
     if (!cart || cart.items.length === 0) {
@@ -157,19 +161,63 @@ const confirmOrder = async (req, res) => {
       return res.redirect(`/user/online-payment/${order.orderId}`);
     }
 
+
     if (paymentMethod === "wallet") {
-      return res.send("wallet payment will add soon");
+
+      const wallet = await Wallet.findOne({ userId });
+      if (!wallet || wallet.balance < payableAmount) {
+        req.flash("error_msg", "Insufficient wallet balance");
+        return res.redirect("/user/checkoutPayment?addressId=" + addressId);
+      }
+
+      await deductMoneyFromWallet(userId, payableAmount, {
+        description: "Order Payment",
+        method: "wallet_payment"
+      });
+
+      orderedItems.forEach(item => item.status = "confirmed");
+
+      const order = new Order({
+        userId,
+        orderedItems,
+        subTotal,
+        discountAmount,
+        deliveryCharge,
+        payableAmount,
+        address: addressString,
+        appliedCoupon: null,
+        paymentMethod: "wallet",
+        paymentStatus: "completed",
+        status: "confirmed"
+      });
+
+      await order.save();
+
+      for (let i of validItems) {
+        await Product.updateOne(
+          { _id: i.productId._id, "variants.size": i.size, "variants.color": i.color },
+          { $inc: { "variants.$.variantQuantity": -i.quantity } }
+        );
+      }
+
+      cart.items = cart.items.filter(c => !validItems.some(
+        v =>
+          v.productId._id.toString() === c.productId._id.toString() &&
+          v.size === c.size &&
+          v.color === c.color
+      ));
+      await cart.save();
+
+      return res.redirect("/user/orderSuccess/" + order.orderId);
     }
 
   } catch (error) {
-    logger.error("Confirm Order Error", {
-      message: error.message,
-      stack: error.stack,
-      userId: req.session.user._id
-    });
+    console.log("Confirm Order Error:", error);
     return res.redirect("/500");
-  }
+    }
+
 };
+
 
 const loadOrderSuccess = async (req, res) => {
   try {
@@ -457,9 +505,9 @@ const cancelSingleItem = async (req, res) => {
     
 
     const allItems = order.orderedItems;
-        const allCancelled = allItems.every(i => i.status === "cancelled");
-        const allDelivered = allItems.every(i => i.status === "delivered");
-        const allReturned = allItems.every(i => i.status === "returned");
+        const allCancelled = allItems.every(i => i.status === "cancelled")
+        const allDelivered = allItems.every(i => i.status === "delivered")
+        const allReturned = allItems.every(i => i.status === "returned")
         const allReturnRequested = allItems.every(i => i.status === "return_requested");
         const allOutForDelivery = allItems.every(i => i.status === "out_for_delivery");
         const allShipped = allItems.every(i => i.status === "shipped");
@@ -492,7 +540,8 @@ const cancelSingleItem = async (req, res) => {
     });
   }
 };
-const returnSingleItem = async (req, res) => {
+
+const  returnSingleItem = async (req, res) => {
   try {
     const { orderId, itemId } = req.params;
     const { reason } = req.body;
@@ -551,7 +600,6 @@ const returnEntireOrder = async (req, res) => {
     }
 
     let changed = false;
-
     order.orderedItems.forEach(item => {
       if (item.status === "delivered") {
         item.status = "return_requested";
@@ -664,16 +712,13 @@ const loadOnlinePaymentPage = async (req, res) => {
 };
 
 const verifyRazorpayPayment = async (req, res) => {
-
   try {
-     
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
       orderId
     } = req.body;
-
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       await Order.findOneAndUpdate(
         { orderId },
@@ -694,7 +739,6 @@ const verifyRazorpayPayment = async (req, res) => {
       );
       return res.json({ success: false, redirectURL:`/user/orderFailed/${orderId}`});
     }
-
     const payment = await razorpayInstance.payments.fetch(razorpay_payment_id);
 
     if (payment.status !== "captured") {
@@ -716,6 +760,7 @@ const verifyRazorpayPayment = async (req, res) => {
 
     order.paymentStatus = "completed";
     order.status = "confirmed";
+    order.orderedItems.forEach(i => i.status = "confirmed");
     await order.save();
 
     for (let item of order.orderedItems) {
@@ -814,5 +859,4 @@ module.exports={
   verifyRazorpayPayment,
   getOrderFailedPage,
   retryPayment
-
 }
