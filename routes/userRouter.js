@@ -8,6 +8,8 @@ const cartController = require('../controllers/user/cartController');
 const checkoutControllers=require("../controllers/user/checkoutControllers")
 const orderController=require("../controllers/user/orderController")
 const wishlistController=require("../controllers/user/wishlistController")
+const couponController=require("../controllers/user/couponController")
+const razorpayController=require("../controllers/user/razorpayController")
 const passport = require('passport');
 const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
@@ -82,10 +84,10 @@ router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleI
 router.post('/order/:orderId/return-order', orderController.returnEntireOrder);
 router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice)
 
-router.get("/online-payment/:orderId",userAuth,orderController.loadOnlinePaymentPage)
-router.post("/verify-payment",userAuth,orderController.verifyRazorpayPayment);
-router.get("/orderFailed/:orderId",userAuth, orderController.getOrderFailedPage);
-router.get("/retry-payment/:orderId",userAuth, orderController.retryPayment);
+router.get("/online-payment/:orderId",userAuth,razorpayController.loadOnlinePaymentPage)
+router.post("/verify-payment",userAuth,razorpayController.verifyRazorpayPayment);
+router.get("/orderFailed/:orderId",userAuth, razorpayController.getOrderFailedPage);
+router.get("/retry-payment/:orderId",userAuth, razorpayController.retryPayment);
 
 
 router.post("/wishlist/add",userAuth, wishlistController.addToWishlist);
@@ -96,6 +98,15 @@ router.post("/wishlist/emptyWishlist/:userId", userAuth, wishlistController.empt
 router.get("/wallet",userAuth,walletController.getWalletPage)
 router.post("/wallet/create-order",walletController.createWalletOrder);
 router.post("/wallet/verify-payment",walletController.verifyWalletPayment)
+
+router.get("/coupon", userAuth, couponController.loadUserCoupons);
+router.post("/apply-coupon", userAuth, couponController.applyCoupon);
+router.post("/cancel-coupon", userAuth, couponController.cancelCoupon);
+router.get("/available-coupons", userAuth, couponController.availableCoupons);
+
+
+
+
 
 
 

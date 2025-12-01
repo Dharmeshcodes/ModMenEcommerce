@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Coupon | Admin</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body { background:#f5f6fa; }
+    .coupon-box {
+      background:#fff;
+      border-radius:12px;
+      padding:25px;
+      border:1px solid #e1e1e1;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    }
+    .form-label { font-weight:600; }
+  </style>
+</head>
+
+<body>
+
+  <%- include('../partials/admin/header') %>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-lg-2 col-md-3 p-0">
+        <%- include('../partials/admin/sidebar') %>
+      </div>
+
+      <div class="col-lg-10 col-md-9">
+
+        <div class="py-4 px-3">
+
+          <!-- Breadcrumb -->
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="/admin/coupon-list">Coupons</a></li>
+              <li class="breadcrumb-item active">Edit Coupon</li>
+            </ol>
+          </nav>
+
+          <h3 class="fw-bold mb-3">Edit Coupon</h3>
+
+          <div class="coupon-box">
+
+            <form id="editCouponForm">
+
+              <div class="row g-3">
+
+                <div class="col-md-6">
+                  <label class="form-label">Coupon Name</label>
+                  <input type="text" class="form-control" name="name" value="<%= coupon.name %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Coupon Code</label>
+                  <input type="text" class="form-control" name="code" value="<%= coupon.code %>">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" rows="3"><%= coupon.description %></textarea>
+
+                    </div>
+
+
+                <div class="col-md-6">
+                  <label class="form-label">Type</label>
+                  <select class="form-select" name="type">
+                    <option value="fixed" <%= coupon.type === "fixed" ? "selected" : "" %>>Fixed Amount</option>
+                    <option value="percentage" <%= coupon.type === "percentage" ? "selected" : "" %>>Percentage</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Discount Value</label>
+                  <input type="number" class="form-control" name="discountValue" value="<%= coupon.discountValue %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Maximum Discount Amount</label>
+                  <input type="number" class="form-control" name="maxDiscountAmount" value="<%= coupon.maxDiscountAmount %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Minimum Order Amount</label>
+                  <input type="number" class="form-control" name="minimumOrderAmount" value="<%= coupon.minimumOrderAmount %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Start Date</label>
+                  <input type="date" class="form-control" name="startDate" value="<%= coupon.startDate.toISOString().split('T')[0] %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Expiry Date</label>
+                  <input type="date" class="form-control" name="expiryDate" value="<%= coupon.expiryDate.toISOString().split('T')[0] %>">
+                </div>
+
+                <!-- <div class="col-md-6">
+                  <label class="form-label">Usage Limit (Total)</label>
+                  <input type="number" class="form-control" name="usageLimit" value="<%= coupon.usageLimit %>">
+                </div> -->
+
+                <div class="col-md-6">
+                  <label class="form-label">Usage Per User</label>
+                  <input type="number" class="form-control" name="usagePerUser" value="<%= coupon.usagePerUser %>">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" name="status">
+                    <option value="true" <%= coupon.status ? "selected" : "" %>>Active</option>
+                    <option value="false" <%= !coupon.status ? "selected" : "" %>>Inactive</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="mt-4 text-end">
+                <button type="submit" class="btn btn-dark px-4">Update Coupon</button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("editCouponForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch(`/admin/edit-coupon/<%= coupon._id %>`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Coupon Updated"
+        }).then(() => {
+          window.location.href = "/admin/coupon-list";
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: json.message || "Update failed"
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

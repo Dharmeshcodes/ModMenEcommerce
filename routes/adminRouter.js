@@ -6,6 +6,7 @@ const categoryController=require('../controllers/admin/categoryController');
 const subcategoryController=require('../controllers/admin/subcategoryController');
 const orderController=require("../controllers/admin/orderController")
 const productController=require('../controllers/admin/productController');
+const couponController=require("../controllers/admin/couponController");
 const {
   uploadProductImages,
   uploadCategoryImages,
@@ -76,6 +77,20 @@ router.post('/order/:orderId/editStatus', adminAuth, orderController.updateOrder
 router.post("/order/:orderId/item/:itemId/editStatus", adminAuth, orderController.updateOrderItemStatus);
 router.post("/order/:orderId/item/:itemId/return-decision",adminAuth, orderController.returnItemDecision);
 router.post("/order/:orderId/return-decision",adminAuth, orderController.returnFullOrderDecision);
+
+router.get("/add-coupon",adminAuth,couponController.loadAddCouponPage)
+router.get("/coupon-list",adminAuth,couponController.loadCouponPage)
+router.post("/add-coupon",adminAuth,couponController.addCoupon)
+router.get("/edit-coupon/:id",adminAuth,couponController.loadEditCouponPage)
+router.patch("/edit-coupon/:id", adminAuth, couponController.updateCoupon);
+router.delete("/delete-coupon/:id", adminAuth, couponController.deleteCoupon);
+router.patch("/couponToggle/:id", adminAuth, couponController.toggleCouponStatus);
+
+//salesreport 
+router.get("/admin/sales-report", adminAuth,adminController.getSalesReport)
+//router.get("/admin/sales-report/export/pdf", adminAuth, exportSalesReportPDF)
+//router.get("/admin/sales-report/export/excel", adminAuth, exportSalesReportExcel)
+
 
 
 

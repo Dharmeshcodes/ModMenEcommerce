@@ -190,17 +190,28 @@
 
             <hr>
 
-            <div class="d-flex justify-content-between">
-              <span>Subtotal</span>
-              <strong>₹<%= grandTotal %></strong>
+            <!-- UPDATED SUMMARY BLOCK -->
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal:</span>
+              <strong>₹<%= grandTotal.toFixed(2) %></strong>
             </div>
 
-            <div class="d-flex justify-content-between mt-2">
-              <span>Shipping</span>
-              <strong class="text-success">Free</strong>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Tax (GST):</span>
+              <strong>₹<%= tax.toFixed(2) %></strong>
             </div>
 
-            <button class="btn btn-outline-dark w-100 mt-4">Apply Coupon</button>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Shipping:</span>
+              <strong><%= shippingCharge === 0 ? "Free" : "₹" + shippingCharge.toFixed(2) %></strong>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between fw-bold fs-5">
+              <span>Payable Total:</span>
+              <span>₹<%= payableTotal.toFixed(2) %></span>
+            </div>
 
             <button id="reviewOrderBtn" class="btn btn-dark w-100 mt-3" 
                     data-bs-toggle="offcanvas" data-bs-target="#orderSummaryCanvas">
@@ -272,7 +283,8 @@
       </div>
     </div>
   </div>
-    <!-- OFFCANVAS SUMMARY -->
+
+  <!-- OFFCANVAS SUMMARY -->
   <div class="offcanvas offcanvas-end offcanvas-width" tabindex="-1" id="orderSummaryCanvas">
     <div class="offcanvas-header">
       <h5 class="fw-bold">ORDER SUMMARY</h5>
@@ -305,22 +317,28 @@
 
       <hr>
 
-      <div class="d-flex justify-content-between mb-2">
-        <span>Subtotal (incl. taxes)</span>
-        <strong>₹<%= grandTotal %></strong>
-      </div>
+     <div class="d-flex justify-content-between mb-2">
+  <span>Subtotal</span>
+  <strong>₹<%= grandTotal.toFixed(2) %></strong>
+</div>
 
-      <div class="d-flex justify-content-between mb-2">
-        <span>Delivery charge</span>
-        <strong class="text-success">FREE</strong>
-      </div>
+<div class="d-flex justify-content-between mb-2">
+  <span>Tax (GST)</span>
+  <strong>₹<%= tax.toFixed(2) %></strong>
+</div>
 
-      <hr>
+<div class="d-flex justify-content-between mb-2">
+  <span>Shipping</span>
+  <strong><%= shippingCharge === 0 ? "Free" : "₹" + shippingCharge.toFixed(2) %></strong>
+</div>
 
-      <div class="d-flex justify-content-between mb-3">
-        <span class="fw-bold">Grand Total</span>
-        <span class="fw-bold">₹<%= grandTotal %></span>
-      </div>
+<hr>
+
+<div class="d-flex justify-content-between mb-3 fw-bold fs-5">
+  <span>Payable Total</span>
+  <span>₹<%= payableTotal.toFixed(2) %></span>
+</div>
+
 
       <a id="proceedToPayment" href="/user/checkoutPayment" class="btn btn-dark w-100 mb-2">
         Proceed to Payment
@@ -396,12 +414,9 @@
     document.addEventListener('DOMContentLoaded', function () {
       const cards = [...document.querySelectorAll('.address-card')];
       const deliverButtons = [...document.querySelectorAll('.deliver-btn')];
-      const reviewBtn = document.getElementById('reviewOrderBtn');
       const selectedAddressContent = document.getElementById('selectedAddressContent');
       const proceed = document.getElementById('proceedToPayment');
 
-
-      // Select address functionality
       let selectedCard = null;
 
       function selectCard(card, scrollIntoView) {
@@ -423,17 +438,14 @@
         }
       }
 
-      // Auto-select default or first address
       const defaultCard = cards.find(c => c.dataset.isdefault === 'true');
       if (defaultCard) selectCard(defaultCard, false);
       else if (cards.length > 0) selectCard(cards[0], false);
 
-      // Click on card selects it
       cards.forEach(card => {
         card.addEventListener('click', () => selectCard(card, true));
       });
 
-      // Deliver button selects address
       deliverButtons.forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
@@ -442,7 +454,6 @@
         });
       });
 
-      // Add address AJAX
       const addForm = document.getElementById('addAddressForm');
       addForm.addEventListener('submit', async function (ev) {
         ev.preventDefault();

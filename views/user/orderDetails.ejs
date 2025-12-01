@@ -152,7 +152,7 @@
                 <% const disableItemCancel = ["shipped","out_for_delivery","delivered","returned","return_requested","failed"].includes(item.status); %>
           <button 
     class="btn btn-danger cancelBtn"
-    data-order-id="<%= order._id %>"
+    data-order-id="<%= order.orderId %>"
     data-item-id="<%= item.itemId %>">
     Cancel
 </button>

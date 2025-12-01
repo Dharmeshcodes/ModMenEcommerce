@@ -72,6 +72,13 @@ const logout = async (req, res) => {
     return res.redirect('/admin/pageerror');
   }
 };
+//salesreport
+
+const getSalesReport=async (req,res)=>{
+  
+  
+}
+
 
 
 
@@ -80,5 +87,6 @@ module.exports = {
   loadAdminLogin,
   adminLogin,
   loadAdminDashboard,
-  logout
+  logout,
+  getSalesReport
 };
