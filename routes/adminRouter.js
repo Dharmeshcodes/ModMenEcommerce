@@ -87,9 +87,9 @@ router.delete("/delete-coupon/:id", adminAuth, couponController.deleteCoupon);
 router.patch("/couponToggle/:id", adminAuth, couponController.toggleCouponStatus);
 
 //salesreport 
-router.get("/admin/sales-report", adminAuth,adminController.getSalesReport)
-//router.get("/admin/sales-report/export/pdf", adminAuth, exportSalesReportPDF)
-//router.get("/admin/sales-report/export/excel", adminAuth, exportSalesReportExcel)
+router.get("/sales-report", adminAuth,adminController.getSalesReport)
+router.get("/sales-report/export/pdf", adminAuth, adminController.exportSalesPDF)
+router.get("/sales-report/export/excel", adminAuth, adminController.exportSalesExcel )
 
 
 

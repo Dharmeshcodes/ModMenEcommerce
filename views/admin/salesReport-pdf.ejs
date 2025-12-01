@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { text-align: center; margin-bottom: 0; }
+        .sub { text-align: center; margin-top: 4px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            font-size: 12px;
+            text-align: left;
+        }
+        th { background: #f2f2f2; }
+        .summary-table {
+            width: 50%;
+            margin-top: 25px;
+            border-collapse: collapse;
+        }
+        .summary-table th {
+            background: #eee;
+            font-weight: bold;
+            padding: 8px;
+        }
+        .summary-table td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Sales Report</h2>
+    <div class="sub">
+        <strong>Type:</strong> <%= reportType %>
+        <% if (dateRange) { %>
+            | <strong>Date Range:</strong> <%= dateRange %>
+        <% } %>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Buyer</th>
+                <th>Product</th>
+                <th>Product ID</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Discount</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% salesRows.forEach(row => { %>
+                <tr>
+                    <td><%= row.orderId %></td>
+                    <td><%= row.orderDate %></td>
+                    <td><%= row.buyer %></td>
+                    <td><%= row.productName %></td>
+                    <td><%= row.productId %></td>
+                    <td><%= row.qty %></td>
+                    <td>₹ <%= row.price %></td>
+                    <td><%= row.category %></td>
+                    <td>₹ <%= row.discount %></td>
+                    <td>₹ <%= row.total %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <table class="summary-table">
+        <tr>
+            <th>Total Sales Count</th>
+            <td><%= totalSales %></td>
+        </tr>
+
+        <tr>
+            <th>Total Revenue</th>
+            <td>₹ <%= totalRevenue %></td>
+        </tr>
+
+        <tr>
+            <th>Total Product Discount</th>
+            <td>₹ <%= totalProductDiscount %></td>
+        </tr>
+
+        <tr>
+            <th>Total Coupon Discount</th>
+            <td>₹ <%= totalCouponDiscount %></td>
+        </tr>
+    </table>
+
+</body>
+</html>
