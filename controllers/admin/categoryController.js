@@ -1,4 +1,7 @@
-    const Category = require('../../models/categorySchema');
+   const Category = require('../../models/categorySchema');
+const Product = require('../../models/productSchema');
+const Subcategory = require('../../models/subcategorySchema');
+const { getSalePrice } = require('../../utils/offerUtils');
 
     const categoryInfo = async (req, res) => {
       try {
@@ -220,63 +223,112 @@ const updateCategory = async (req, res) => {
   }
 };
 
-module.exports = {
-  loadEditCategory,
-  updateCategory,
+
+const updateCategoryOffer = async (req, res) => {
+  try {
+    const categoryId = req.body.categoryId;
+    const offer = req.body.offer;
+    const maxRedeemable = req.body.maxRedeemable;
+    const startDate = req.body.startDate;
+    const validUntil = req.body.validUntil;
+
+    if (!categoryId || offer === undefined || !startDate || !validUntil) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
+    }
+
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+
+    category.offer = {
+      offerPercentage: Number(offer),
+      maxRedeem: Number(maxRedeemable) || 0,
+      startDate: new Date(startDate),
+      validUntil: new Date(validUntil),
+    };
+
+    await category.save();
+
+    const products = await Product.find({ categoryId: categoryId });
+
+    for (const product of products) {
+      let subcat = null;
+      if (product.subCategoryId) {
+        subcat = await Subcategory.findById(product.subCategoryId);
+      }
+
+      for (const variant of product.variants) {
+        const offerData = getSalePrice(
+          variant.variantPrice,
+          category.offer,
+          subcat ? subcat.offer : null,
+          product.offer
+        );
+
+        variant.salePrice = offerData.salePrice;
+        product.displayOffer = offerData.bestOffer;
+        product.offerSource = offerData.offerSource;
+      }
+
+      await product.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Offer updated successfully',
+      data: category
+    });
+
+  } catch (error) {
+    console.error('Offer update error:', error);
+    res.status(500).json({ success: false, message: 'Server error while updating offer' });
+  }
 };
 
-    const updateCategoryOffer = async (req, res) => {
-      try {
-        const { categoryId, offer, maxRedeemable, startDate, validUntil } = req.body;
+const deleteCategoryOffer = async (req, res) => {
+  try {
+    const categoryId = req.body.categoryId;
 
-        if (!categoryId || offer === undefined || !startDate || !validUntil) {
-          return res.status(400).json({ success: false, message: 'Missing required fields' });
-        }
-        const category = await Category.findById(categoryId);
-        if (!category) {
-          return res.status(404).json({ success: false, message: 'Category not found' });
-        }
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ success: false, message: 'Category not found' });
+    }
 
-        category.offer = {
-          offerPercentage: Number(offer),
-          maxRedeem: Number(maxRedeemable) || 0,
-          startDate: new Date(startDate),
-          validUntil: new Date(validUntil),
-        };
+    category.offer = undefined;
+    await category.save();
 
-        await category.save();
+    const products = await Product.find({ categoryId: categoryId });
 
-        res.status(200).json({
-          success: true,
-          message: 'Offer updated successfully',
-          data: category
-        });
-
-      } catch (error) {
-        console.error('Offer update error:', error);
-        res.status(500).json({ success: false, message: 'Server error while updating offer' });
+    for (const product of products) {
+      let subcat = null;
+      if (product.subCategoryId) {
+        subcat = await Subcategory.findById(product.subCategoryId);
       }
-    };
 
-    const deleteCategoryOffer = async (req, res) => {
-      try {
-        const { categoryId } = req.body;
-        const category = await Category.findById(categoryId);
+      for (const variant of product.variants) {
+        const offerData = getSalePrice(
+          variant.variantPrice,
+          null,
+          subcat ? subcat.offer : null,
+          product.offer
+        );
 
-        if (!category) {
-          return res.status(404).json({ success: false, message: 'Category not found' });
-        }
-
-        category.offer = undefined;
-
-        await category.save();
-        res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Server error while deleting the offer' });
+        variant.salePrice = offerData.salePrice;
+        product.displayOffer = offerData.bestOffer;
+        product.offerSource = offerData.offerSource;
       }
-    };
 
+      await product.save();
+    }
+
+    return res.status(200).json({ success: true, message: 'Category offer deleted successfully' });
+
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Server error while deleting the offer' });
+  }
+};
     const toggleListStatus = async (req, res) => {
       try {
         const { categoryId, isListed } = req.body;

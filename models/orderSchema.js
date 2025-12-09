@@ -33,7 +33,12 @@ const orderSchema = new mongoose.Schema(
           type: String,
           required: true
         },
-
+        category: { 
+          type: String 
+        },
+        subCategory: {
+           type: String 
+          },
         size: {
           type: String,
           required: true

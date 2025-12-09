@@ -115,7 +115,8 @@ const getAdminOrderDetails = async (req, res) => {
         total: item.finalPrice || (item.salePrice * item.quantity),
         image: mainImage,
         itemId: item._id,
-        status:item.status
+        status:item.status,
+        returnReason: item.returnReason || "" 
       });
     }
 
@@ -144,6 +145,21 @@ const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ success: false, msg: "Order not found" });
     }
 
+    if (order.status === "cancelled") {
+      return res.json({ success: false, msg: "Cancelled order cannot be modified" });
+    }
+
+    if (order.status === "delivered") {
+      const allowed = ["return_requested", "returned", "failed", "delivered"];
+
+      if (!allowed.includes(newStatus)) {
+        return res.json({
+          success: false,
+          msg: "Delivered order cannot change to this status"
+        });
+      }
+    }
+
     order.status = newStatus;
 
     if (newStatus === "delivered") {
@@ -166,6 +182,7 @@ const updateOrderStatus = async (req, res) => {
     return res.status(500).json({ success: false, msg: "Server error" });
   }
 };
+
 const updateOrderItemStatus = async (req, res) => {
   try {
     const { orderId, itemId } = req.params;

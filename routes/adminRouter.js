@@ -20,7 +20,7 @@ const {userAuth, adminAuth} =require('../middlewares/auth');
 
 router.get('/login',adminController.loadAdminLogin);
 router.post('/login',adminController.adminLogin);
-router.get('/dashboard', adminAuth , adminController.loadAdminDashboard);
+
 router.get('/logout',adminController.logout);
 
 //customer
@@ -60,6 +60,8 @@ router.get('/addProducts', adminAuth, productController.getProductAddPage);
 router.post('/addProducts',adminAuth,uploadProductImages.array('images', 4),productController.addProducts);
 router.get('/updateProduct/:id',adminAuth, productController.getUpdateProductPage);
 router.patch('/updateProduct/:id',adminAuth,uploadProductImages.array('images', 4),productController.updateProduct);
+router.delete('/product/:productId/image/:index', adminAuth, productController.deleteProductImage);
+
 
 // router.patch("/product/toggleList/:id",adminAuth,productController.toggleListStatus)
 router.patch('/product/toggleList/:id', adminAuth,productController.toggleListStatus);
@@ -90,6 +92,8 @@ router.patch("/couponToggle/:id", adminAuth, couponController.toggleCouponStatus
 router.get("/sales-report", adminAuth,adminController.getSalesReport)
 router.get("/sales-report/export/pdf", adminAuth, adminController.exportSalesPDF)
 router.get("/sales-report/export/excel", adminAuth, adminController.exportSalesExcel )
+
+router.get('/dashboard', adminAuth , adminController.loadAdminDashboard);
 
 
 

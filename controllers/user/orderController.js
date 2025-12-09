@@ -84,16 +84,19 @@ const confirmOrder = async (req, res) => {
     const addressString = `${selectedAddress.fullName}, ${selectedAddress.houseNo}, ${selectedAddress.city}, ${selectedAddress.landMark}, ${selectedAddress.district}, ${selectedAddress.state}, ${selectedAddress.pincode}, Phone: ${selectedAddress.phone}`;
 
     const orderedItems = validItems.map(i => ({
-      productId: i.productId._id,
-      productName: i.productId.name,
-      size: i.size,
-      color: i.color,
-      quantity: i.quantity,
-      price: i.variantPrice,
-      salePrice: i.salePrice,
-      finalPrice: i.salePrice * i.quantity,
-      status: "pending"
-    }));
+  productId: i.productId._id,
+  productName: i.productId.name,
+  category: i.productId.categoryId?.name || "Unknown",
+  subCategory: i.productId.subCategoryId?.name || "Unknown",
+  size: i.size,
+  color: i.color,
+  quantity: i.quantity,
+  price: i.variantPrice,
+  salePrice: i.salePrice,
+  finalPrice: i.salePrice * i.quantity,
+  status: "pending"
+}));
+
 
     const orderData = {
       userId,
@@ -142,7 +145,7 @@ const confirmOrder = async (req, res) => {
         req.flash("error_msg", "Insufficient wallet balance");
         return res.redirect("/user/checkoutPayment?addressId=" + addressId);
       }
-      await deductMoneyFromWallet(userId, payableTotal, { description: "Order Payment", method: "wallet_payment" });
+      await deductMoneyFromWallet(userId, payableTotal, { description: "Order Payment", method: "wallet_payment"});
       orderedItems.forEach(item => item.status = "confirmed");
       const order = new Order(orderData);
       order.paymentStatus = "completed";

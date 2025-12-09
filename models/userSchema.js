@@ -46,6 +46,20 @@ const userSchema = new mongoose.Schema({
     type: String, 
     default: null
   },
+  referralCode: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  referredBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  referralsCount: {
+    type: Number,
+    default: 0
+  },
    wishlist: [
     {
       type: mongoose.Schema.Types.ObjectId,

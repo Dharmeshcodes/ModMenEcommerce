@@ -269,7 +269,6 @@
   </style>
 </head>
 <body>
-
 <%- include('../partials/admin/header') %>
 <div class="container-fluid">
   <div class="row">
@@ -282,55 +281,83 @@
           <li class="breadcrumb-item active" aria-current="page">Products</li>
         </ol>
       </nav>
+
       <% if (success_msg && success_msg.length > 0) { %>
-            <div class="alert alert-success text-center"><%= success_msg %></div>
-          <% } %>
+        <div class="alert alert-success text-center"><%= success_msg %></div>
+      <% } %>
 
-          <% if (error_msg && error_msg.length > 0) { %>
-            <div class="alert alert-danger text-center"><%= error_msg %></div>
-          <% } %>
-
+      <% if (error_msg && error_msg.length > 0) { %>
+        <div class="alert alert-danger text-center"><%= error_msg %></div>
+      <% } %>
 
       <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
         <h1 class="h3 m-0 fw-semibold">Products</h1>
-        <form id="filterForm" class="flex-grow-1 mx-3" style="max-width:360px;" action="/admin/adminProducts" method="GET">
-          <input type="text" class="form-control form-control-sm" name="search" placeholder="Search product..." value="<%= searchQuery || '' %>" />
-        </form>
+
+        <div class="position-relative flex-grow-1 mx-3" style="max-width:360px;">
+          <input 
+            type="text" 
+            id="searchInput"
+            class="form-control form-control-sm" 
+            placeholder="Search product..."
+            value="<%= searchQuery || '' %>"
+          >
+          <i id="searchClear" 
+             class="fas fa-times position-absolute" 
+             style="right:10px; top:50%; transform:translateY(-50%); cursor:pointer; display:<%= searchQuery ? 'block':'none' %>;">
+          </i>
+        </div>
+
         <a href="/admin/addProducts" class="btn btn-dark px-4">
           <i class="fas fa-plus me-1"></i> Add New Product
         </a>
       </div>
 
       <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
-        <form id="secondaryFilterForm" action="/admin/adminProducts" method="GET" class="compact-filter-bar px-0 gap-2">
-          <input type="hidden" name="search" value="<%= searchQuery %>">
-          <input type="hidden" name="page" value="<%= currentPage %>">
-          <input type="hidden" name="sortBy" id="sortByInput" value="<%= sortBy %>">
-          <input type="hidden" name="sortOrder" id="sortOrderInput" value="<%= sortOrder %>">
-          <button type="button" class="compact-filter-bar-btn" disabled style="margin-right:.3em;">FilterBy</button>
-          <select class="form-select fs-6 px-2 py-1" name="category" onchange="document.getElementById('secondaryFilterForm').submit()">
+        <div id="filterBar" class="compact-filter-bar px-0 gap-2">
+          <button type="button" class="compact-filter-bar-btn" disabled>FilterBy</button>
+
+          <select id="filterCategory" class="form-select fs-6 px-2 py-1">
             <option value="">Category</option>
             <% categories.forEach(function(cat) { %>
-            <option value="<%= cat._id %>" <%= (category === cat._id.toString()) ? 'selected' : '' %>><%= cat.name %></option>
+              <option value="<%= cat._id %>" <%= category === cat._id.toString() ? "selected" : "" %>>
+                <%= cat.name %>
+              </option>
             <% }); %>
           </select>
-          <select class="form-select fs-6 px-2 py-1" name="priceRange" onchange="document.getElementById('secondaryFilterForm').submit()">
+
+          <select id="filterPrice" class="form-select fs-6 px-2 py-1">
             <option value="">Price</option>
-            <option value="0-500" <%= priceRange === '0-500' ? 'selected' : '' %>>₹0 - ₹500</option>
-            <option value="501-1000" <%= priceRange === '501-1000' ? 'selected' : '' %>>₹501 - ₹1000</option>
-            <option value="1001-2000" <%= priceRange === '1001-2000' ? 'selected' : '' %>>₹1001 - ₹2000</option>
-            <option value="2001-999999" <%= priceRange === '2001-999999' ? 'selected' : '' %>>₹2001+</option>
+            <option value="0-500" <%= priceRange === "0-500" ? "selected" : "" %>>₹0 - ₹500</option>
+            <option value="501-1000" <%= priceRange === "501-1000" ? "selected" : "" %>>₹501 - ₹1000</option>
+            <option value="1001-2000" <%= priceRange === "1001-2000" ? "selected" : "" %>>₹1001 - ₹2000</option>
+            <option value="2001-999999" <%= priceRange === "2001-999999" ? "selected" : "" %>>₹2001+</option>
           </select>
-        </form>
+        </div>
+
         <div class="compact-sort-bar ms-md-auto my-2 my-md-0">
           <span class="compact-sort-label me-1">Sort</span>
-          <button type="button" onclick="setSort('variants.variantPrice','desc')" class="btn-sort <%= (sortBy === 'variants.variantPrice' && sortOrder === 'desc') ? 'active' : '' %>">Price High-Low</button>
-          <button type="button" onclick="setSort('variants.variantPrice','asc')" class="btn-sort <%= (sortBy === 'variants.variantPrice' && sortOrder === 'asc') ? 'active' : '' %>">Price Low-High</button>
-          <button type="button" onclick="setSort('createdAt','desc')" class="btn-sort <%= (sortBy === 'createdAt' && sortOrder === 'desc') ? 'active' : '' %>">Last added first</button>
+
+          <button 
+            class="btn-sort <%= sortBy === 'variants.variantPrice' && sortOrder === 'desc' ? 'active' : '' %>"
+            onclick="applySort('variants.variantPrice','desc')">
+            Price High-Low
+          </button>
+
+          <button 
+            class="btn-sort <%= sortBy === 'variants.variantPrice' && sortOrder === 'asc' ? 'active' : '' %>"
+            onclick="applySort('variants.variantPrice','asc')">
+            Price Low-High
+          </button>
+
+          <button 
+            class="btn-sort <%= sortBy === 'createdAt' && sortOrder === 'desc' ? 'active' : '' %>"
+            onclick="applySort('createdAt','desc')">
+            Last added first
+          </button>
         </div>
       </div>
 
-      <div class="table-responsive bg-white p-3 rounded shadowed-box">
+            <div class="table-responsive bg-white p-3 rounded shadowed-box">
         <table class="table align-middle">
           <thead class="table-dark align-middle">
             <tr>
@@ -345,47 +372,60 @@
               <th>Offer</th>
             </tr>
           </thead>
+
           <tbody>
             <% if (products && products.length > 0) { %>
               <% products.forEach(function(product) { %>
               <tr>
                 <td class="table-product-cell">
                   <% 
-                    var prodImg = '';
+                    let prodImg = '';
                     if (product.images && product.images.length > 0) {
                       let mainImg = product.images.find(img => img.isMain);
-                      prodImg = (mainImg && mainImg.thumbnail) ? mainImg.thumbnail : product.images[0].thumbnail || product.images[0].url;
+                      prodImg = (mainImg && mainImg.thumbnail) 
+                                ? mainImg.thumbnail 
+                                : product.images[0].thumbnail || product.images[0].url;
                     }
                   %>
-                  <img src="<%= prodImg ? prodImg : 'https://via.placeholder.com/60' %>" class="product-img" alt="Product Image">
+                  <img src="<%= prodImg || 'https://via.placeholder.com/60' %>" 
+                       class="product-img" 
+                       alt="Product Image">
                 </td>
+
                 <td class="table-product-cell">
                   <div class="product-name"><%= product.name %></div>
-                  <% if (product.variants && product.variants.length > 0) { %>
+                  <% if (product.variants?.length) { %>
                     <div class="product-details">
-                      Size <%= product.variants[0].size %> <span class="variant-divider">||</span> Color <%= product.color %>
+                      Size <%= product.variants[0].size %> 
+                      <span class="variant-divider">||</span> 
+                      Color <%= product.color %>
                     </div>
                   <% } %>
                 </td>
+
                 <td class="table-product-cell">
-                  <%= product.categoryId && product.categoryId.name ? product.categoryId.name : 'N/A' %>
+                  <%= product.categoryId?.name || 'N/A' %>
                 </td>
+
                 <td class="table-product-cell">
-                  <%= product.subCategoryId && product.subCategoryId.name ? product.subCategoryId.name : '--' %>
+                  <%= product.subCategoryId?.name || '--' %>
                 </td>
+
                 <td class="table-product-cell">
                   ₹
                   <%= (
-                        product.variants && product.variants.length > 0 && 
+                        product.variants?.length &&
                         typeof product.variants[0].variantPrice === 'number'
-                      ) ? product.variants[0].variantPrice.toFixed(2) : '-' %>
-                </td>
-                <td class="table-product-cell">
-                  <%= product.variants && product.variants.length > 0
-                        ? product.variants.reduce((sum, v) => sum + (v.variantQuantity || 0), 0)
-                        : 0
+                      ) 
+                        ? product.variants[0].variantPrice.toFixed(2) 
+                        : '-' 
                   %>
                 </td>
+
+                <td class="table-product-cell">
+                  <%= product.variants?.reduce((s, v) => s + (v.variantQuantity || 0), 0) || 0 %>
+                </td>
+
                 <td class="table-product-cell">
                   <div class="switch-toggle">
                     <button 
@@ -399,85 +439,108 @@
                     </button>
                   </div>
                 </td>
+
                 <td class="action-cell">
-                  <a href="/admin/updateProduct/<%= product._id %>" class="btn btn-outline-dark" title="Edit">
+                  <a href="/admin/updateProduct/<%= product._id %>" 
+                     class="btn btn-outline-dark" 
+                     title="Edit">
                     <i class="fas fa-pen"></i>
                   </a>
-                  <button data-product-id="<%= product._id %>" class="btn btn-outline-danger delete-product-btn" title="Delete">
+
+                  <button data-product-id="<%= product._id %>" 
+                          class="btn btn-outline-danger delete-product-btn" 
+                          title="Delete">
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
+
                 <td class="table-product-cell">
                   <div class="offer-widget">
                     <% if (product.offer && product.offer.productOffer > 0) { %>
+
                       <div class="offer-actions">
                         <button 
-                              onclick='editOfferModal("<%= product._id %>", "<%= product.offer._id %>", <%- JSON.stringify(product.offer) %>)' 
-                              class="btn-offer-edit" 
-                              title="Edit Offer"
-                            >
-                              <i class="fas fa-pen"></i>
-                            </button>
+                          onclick='editOfferModal("<%= product._id %>", <%- JSON.stringify(product.offer) %>)'
+                          class="btn-offer-edit" 
+                          title="Edit Offer">
+                          <i class="fas fa-pen"></i>
+                        </button>
 
                         <button 
-                      onclick="deleteOfferModal('<%= product._id %>')" 
-                      class="btn-offer-delete" 
-                      title="Delete Offer"
-                      type="button"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-
+                          onclick="deleteOfferModal('<%= product._id %>')" 
+                          class="btn-offer-delete" 
+                          title="Delete Offer">
+                          <i class="fas fa-trash"></i>
+                        </button>
                       </div>
+
                       <div class="offer-badge">
                         <%= product.offer.productOffer %>% Off
                       </div>
+
                     <% } else { %>
-                      <button class="offer-btn add-offer" onclick="addOfferModal('<%= product._id %>')" type="button">
+                      <button 
+                        class="offer-btn add-offer" 
+                        onclick="addOfferModal('<%= product._id %>')">
                         Add Offer
                       </button>
                     <% } %>
                   </div>
                 </td>
+
               </tr>
-              <% }); %>
+              <% }) %>
+
             <% } else { %>
               <tr>
                 <td colspan="9" class="text-center py-5">No products found.</td>
               </tr>
             <% } %>
+
           </tbody>
         </table>
       </div>
 
+
+      <!-- PAGINATION -->
       <div class="mt-4 d-flex justify-content-end align-items-center gap-2">
         <span class="me-2 small text-muted">
-          Showing <%= ((currentPage-1)*limit)+1 %>-<%= Math.min(currentPage*limit,totalProducts) %> from <%= totalProducts %>
+          Showing 
+          <%= ((currentPage-1)*limit)+1 %> -
+          <%= Math.min(currentPage*limit, totalProducts) %> 
+          from <%= totalProducts %>
         </span>
+
         <nav>
           <ul class="pagination m-0">
-  <% for(let i = 1; i <= totalPages; i++) { %>
-    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-      <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-    </li>
-  <% } %>
-</ul>
 
+            <% for(let i = 1; i <= totalPages; i++) { %>
+              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" 
+                   href="javascript:void(0)" 
+                   onclick="loadPage(<%= i %>)">
+                  <%= i %>
+                </a>
+              </li>
+            <% } %>
+
+          </ul>
         </nav>
       </div>
+
     </main>
   </div>
 </div>
+
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-function setSort(sortByValue, sortOrderValue) {
-  document.getElementById('sortByInput').value = sortByValue;
-  document.getElementById('sortOrderInput').value = sortOrderValue;
-  document.getElementById('secondaryFilterForm').submit();
-}
+
 
 document.querySelectorAll('.slider-btn').forEach(function(btn) {
   btn.addEventListener('click', function () {
@@ -713,9 +776,93 @@ function deleteOfferModal(productId) {
 }
 
 
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+  const searchInput = document.getElementById("searchInput");
+  const clearIcon = document.getElementById("searchClear");
+  const filterCategory = document.getElementById("filterCategory");
+  const filterPrice = document.getElementById("filterPrice");
+
+  let currentSort = "<%= sortBy || '' %>";
+  let currentSortOrder = "<%= sortOrder || 'desc' %>";
+  let currentPage = <%= currentPage %> || 1;
+
+  function loadProducts(page = 1) {
+    let url = `/admin/adminProducts?page=${page}`;
+
+    if (searchInput && searchInput.value.trim()) {
+      url += `&search=${encodeURIComponent(searchInput.value.trim())}`;
+    }
+
+    if (filterCategory && filterCategory.value.trim()) {
+      url += `&category=${encodeURIComponent(filterCategory.value.trim())}`;
+    }
+
+    if (filterPrice && filterPrice.value.trim()) {
+      url += `&priceRange=${encodeURIComponent(filterPrice.value.trim())}`;
+    }
+
+    if (currentSort) {
+      url += `&sortBy=${encodeURIComponent(currentSort)}`;
+    }
+
+    if (currentSortOrder) {
+      url += `&sortOrder=${encodeURIComponent(currentSortOrder)}`;
+    }
+
+    window.location.href = url;
+  }
+
+  window.loadPage = function (page) {
+    loadProducts(page);
+  };
+
+  window.applySort = function (sortBy, sortOrder = 'desc') {
+    currentSort = sortBy;
+    currentSortOrder = sortOrder;
+    loadProducts(1);
+  };
+
+  if (searchInput) {
+    searchInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        loadProducts(1);
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      clearIcon.style.display = searchInput.value.trim() ? "block" : "none";
+    });
+  }
+
+  if (clearIcon) {
+    clearIcon.addEventListener("click", () => {
+      searchInput.value = "";
+      clearIcon.style.display = "none";
+      loadProducts(1);
+    });
+  }
+
+  if (filterCategory) {
+    filterCategory.addEventListener("change", () => loadProducts(1));
+  }
+
+  if (filterPrice) {
+    filterPrice.addEventListener("change", () => loadProducts(1));
+  }
+
+});
 
 </script>
+
+
+
+
+
+
 
 </body>
 </html>

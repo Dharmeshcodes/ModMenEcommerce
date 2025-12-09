@@ -7,7 +7,7 @@ const Cart = require("../../models/cartSchema");
 
 const addToWishlist = async (req, res) => {
   try {
-    const userId = req.session.user;
+    const userId = req.session.user._id;
     const productId = req.body.productId;
 
     if (!userId) {

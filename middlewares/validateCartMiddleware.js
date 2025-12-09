@@ -5,7 +5,6 @@ const User = require("../models/userSchema");
 const Cart = require("../models/cartSchema");
 
 
-
 const validateCartMiddleware = async (req, res, next) => {
   try {
     const userId = req.session.user._id;
@@ -25,6 +24,7 @@ const validateCartMiddleware = async (req, res, next) => {
     }
 
     let changed = false;
+    let outOfStock = false;
     const validItems = [];
 
     for (let item of cart.items) {
@@ -57,29 +57,27 @@ const validateCartMiddleware = async (req, res, next) => {
       const stock = variant.variantQuantity;
 
       if (stock <= 0) {
+        outOfStock = true;
         item.productId.stock = 0;
         validItems.push(item);
         continue;
       }
 
-
       if (item.quantity > stock) {
-        item.quantity = stock;
         changed = true;
+        outOfStock = true;
+        item.quantity = stock;
       }
 
       item.productId.stock = stock;
-
       validItems.push(item);
     }
 
     cart.items = validItems;
     await cart.save();
 
-  
-    if (changed) {
+    if (outOfStock || changed) {
       let grandTotal = 0;
-
       cart.items.forEach(i => {
         if (i.productId.stock > 0) {
           grandTotal += i.quantity * i.salePrice;
@@ -97,7 +95,7 @@ const validateCartMiddleware = async (req, res, next) => {
         tax,
         shippingCharge,
         payableTotal,
-        errorMessage: "Some items were updated due to changes in stock."
+        errorMessage: "Some items are out of stock."
       });
     }
 
@@ -107,6 +105,7 @@ const validateCartMiddleware = async (req, res, next) => {
     return res.redirect("/pageNotFound");
   }
 };
+
 
 
 module.exports = validateCartMiddleware;

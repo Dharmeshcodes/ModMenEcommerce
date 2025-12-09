@@ -1,5 +1,7 @@
 const Subcategory = require('../../models/subcategorySchema');
 const Category = require('../../models/categorySchema');
+const { getSalePrice } = require('../../utils/offerUtils');
+const Product=require("../../models/productSchema")
 
 async function getSubcategory(req, res) {
   try {
@@ -209,17 +211,23 @@ async function toggleListStatus(req, res) {
 async function editOffer(req, res) {
   try {
     const subcategoryId = req.params.id;
-    const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
+
+    const offerPercentage = req.body.offerPercentage;
+    const maxRedeem = req.body.maxRedeem;
+    const startDate = req.body.startDate;
+    const validUntil = req.body.validUntil;
 
     if (!offerPercentage || isNaN(offerPercentage) || offerPercentage < 1 || offerPercentage > 100) {
       req.flash('error_msg', 'Offer percentage must be between 1 and 100.');
       return res.redirect('/admin/subcategory');
     }
+
     const maxR = parseInt(maxRedeem, 10);
     if (isNaN(maxR) || maxR < 0) {
       req.flash('error_msg', 'Max redeem must be 0 or a positive number.');
       return res.redirect('/admin/subcategory');
     }
+
     if (!startDate || !validUntil || new Date(startDate) > new Date(validUntil)) {
       req.flash('error_msg', 'Invalid start date or valid until date.');
       return res.redirect('/admin/subcategory');
@@ -240,12 +248,34 @@ async function editOffer(req, res) {
 
     await subcat.save();
 
+    const products = await Product.find({ subCategoryId: subcategoryId });
+
+    for (const product of products) {
+      const category = await Category.findById(product.categoryId);
+
+      for (const variant of product.variants) {
+        const offerData = getSalePrice(
+          variant.variantPrice,
+          category ? category.offer : null,
+          subcat.offer,
+          product.offer
+        );
+
+        variant.salePrice = offerData.salePrice;
+        product.displayOffer = offerData.bestOffer;
+        product.offerSource = offerData.offerSource;
+      }
+
+      await product.save();
+    }
+
     req.flash('success_msg', 'Offer updated successfully.');
-    res.redirect('/admin/subcategory');
+    return res.redirect('/admin/subcategory');
+
   } catch (error) {
     console.error(error);
     req.flash('error_msg', 'Server error.');
-    res.redirect('/admin/subcategory');
+    return res.redirect('/admin/subcategory');
   }
 }
 

@@ -158,6 +158,7 @@ const getCartPage = async (req, res) => {
       const stock = variant.variantQuantity;
 
       if (stock <= 0) {
+          errorMessage = "Some items are out of stock.";
         continue;
       }
 
