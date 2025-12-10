@@ -8991,3 +8991,10 @@
 {"level":"info","message":"Request: GET /admin/dashboard?type=month&from=&to= - Body: undefined","timestamp":"2025-12-09 23:28:18"}
 {"level":"info","message":"Request: GET /admin/dashboard?type=year&from=&to= - Body: undefined","timestamp":"2025-12-09 23:28:36"}
 {"level":"info","message":"Request: GET /admin/dashboard?type=&from=&to= - Body: undefined","timestamp":"2025-12-09 23:28:42"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-09 23:34:44"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-09 23:34:44"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-10 08:30:58"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-10 08:30:58"}
+{"level":"info","message":"Request: GET /admin/login - Body: undefined","timestamp":"2025-12-10 08:40:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-10 08:46:38"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-10 08:46:38"}
