@@ -15,6 +15,7 @@ const { userAuth, adminAuth } = require('../middlewares/auth');
 const checkBlockedUser = require('../middlewares/checkBlockedUser');
 const validateCartMiddleware=require("../middlewares/validateCartMiddleware")
 const walletController=require("../controllers/user/walletController")
+const reviewController=require("../controllers/user/reviewController")
 
 const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
@@ -78,21 +79,22 @@ router.get("/order-review", userAuth,validateCartMiddleware, checkoutControllers
 
 router.post("/confirmOrder", userAuth,validateCartMiddleware, orderController.confirmOrder);
 router.get("/orderSuccess/:orderId", userAuth, orderController.loadOrderSuccess);
-router.get("/order",userAuth,checkBlockedUser,orderController.getUserOrders)
-router.get("/order/:orderId", userAuth, checkBlockedUser,orderController.getOrderDetails);
-router.post("/cancel-order/:orderId", userAuth,checkBlockedUser,orderController.cancelOrder)
-router.post('/cancelItem/:orderId/:itemId', orderController.cancelSingleItem);
+router.get("/order",userAuth,checkBlockedUser,validateCartMiddleware,orderController.getUserOrders)
+router.get("/order/:orderId", userAuth, checkBlockedUser,validateCartMiddleware,orderController.getOrderDetails);
+router.post("/cancel-order/:orderId", userAuth,orderController.cancelOrder)
+router.post('/cancelItem/:orderId/:itemId',orderController.cancelSingleItem);
 router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleItem);
 router.post('/order/:orderId/return-order', orderController.returnEntireOrder);
 router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice)
 
-router.get("/online-payment/:orderId",userAuth,razorpayController.loadOnlinePaymentPage)
-router.post("/verify-payment",userAuth,razorpayController.verifyRazorpayPayment);
+router.get("/online-payment/:orderId",userAuth,validateCartMiddleware,razorpayController.loadOnlinePaymentPage)
+router.post("/verify-payment",userAuth,validateCartMiddleware,razorpayController.verifyRazorpayPayment);
 router.get("/orderFailed/:orderId",userAuth, razorpayController.getOrderFailedPage);
-router.get("/retry-payment/:orderId",userAuth, razorpayController.retryPayment);
+router.get("/retry-payment/:orderId",userAuth,validateCartMiddleware, razorpayController.retryPayment);
 
 
-router.post("/wishlist/add",userAuth, wishlistController.addToWishlist);
+router.post("/wishlist/toggle",userAuth,wishlistController.toggleWishlist);
+
 router.get("/wishlist",userAuth, wishlistController.getWishlist)
 router.get('/wishlist/remove',userAuth, wishlistController.removeFromWishlist)
 router.post("/wishlist/emptyWishlist/:userId", userAuth, wishlistController.emptyWishlist);
@@ -105,6 +107,9 @@ router.get("/coupon", userAuth, couponController.loadUserCoupons);
 router.post("/apply-coupon", userAuth, couponController.applyCoupon);
 router.post("/cancel-coupon", userAuth, couponController.cancelCoupon);
 router.get("/available-coupons", userAuth, couponController.availableCoupons);
+
+router.post("/review/add",userAuth,reviewController.addReview);
+router.delete("/review/:reviewId",reviewController.deleteReview);
 
 
 

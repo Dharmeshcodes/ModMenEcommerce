@@ -248,13 +248,12 @@ const updateOrderItemStatus = async (req, res) => {
   }
 };
 
-
 const returnItemDecision = async (req, res) => {
   try {
     const { orderId, itemId } = req.params;
     const { decision } = req.body;
 
-    if (!decision || (decision !== "accept" && decision !== "reject")) {
+    if (!["accept_nostock", "accept_addstock", "reject"].includes(decision)) {
       return res.status(400).json({ success: false, message: "Invalid decision" });
     }
 
@@ -268,7 +267,11 @@ const returnItemDecision = async (req, res) => {
       return res.status(400).json({ success: false, message: "No return request on this item" });
     }
 
-    if (decision === "accept") {
+    if (decision === "reject") {
+      item.status = "delivered";
+    }
+
+    if (decision === "accept_nostock" || decision === "accept_addstock") {
       item.status = "returned";
 
       if (order.paymentMethod !== "cod") {
@@ -279,53 +282,41 @@ const returnItemDecision = async (req, res) => {
         });
       }
 
-      const product = await Product.findById(item.productId);
-      if (product) {
-        const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
-        if (variant) variant.variantQuantity += item.quantity;
-        await product.save();
+      if (decision === "accept_addstock") {
+        const product = await Product.findById(item.productId);
+        if (product) {
+          const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
+          if (variant) variant.variantQuantity += item.quantity;
+          await product.save();
+        }
       }
-
-    } else if (decision === "reject") {
-      item.status = "delivered";
     }
 
-    const allItems = order.orderedItems;
-    const allCancelled = allItems.every(i => i.status === "cancelled");
-    const allDelivered = allItems.every(i => i.status === "delivered");
-    const allReturned = allItems.every(i => i.status === "returned");
-    const allReturnRequested = allItems.every(i => i.status === "return_requested");
-    const allOutForDelivery = allItems.every(i => i.status === "out_for_delivery");
-    const allShipped = allItems.every(i => i.status === "shipped");
-    const allConfirmed = allItems.every(i => i.status === "confirmed");
-    const allPending = allItems.every(i => i.status === "pending");
-    const allFailed = allItems.every(i => i.status === "failed");
+    const activeItems = order.orderedItems.filter(i =>
+      !["cancelled", "returned"].includes(i.status)
+    );
 
-    if (allCancelled) order.status = "cancelled";
-    else if (allDelivered) order.status = "delivered";
-    else if (allReturned) order.status = "returned";
-    else if (allReturnRequested) order.status = "return_requested";
-    else if (allOutForDelivery) order.status = "out_for_delivery";
-    else if (allShipped) order.status = "shipped";
-    else if (allConfirmed) order.status = "confirmed";
-    else if (allPending) order.status = "pending";
-    else if (allFailed) order.status = "failed";
+    if (activeItems.length === 0) {
+      order.status = "returned";
+    } else if (order.orderedItems.some(i => i.status === "return_requested")) {
+      order.status = "return_requested";
+    }
 
     order.markModified("orderedItems");
     await order.save();
 
-    return res.json({ success: true, message: `Item return ${decision}ed successfully` });
+    return res.json({ success: true, message: `Item return ${decision} processed` });
   } catch (err) {
-    console.error("returnItemDecision error:", err);
     return res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
+
 const returnFullOrderDecision = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { decision } = req.body;
 
-    if (!decision || (decision !== "accept" && decision !== "reject")) {
+    if (!["accept_nostock", "accept_addstock", "reject"].includes(decision)) {
       return res.status(400).json({ success: false, message: "Invalid decision" });
     }
 
@@ -336,7 +327,14 @@ const returnFullOrderDecision = async (req, res) => {
       return res.status(400).json({ success: false, message: "Full order return not requested" });
     }
 
-    if (decision === "accept") {
+    if (decision === "reject") {
+      order.orderedItems.forEach(i => {
+        if (i.status === "return_requested") i.status = "delivered";
+      });
+      order.status = "delivered";
+    }
+
+    if (decision === "accept_nostock" || decision === "accept_addstock") {
       order.orderedItems.forEach(i => {
         if (i.status === "return_requested") i.status = "returned";
       });
@@ -349,38 +347,28 @@ const returnFullOrderDecision = async (req, res) => {
         });
       }
 
-      for (const item of order.orderedItems) {
-        const product = await Product.findById(item.productId);
-        if (product) {
-          const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
-          if (variant) variant.variantQuantity += item.quantity;
-          await product.save();
+      if (decision === "accept_addstock") {
+        for (const item of order.orderedItems) {
+          const product = await Product.findById(item.productId);
+          if (product) {
+            const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
+            if (variant) variant.variantQuantity += item.quantity;
+            await product.save();
+          }
         }
       }
 
       order.status = "returned";
-
-    } else if (decision === "reject") {
-      order.orderedItems.forEach(i => {
-        if (i.status === "return_requested") i.status = "delivered";
-      });
-      order.status = "delivered";
     }
 
     order.markModified("orderedItems");
     await order.save();
 
-    return res.json({ success: true, message: `Order return ${decision}ed successfully` });
+    return res.json({ success: true, message: `Order return ${decision} processed` });
   } catch (err) {
-    console.error("returnFullOrderDecision error:", err);
     return res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
-
-
-
-
-
 
 
 

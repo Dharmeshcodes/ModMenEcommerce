@@ -133,8 +133,23 @@
                                   <div style="font-size:0.85rem; font-weight:600;">Return Reason:</div>
                                   <div style="font-size:0.85rem;" class="text-muted"><%= it.returnReason %></div>
                                   <div class="mt-2 d-flex gap-2">
-                                    <button class="btn btn-sm btn-success" onclick="handleItemReturnDecision('<%= order.orderId %>','<%= it.itemId %>','accept')">Accept</button>
-                                    <button class="btn btn-sm btn-danger" onclick="handleItemReturnDecision('<%= order.orderId %>','<%= it.itemId %>','reject')">Reject</button>
+                                    <button class="btn btn-sm btn-success"
+        onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'accept_nostock')">
+  Accept (No Stock)
+</button>
+
+<button class="btn btn-sm btn-primary"
+        onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'accept_addstock')">
+  Accept (Add Stock)
+</button>
+
+<button class="btn btn-sm btn-danger"
+        onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'reject')">
+  Reject
+</button>
+
+                                    
+                                    
                                   </div>
                                 </div>
                               <% } %>
@@ -180,13 +195,26 @@
 
             <div class="bottom-actions">
               <a href="/admin/orders" class="btn btn-back">Back</a>
-              <a href="/admin/order/<%= order.orderId %>/invoice" class="btn btn-invoice">Invoice</a>
+              <!-- <a href="/admin/order/<%= order.orderId %>/invoice" class="btn btn-invoice">Invoice</a> -->
             </div>
 
             <% if (order.status === 'return_requested') { %>
               <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-success" onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'accept')">Accept Full Return</button>
-                <button class="btn btn-danger" onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'reject')">Reject Full Return</button>
+                <button class="btn btn-success"
+        onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'accept_nostock')">
+  Accept No Stock
+</button>
+
+<button class="btn btn-primary"
+        onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'accept_addstock')">
+  Accept Add Stock
+</button>
+
+<button class="btn btn-danger"
+        onclick="handleFullOrderReturnDecision('<%= order.orderId %>', 'reject')">
+  Reject
+</button>
+
               </div>
             <% } %>
 
@@ -234,36 +262,37 @@
     }
 
     async function handleItemReturnDecision(orderId, itemId, decision) {
-      const res = await fetch(`/admin/order/${orderId}/item/${itemId}/return-decision`, {
+    const res = await fetch(`/admin/order/${orderId}/item/${itemId}/return-decision`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ decision })
-      });
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (data.success) {
+    if (data.success) {
         Swal.fire("Success", data.message, "success").then(() => location.reload());
-      } else {
+    } else {
         Swal.fire("Error", data.message, "error");
-      }
     }
+}
 
-    async function handleFullOrderReturnDecision(orderId, decision) {
-      const res = await fetch(`/admin/order/${orderId}/return-decision`, {
+async function handleFullOrderReturnDecision(orderId, decision) {
+    const res = await fetch(`/admin/order/${orderId}/return-decision`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ decision })
-      });
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (data.success) {
+    if (data.success) {
         Swal.fire("Success", data.message, "success").then(() => location.reload());
-      } else {
+    } else {
         Swal.fire("Error", data.message, "error");
-      }
     }
+}
+
   </script>
 </body>
 </html>

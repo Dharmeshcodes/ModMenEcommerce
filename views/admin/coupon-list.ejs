@@ -250,24 +250,46 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    /* SEARCH */
     const searchInput = document.getElementById("searchInput");
-    const clearSearch = document.getElementById("clearSearch");
+const clearSearch = document.getElementById("clearSearch");
 
-    function updateClear() {
-      clearSearch.style.display = searchInput.value.trim() ? "block" : "none";
-    }
-    updateClear();
+function buildUrl(params) {
+  const q = searchInput.value.trim();
+  const urlParams = new URLSearchParams(window.location.search);
 
-    clearSearch.onclick = () => window.location.href = "/admin/coupon-list";
+  if (q) urlParams.set("search", q);
+  else urlParams.delete("search");
 
+  if (params.filter) urlParams.set("filter", params.filter);
 
-    /* FILTER */
-    document.querySelectorAll(".filter-btn-item").forEach(btn => {
-      btn.onclick = () => {
-        window.location.href = `/admin/coupon-list?filter=${btn.dataset.type}`;
-      };
-    });
+  return "/admin/coupon-list?" + urlParams.toString();
+}
+
+function updateClear() {
+  clearSearch.style.display = searchInput.value.trim() ? "block" : "none";
+}
+
+updateClear();
+
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    window.location.href = buildUrl({});
+  }
+});
+
+clearSearch.onclick = () => {
+  searchInput.value = "";
+  updateClear();
+  window.location.href = buildUrl({});
+};
+
+document.querySelectorAll(".filter-btn-item").forEach(btn => {
+  btn.onclick = () => {
+    const filterType = btn.dataset.type;
+    window.location.href = buildUrl({ filter: filterType });
+  };
+});
 
 
     /* DELETE */

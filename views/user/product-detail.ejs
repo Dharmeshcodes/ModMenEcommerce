@@ -177,6 +177,17 @@
       transition: background 0.15s;
       margin-right: 0;
     }
+    .wishlist-heart {
+  font-size: 1.9rem;
+  cursor: pointer;
+  color: black;
+  transition: color 0.2s ease;
+}
+
+.wishlist-heart.active {
+  color: red;
+}
+
     .cart-btn:hover { background: #333; color: #fff;}
     .wishlist-btn {
       background: #fff;
@@ -507,9 +518,13 @@
         <% } %>
 
       <button class="cart-btn" style="padding:12px 90px;border-radius:30px;font-weight:700;font-size:1.15em;background:#111;color:#fff;border:none;">Add to Cart</button>
-      <button class="wishlist-btn" id="addToWishlistBtn" title="Wishlist">
-  <i class="far fa-heart"></i>
-</button>
+        <i class="fas fa-heart wishlist-heart 
+   <%= (user && Array.isArray(user.wishlist) && user.wishlist.some(id => id.toString() === product._id.toString())) ? 'active' : '' %>"
+   data-id="<%= product._id %>"
+   onclick="toggleWishlist(this)"
+   style="font-size:1.9rem;cursor:pointer;margin-left:10px;">
+</i>
+
 
 
     </div>
@@ -765,44 +780,37 @@
     }
   });
 
-  document.getElementById("addToWishlistBtn").addEventListener("click", async () => {
-  const productId = "<%= product._id %>";
+
+async function toggleWishlist(el) {
+  const productId = el.dataset.id;
+  if (!productId) return;
 
   try {
-    const response = await fetch("/user/wishlist/add", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
+    const res = await fetch('/user/wishlist/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ productId })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
-    if (data.status) {
-      Swal.fire({
-        icon: "success",
-        title: "Added to Wishlist",
-        text: data.message || "Product saved."
-      });
-
-      document.querySelector("#addToWishlistBtn i").classList.remove("far");
-      document.querySelector("#addToWishlistBtn i").classList.add("fas");
-      document.querySelector("#addToWishlistBtn").style.color = "red";
-    } else {
-      Swal.fire({
-        icon: "info",
-        title: "Wishlist",
-        text: data.message
-      });
+    if (!data || !data.success) {
+      Swal.fire({ icon: 'warning', title: data?.message || 'Operation failed', showConfirmButton: false, timer: 1200 });
+      return;
     }
 
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Something went wrong"
-    });
+    if (data.action === 'added') {
+      el.classList.add('active');
+      Swal.fire({ icon: 'success', title: 'Added to wishlist', showConfirmButton: false, timer: 900 });
+    } else {
+      el.classList.remove('active');
+      Swal.fire({ icon: 'info', title: 'Removed from wishlist', showConfirmButton: false, timer: 900 });
+    }
+  } catch (err) {
+    console.error('Wishlist toggle error', err);
+    Swal.fire({ icon: 'error', title: 'Server error', showConfirmButton: false, timer: 1400 });
   }
-});
+}
 
 
 

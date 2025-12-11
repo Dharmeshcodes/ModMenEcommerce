@@ -345,7 +345,6 @@ const decreaseQuantity = async (req, res) => {
 };
 
 
-
 const removeCartItem = async (req, res) => {
   try {
     const userId = req.session.user._id;
@@ -395,7 +394,6 @@ const removeCartItem = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
 
 
 const emptyCart = async (req, res) => {

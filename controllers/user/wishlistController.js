@@ -5,71 +5,54 @@ const User = require("../../models/userSchema");
 const Cart = require("../../models/cartSchema");
 
 
-const addToWishlist = async (req, res) => {
+const toggleWishlist = async (req, res) => {
   try {
-    const userId = req.session.user._id;
+    console.log("the controller function hit");
+    const userId = req.session.user?._id;
     const productId = req.body.productId;
 
     if (!userId) {
-      return res.status(401).json({ status: false, message: "Login required" })
+      return res.status(401).json({ success: false, message: "Login required" });
     }
 
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ status: false, message: "User not found" })
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
 
     const product = await Product.findById(productId)
       .populate("categoryId")
-      .populate("subCategoryId")
+      .populate("subCategoryId");
 
-    if (!product) {
-      return res.status(404).json({ status: false, message: "Product not found" });
+    if (!product || product.isDeleted || !product.isListed ||
+        product.categoryId?.isDeleted || product.subCategoryId?.isDeleted) {
+      return res.status(400).json({ success: false, message: "Product unavailable" });
     }
 
-    if (
-      product.isDeleted ||
-      !product.isListed ||
-      !product.categoryId ||
-      product.categoryId?.isDeleted ||
-      !product.subCategoryId ||
-      product.subCategoryId?.isDeleted
-    ) {
-      return res.status(400).json({
-        status: false,
-        message: "This product is unavailable or removed",
-      });
-    }
+    const exists = user.wishlist.some(id => id.toString() === productId.toString());
 
-    if (user.wishlist.includes(productId)) {
-      return res.status(400).json({ status: false, message: "Already in wishlist" });
-    }
-
+    if (exists) {
+      user.wishlist.pull(productId);
+      await user.save();
+      return res.json({ success: true, action: "removed" });
+    } 
+    
     const cart = await Cart.findOne({ userId });
-    if (cart) {
-      const inCart = cart.items.some(
-        (item) => item.productId.toString() === productId.toString()
-      );
-      if (inCart) {
-        return res.status(400).json({
-          status: false,
-          message: "This product is already in your cart",
-        });
-      }
+    if (cart?.items.some(i => i.productId.toString() === productId)) {
+      return res.json({ success: false, message: "Already in cart" });
     }
 
     user.wishlist.push(productId);
     await user.save();
-
-    return res.status(200).json({
-      status: true,
-      message: "Added to wishlist successfully",
-      wishlistCount: user.wishlist.length,
-    });
+    return res.json({ success: true, action: "added" });
 
   } catch (error) {
-    console.error("AddToWishlist Error:", error);
-    return res.status(500).json({ status: false, message: "Server error" });
+    console.log("Toggle Wishlist Error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
 
 const getWishlist = async (req, res) => {
   try {
@@ -179,7 +162,7 @@ const emptyWishlist = async (req, res) => {
 
 
 module.exports={
-    addToWishlist,
+    toggleWishlist,
     getWishlist,
     removeFromWishlist,
     emptyWishlist

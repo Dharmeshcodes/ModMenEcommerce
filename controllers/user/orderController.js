@@ -32,16 +32,23 @@ const confirmOrder = async (req, res) => {
       const product = await Product.findById(item.productId)
         .populate("categoryId")
         .populate("subCategoryId");
+
       if (!product) continue;
       if (!product.isListed || product.isDeleted) continue;
       if (product.categoryId?.isDeleted || !product.categoryId?.isListed) continue;
       if (product.subCategoryId?.isDeleted || !product.subCategoryId?.isListed) continue;
-      const variant = product.variants.find(v => v.color === item.color && v.size === item.size);
+
+      const variant = product.variants.find(
+        v => v.color === item.color && v.size === item.size
+      );
+
       if (!variant) continue;
       if (variant.variantQuantity <= 0) continue;
+
       item.variantPrice = variant.variantPrice;
       item.salePrice = variant.salePrice;
       item.productId = product;
+
       validItems.push(item);
     }
 
@@ -51,6 +58,7 @@ const confirmOrder = async (req, res) => {
 
     let subtotal = 0;
     let offerDiscount = 0;
+
     validItems.forEach(i => {
       subtotal += i.salePrice * i.quantity;
       offerDiscount += (i.variantPrice - i.salePrice) * i.quantity;
@@ -62,7 +70,28 @@ const confirmOrder = async (req, res) => {
     const tax = +(subtotal * 0.18).toFixed(2);
     const cgst = +(tax / 2).toFixed(2);
     const sgst = +(tax / 2).toFixed(2);
-    const shippingCharge = subtotal > 0 && subtotal < 1000 ? 50 : 0;
+
+    const addressDoc = await Address.findOne({ userId });
+    let selectedAddress = null;
+
+    if (addressDoc) {
+      selectedAddress =
+        addressDoc.address.id(addressId) ||
+        addressDoc.address.find(a => a.isDefault) ||
+        addressDoc.address[0];
+    }
+
+    if (!selectedAddress) {
+      return res.redirect("/user/checkout-address");
+    }
+
+    let shippingCharge = 50;
+    if (selectedAddress?.state) {
+      const state = selectedAddress.state.trim().toLowerCase();
+      if (state === "kerala") {
+        shippingCharge = 0;
+      }
+    }
 
     let couponDiscount = 0;
     if (appliedCoupon && appliedCoupon.discount) {
@@ -74,29 +103,21 @@ const confirmOrder = async (req, res) => {
 
     delete req.session.appliedCoupon;
 
-    const addressDoc = await Address.findOne({ userId });
-    let selectedAddress = null;
-    if (addressDoc) {
-      selectedAddress = addressDoc.address.id(addressId) || addressDoc.address.find(a => a.isDefault) || addressDoc.address[0];
-    }
-    if (!selectedAddress) return res.redirect("/user/checkout-address");
-
     const addressString = `${selectedAddress.fullName}, ${selectedAddress.houseNo}, ${selectedAddress.city}, ${selectedAddress.landMark}, ${selectedAddress.district}, ${selectedAddress.state}, ${selectedAddress.pincode}, Phone: ${selectedAddress.phone}`;
 
     const orderedItems = validItems.map(i => ({
-  productId: i.productId._id,
-  productName: i.productId.name,
-  category: i.productId.categoryId?.name || "Unknown",
-  subCategory: i.productId.subCategoryId?.name || "Unknown",
-  size: i.size,
-  color: i.color,
-  quantity: i.quantity,
-  price: i.variantPrice,
-  salePrice: i.salePrice,
-  finalPrice: i.salePrice * i.quantity,
-  status: "pending"
-}));
-
+      productId: i.productId._id,
+      productName: i.productId.name,
+      category: i.productId.categoryId?.name || "Unknown",
+      subCategory: i.productId.subCategoryId?.name || "Unknown",
+      size: i.size,
+      color: i.color,
+      quantity: i.quantity,
+      price: i.variantPrice,
+      salePrice: i.salePrice,
+      finalPrice: i.salePrice * i.quantity,
+      status: "pending"
+    }));
 
     const orderData = {
       userId,
@@ -116,18 +137,30 @@ const confirmOrder = async (req, res) => {
       status: paymentMethod === "cod" || paymentMethod === "wallet" ? "confirmed" : "pending"
     };
 
+    if (paymentMethod === "cod" && payableTotal > 1000) {
+      req.flash("error_msg", "COD is not available for orders above ₹1000.");
+      return res.redirect("/user/checkoutPayment?addressId=" + addressId);
+    }
+
     if (paymentMethod === "cod") {
       const order = new Order(orderData);
       await order.save();
+
       for (let i of validItems) {
         await Product.updateOne(
           { _id: i.productId._id, "variants.size": i.size, "variants.color": i.color },
           { $inc: { "variants.$.variantQuantity": -i.quantity } }
         );
       }
-      cart.items = cart.items.filter(c => !validItems.some(v =>
-        v.productId._id.toString() === c.productId._id.toString() && v.size === c.size && v.color === c.color
-      ));
+
+      cart.items = cart.items.filter(c =>
+        !validItems.some(v =>
+          v.productId._id.toString() === c.productId._id.toString() &&
+          v.size === c.size &&
+          v.color === c.color
+        )
+      );
+
       await cart.save();
       return res.redirect("/user/orderSuccess/" + order.orderId);
     }
@@ -141,35 +174,52 @@ const confirmOrder = async (req, res) => {
 
     if (paymentMethod === "wallet") {
       const wallet = await Wallet.findOne({ userId });
+
       if (!wallet || wallet.balance < payableTotal) {
         req.flash("error_msg", "Insufficient wallet balance");
         return res.redirect("/user/checkoutPayment?addressId=" + addressId);
       }
-      await deductMoneyFromWallet(userId, payableTotal, { description: "Order Payment", method: "wallet_payment"});
+
+      await deductMoneyFromWallet(
+        userId,
+        payableTotal,
+        { description: "Order Payment", method: "wallet_payment" }
+      );
+
       orderedItems.forEach(item => item.status = "confirmed");
+
       const order = new Order(orderData);
       order.paymentStatus = "completed";
       order.status = "confirmed";
       await order.save();
+
       for (let i of validItems) {
         await Product.updateOne(
           { _id: i.productId._id, "variants.size": i.size, "variants.color": i.color },
           { $inc: { "variants.$.variantQuantity": -i.quantity } }
         );
       }
-      cart.items = cart.items.filter(c => !validItems.some(v =>
-        v.productId._id.toString() === c.productId._id.toString() && v.size === c.size && v.color === c.color
-      ));
+
+      cart.items = cart.items.filter(c =>
+        !validItems.some(v =>
+          v.productId._id.toString() === c.productId._id.toString() &&
+          v.size === c.size &&
+          v.color === c.color
+        )
+      );
+
       await cart.save();
       return res.redirect("/user/orderSuccess/" + order.orderId);
     }
 
     return res.redirect("/user/cart");
+
   } catch (error) {
     console.log("Confirm Order Error:", error);
     return res.redirect("/500");
   }
 };
+
 
 const loadOrderSuccess = async (req, res) => {
   try {

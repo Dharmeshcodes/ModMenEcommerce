@@ -151,6 +151,7 @@ const salePage = async (req, res) => {
     if (search) params.push(`search=${encodeURIComponent(search)}`);
 
     const paginationQuery = params.length ? `&${params.join("&")}` : "";
+    console.log("user passed form the sale page is ",user)
 
     res.render("user/sale", {
       categories,

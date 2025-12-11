@@ -388,8 +388,12 @@
         <div class="product-card">
           <div class="product-image-wrapper">
 
-            <i class="fas fa-heart wishlist-heart"
-               onclick="addToWishlist('<%= product._id %>', this)"></i>
+            <i class="fas fa-heart wishlist-heart <%= (user && Array.isArray(user.wishlist) && user.wishlist.some(id => id.toString() === product._id.toString())) ? 'active' : '' %>"
+   data-id="<%= product._id %>"
+   onclick="toggleWishlist(this)"></i>
+
+
+
 
             <img src="<%= product.images?.[0]?.url || '/user/images/no-image.png' %>">
 
@@ -516,40 +520,34 @@ function goToPage(page) {
 }
 
 /* WISHLIST */
-async function addToWishlist(productId, heartIcon) {
+    async function toggleWishlist(el) {
+  const productId = el.dataset.id;
+  if (!productId) return;
+
   try {
-    const res = await fetch('/user/wishlist/add', {
+    const res = await fetch('/user/wishlist/toggle', {
       method: 'POST',
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ productId })
     });
 
     const data = await res.json();
 
-    if (data.success) {
-      heartIcon.classList.add("active");
-      Swal.fire({
-        icon: "success",
-        title: "Added to wishlist",
-        showConfirmButton: false,
-        timer: 1200
-      });
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: data.message || "Something went wrong",
-        showConfirmButton: false,
-        timer: 1400
-      });
+    if (!data || !data.success) {
+      Swal.fire({ icon: 'warning', title: data?.message || 'Operation failed', showConfirmButton: false, timer: 1200 });
+      return;
     }
 
-  } catch {
-    Swal.fire({
-      icon: "error",
-      title: "Error adding to wishlist",
-      showConfirmButton: false,
-      timer: 1400
-    });
+    if (data.action === 'added') {
+      el.classList.add('active');
+      Swal.fire({ icon: 'success', title: 'Added to wishlist', showConfirmButton: false, timer: 900 });
+    } else {
+      el.classList.remove('active');
+      Swal.fire({ icon: 'info', title: 'Removed from wishlist', showConfirmButton: false, timer: 900 });
+    }
+  } catch (err) {
+    console.error('Wishlist toggle error', err);
+    Swal.fire({ icon: 'error', title: 'Server error', showConfirmButton: false, timer: 1400 });
   }
 }
 </script>

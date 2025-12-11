@@ -68,7 +68,6 @@ const getCheckoutPage = async (req, res) => {
         errorMessage = "Quantities adjusted due to stock changes.";
       }
 
-      // We always use salePrice stored in cart
       item.salePrice = variant.salePrice;
       item.productId.stock = stock;
       validItems.push(item);
@@ -96,13 +95,20 @@ const getCheckoutPage = async (req, res) => {
       grandTotal += i.quantity * i.salePrice;
     });
 
-    // TAX + SHIPPING (same as cart)
     const tax = +(grandTotal * 0.18).toFixed(2);
-    const shippingCharge = grandTotal > 0 && grandTotal < 1000 ? 50 : 0;
-    const payableTotal = +(grandTotal + tax + shippingCharge).toFixed(2);
 
     const addressesDoc = await Address.findOne({ userId });
     const addresses = addressesDoc ? addressesDoc.address : [];
+
+    let shippingCharge = 50;
+    const defaultAddress = addresses.find(a => a.isDefault) || addresses[0];
+
+    if (defaultAddress?.state) {
+      const state = defaultAddress.state.trim().toLowerCase();
+      if (state === "kerala") shippingCharge = 0;
+    }
+
+    const payableTotal = +(grandTotal + tax + shippingCharge).toFixed(2);
 
     return res.render("user/checkout-address", {
       user: userData,
@@ -180,9 +186,6 @@ const loadPaymentPage = async (req, res) => {
     const tax = +(subtotal * 0.18).toFixed(2);
     const cgst = +(tax / 2).toFixed(2);
     const sgst = +(tax / 2).toFixed(2);
-    const shippingCharge = subtotal < 1000 ? 50 : 0;
-
-    let payableTotal = subtotal + tax + shippingCharge;
 
     const addressId = req.query.addressId;
     const addressDoc = await Address.findOne({ userId });
@@ -193,6 +196,14 @@ const loadPaymentPage = async (req, res) => {
     if (!address) {
       return res.redirect("/user/checkout-address");
     }
+
+    let shippingCharge = 50;
+    if (address.state) {
+      const state = address.state.trim().toLowerCase();
+      if (state === "kerala") shippingCharge = 0;
+    }
+
+    let payableTotal = subtotal + tax + shippingCharge;
 
     let appliedCoupon = req.session.appliedCoupon;
 
@@ -219,12 +230,14 @@ const loadPaymentPage = async (req, res) => {
     return res.redirect("/500");
   }
 };
+
 const loadOrderReviewPage = async (req, res) => {
   try {
     const userId = req.session.user._id;
     const addressId = req.query.addressId;
     const paymentMethod = req.query.paymentMethod || "cod";
-const userData=await User.findById(userId)
+    const userData = await User.findById(userId);
+
     let addressDoc = await Address.findOne(
       { "address._id": addressId },
       { "address.$": 1 }
@@ -235,7 +248,7 @@ const userData=await User.findById(userId)
     if (!address) {
       const parent = await Address.findOne({ userId });
       if (!parent) return res.redirect("/user/checkout-address");
-      address = parent.address.find((a) => a.isDefault) || parent.address[0];
+      address = parent.address.find(a => a.isDefault) || parent.address[0];
     }
 
     const cart = await Cart.findOne({ userId });
@@ -245,6 +258,7 @@ const userData=await User.findById(userId)
 
     const validItems = [];
     let errorMessage = null;
+
     for (let item of cart.items) {
       const product = await Product.findById(item.productId)
         .populate("categoryId")
@@ -264,7 +278,7 @@ const userData=await User.findById(userId)
       }
 
       const variant = product.variants.find(
-        (v) => v.color === item.color && v.size === item.size
+        v => v.color === item.color && v.size === item.size
       );
 
       if (!variant) {
@@ -274,9 +288,7 @@ const userData=await User.findById(userId)
 
       const stock = variant.variantQuantity;
 
-      if (stock <= 0) {
-        continue;
-      }
+      if (stock <= 0) continue;
 
       if (item.quantity > stock) {
         item.quantity = stock;
@@ -298,16 +310,23 @@ const userData=await User.findById(userId)
 
     let subtotal = 0;
     let discount = 0;
-    validItems.forEach((i) => {
+
+    validItems.forEach(i => {
       subtotal += i.salePrice * i.quantity;
       discount += (i.variantPrice - i.salePrice) * i.quantity;
     });
 
     subtotal = +subtotal.toFixed(2);
+
     const cgst = +(subtotal * 0.09).toFixed(2);
     const sgst = +(subtotal * 0.09).toFixed(2);
     const tax = +(cgst + sgst).toFixed(2);
-    const shippingCharge = subtotal < 1000 ? 50 : 0;
+
+    let shippingCharge = 50;
+    if (address.state) {
+      const state = address.state.trim().toLowerCase();
+      if (state === "kerala") shippingCharge = 0;
+    }
 
     const applied = req.session.appliedCoupon || null;
     const couponDiscount = applied ? applied.discount : 0;
@@ -329,7 +348,7 @@ const userData=await User.findById(userId)
       couponDiscount,
       payableTotal,
       errorMessage,
-      user:userData
+      user: userData
     });
 
   } catch (error) {
@@ -337,6 +356,7 @@ const userData=await User.findById(userId)
     return res.redirect("/500");
   }
 };
+
 module.exports = {
   getCheckoutPage,
   loadPaymentPage,

@@ -124,7 +124,7 @@ const getSalesReport = async (req, res) => {
       if (search) {
         query.$or = [
           { "orderedItems.productName": { $regex: search, $options: "i" } },
-          { "userId.name": { $regex: search, $options: "i" } }
+          { "userId.fullName": { $regex: search, $options: "i" } }
         ];
       }
 
@@ -199,7 +199,6 @@ const getSalesReport = async (req, res) => {
     }
   };
 
-
 const exportSalesExcel = async (req, res) => {
     try {
         const { type, from, to, search } = req.query;
@@ -209,7 +208,7 @@ const exportSalesExcel = async (req, res) => {
         if (search) {
             query.$or = [
                 { "orderedItems.productName": { $regex: search, $options: "i" } },
-                { "userId.name": { $regex: search, $options: "i" } }
+                { "userId.fullName": { $regex: search, $options: "i" } }
             ];
         }
 
@@ -257,19 +256,32 @@ const exportSalesExcel = async (req, res) => {
         sheet.addRow([]);
 
         sheet.columns = [
-            { header: "Order ID", key: "orderId", width: 18 },
-            { header: "Order Date", key: "orderDate", width: 16 },
-            { header: "Buyer", key: "buyer", width: 20 },
-            { header: "Product", key: "product", width: 28 },
-            { header: "Product ID", key: "productId", width: 22 },
-            { header: "Qty", key: "qty", width: 8 },
-            { header: "Price", key: "price", width: 12 },
-            { header: "Category", key: "category", width: 18 },
-            { header: "Discount", key: "discount", width: 14 },
-            { header: "Total", key: "total", width: 14 }
+            { key: "orderId", width: 18 },
+            { key: "orderDate", width: 16 },
+            { key: "buyer", width: 20 },
+            { key: "product", width: 28 },
+            { key: "productId", width: 22 },
+            { key: "qty", width: 8 },
+            { key: "price", width: 12 },
+            { key: "category", width: 18 },
+            { key: "discount", width: 14 },
+            { key: "total", width: 14 }
         ];
 
-        sheet.getRow(4).font = { bold: true };
+        const header = sheet.addRow({
+            orderId: "Order ID",
+            orderDate: "Order Date",
+            buyer: "Buyer",
+            product: "Product",
+            productId: "Product ID",
+            qty: "Qty",
+            price: "Price",
+            category: "Category",
+            discount: "Discount",
+            total: "Total"
+        });
+
+        header.font = { bold: true };
 
         orders.forEach(order => {
             const orderDateStr = new Date(order.createdOn).toLocaleDateString("en-IN");
@@ -284,7 +296,7 @@ const exportSalesExcel = async (req, res) => {
                 sheet.addRow({
                     orderId: order.orderId,
                     orderDate: orderDateStr,
-                    buyer: order.userId?.name || "Unknown",
+                    buyer: order.userId?.fullName || "Unknown",
                     product: item.productName,
                     productId: product?._id || "",
                     qty: item.quantity,
@@ -329,7 +341,7 @@ const exportSalesPDF = async (req, res) => {
         if (search) {
             query.$or = [
                 { "orderedItems.productName": { $regex: search, $options: "i" } },
-                { "userId.name": { $regex: search, $options: "i" } }
+                { "userId.fullName": { $regex: search, $options: "i" } }
             ];
         }
 
@@ -364,7 +376,7 @@ const exportSalesPDF = async (req, res) => {
 
                 salesRows.push({
                     orderId: order.orderId,
-                    buyer: order.userId?.name || "Unknown",
+                    buyer: order.userId?.fullName || "Unknown",
                     productName: item.productName,
                     productId: product?._id || "",
                     qty: item.quantity,
