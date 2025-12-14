@@ -143,6 +143,10 @@ const orderSchema = new mongoose.Schema(
       enum: ["cod", "wallet", "razorpay"],
       default: "cod"
     },
+    paymentSessionId: {
+      type: String,
+      default: null
+    },
 
     paymentStatus: {
       type: String,

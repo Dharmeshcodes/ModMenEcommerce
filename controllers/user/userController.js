@@ -83,7 +83,7 @@ const salePage = async (req, res) => {
       search = ""
     } = req.query;
 
-    const pageSize = 16;
+    const pageSize = 12;
     const skip = (page - 1) * pageSize;
 
     const categories = await Category.find({ isListed: true, isDeleted: false }).lean();
@@ -108,12 +108,16 @@ const salePage = async (req, res) => {
     if (search.trim())
       query.name = { $regex: search.trim(), $options: "i" };
 
+    const totalCount = await Product.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / pageSize);
+
     let saleProducts = await Product.find(query)
       .populate({ path: "categoryId", match: { isListed: true, isDeleted: false } })
       .populate({ path: "subCategoryId", match: { isListed: true, isDeleted: false } })
       .skip(skip)
       .limit(pageSize)
-      .lean();
+      .lean()
+      .sort({createdAt:-1});
 
     saleProducts = saleProducts.filter(p => p.categoryId && p.subCategoryId);
 
@@ -126,9 +130,6 @@ const salePage = async (req, res) => {
     } else {
       saleProducts.sort((a, b) => b._id - a._id);
     }
-
-    const totalCount = saleProducts.length;
-    const totalPages = Math.ceil(totalCount / pageSize);
 
     const params = [];
 
@@ -151,7 +152,6 @@ const salePage = async (req, res) => {
     if (search) params.push(`search=${encodeURIComponent(search)}`);
 
     const paginationQuery = params.length ? `&${params.join("&")}` : "";
-    console.log("user passed form the sale page is ",user)
 
     res.render("user/sale", {
       categories,
@@ -201,6 +201,7 @@ function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+
 async function sendVerificationEmail(email, otp) {
   try {
     const transporter = nodemailer.createTransport({
@@ -228,6 +229,7 @@ async function sendVerificationEmail(email, otp) {
 
 const REFERRER_CREDIT = 100;
 const NEW_USER_CREDIT = 50;
+
 const signup = async (req, res) => {
   try {
     const { fullName, mobile, email, password, confirmPassword, referralCode } = req.body;
@@ -260,7 +262,11 @@ const signup = async (req, res) => {
     let referredByUser = null;
     if (referralCode && referralCode.trim()) {
       referredByUser = await User.findOne({ referralCode: referralCode.trim() });
+
+      console.log("the refered by user is",referredByUser)
+
       if (!referredByUser) {
+        console.log("the if condition works")
         return res.render("user/signup", {
           error: ["Invalid referral code"],
           formData: { fullName, email, mobile, referralCode }
@@ -281,6 +287,8 @@ const signup = async (req, res) => {
       password,
       referredBy: referredByUser ? referredByUser._id.toString() : null
     };
+    console.log("in signup the seiion detais are",req.session.userData)
+    console.log("in signup the userotp in session is",req.session.userOtp)
 
     req.session.save(() => {
   res.render("user/verify-otp", { email });
@@ -308,8 +316,11 @@ function generateReferralCode() {
 const verifyOtp = async (req, res) => {
   try {
     const { otp } = req.body;
+    console.log("the req.session.otp is",req.session.userOtp)
+    console.log("the otp from req.body is",req.body.otp)
 
     if (!req.session.userOtp || otp.toString() !== req.session.userOtp.toString()) {
+      console.log("if condition works ")
       return res.status(400).json({
         success: false,
         message: "Invalid OTP, please try again"
@@ -386,8 +397,6 @@ const verifyOtp = async (req, res) => {
     });
   }
 };
-
-
 
 const resendOtp = async (req, res) => {
   try {
@@ -516,6 +525,34 @@ const getReferralCodePage = async (req, res) => {
   }
 };
 
+const createReferralCode = async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect("/user/login");
+    }
+
+    const user = await User.findById(req.session.user._id);
+    if (!user) {
+      return res.redirect("/user/login");
+    }
+
+    if (!user.referralCode) {
+      user.referralCode = Math.random()
+        .toString(36)
+        .substring(2, 10)
+        .toUpperCase();
+
+      await user.save();
+    }
+
+    return res.redirect("/user/referral-code");
+  } catch (error) {
+    console.log(error);
+    return res.redirect("/500");
+  }
+};
+
+
 module.exports = {
   loadHomepage,
   loadSignup,
@@ -529,7 +566,7 @@ module.exports = {
   salePage,
   googleAuth,
   googleAuthCallback,
-  getReferralCodePage
-  
+  getReferralCodePage,
+  createReferralCode
 
 };

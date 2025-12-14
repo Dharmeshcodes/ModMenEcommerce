@@ -29,6 +29,8 @@ router.post('/signup', userController.signup);
 router.post('/verify-otp', userController.verifyOtp);
 router.post('/resend-otp', userController.resendOtp);
 router.get("/referral-code", userAuth, userController.getReferralCodePage);
+router.post("/generate-referral",userAuth,userController.createReferralCode);
+
 
 
 router.get('/auth/google', userController.googleAuth);
@@ -77,10 +79,10 @@ router.get("/checkoutPayment", userAuth, validateCartMiddleware,checkoutControll
 router.get("/order-review", userAuth,validateCartMiddleware, checkoutControllers.loadOrderReviewPage);
 
 
-router.post("/confirmOrder", userAuth,validateCartMiddleware, orderController.confirmOrder);
+router.post("/confirmOrder", userAuth,validateCartMiddleware,orderController.confirmOrder);
 router.get("/orderSuccess/:orderId", userAuth, orderController.loadOrderSuccess);
-router.get("/order",userAuth,checkBlockedUser,validateCartMiddleware,orderController.getUserOrders)
-router.get("/order/:orderId", userAuth, checkBlockedUser,validateCartMiddleware,orderController.getOrderDetails);
+router.get("/order",userAuth,checkBlockedUser,orderController.getUserOrders)
+router.get("/order/:orderId", userAuth, checkBlockedUser,orderController.getOrderDetails);
 router.post("/cancel-order/:orderId", userAuth,orderController.cancelOrder)
 router.post('/cancelItem/:orderId/:itemId',orderController.cancelSingleItem);
 router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleItem);

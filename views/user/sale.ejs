@@ -411,9 +411,9 @@
             </div>
 
             <div class="product-price">
-              $<%= product.variants?.[0]?.salePrice.toFixed(2) %>
+              ₹<%= product.variants?.[0]?.salePrice.toFixed(2) %>
               <% if (product.variants?.[0]?.variantPrice > product.variants[0].salePrice) { %>
-                <span class="sale-strike">$<%= product.variants[0].variantPrice.toFixed(2) %></span>
+                <span class="sale-strike">₹<%= product.variants[0].variantPrice.toFixed(2) %></span>
               <% } %>
             </div>
 

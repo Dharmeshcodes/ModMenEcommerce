@@ -22,6 +22,29 @@
         .ref-box { background:#2c2c2c; color:#fff; padding:18px 26px; border-radius:14px; font-size:1.6rem; letter-spacing:4px; display:flex; justify-content:center; align-items:center; gap:14px; user-select:none; }
         .copy-btn { background:#fff; color:#000; border-radius:8px; padding:6px 10px; font-size:0.9rem; cursor:pointer; border:0; }
         @media(max-width:900px){ .main-content-box { width:100%; padding:38px 25px; } }
+        .generate-btn {
+    background-color: #e6f3ff;
+    color: #0b5ed7;
+    border: 1px solid #b6dbff;
+    border-radius: 18px;
+    padding: 10px 28px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(13,110,253,0.15);
+    transition: all 0.2s ease;
+}
+
+.generate-btn:hover:not(:disabled) {
+    background-color: #d4ebff;
+}
+
+.generate-btn:disabled {
+    background-color: #f1f1f1;
+    color: #999;
+    border-color: #ddd;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
     </style>
 </head>
 <body>
@@ -65,9 +88,26 @@
                 </p>
 
                 <div class="ref-box">
-                    <span id="refCode"><%= user.referralCode %></span>
-                    <button class="copy-btn" onclick="copyReferral()">Copy</button>
-                </div>
+    <span id="refCode">
+        <%= user.referralCode ? user.referralCode : "NOT GENERATED" %>
+    </span>
+    <% if (user.referralCode) { %>
+        <button class="copy-btn" onclick="copyReferral()">Copy</button>
+    <% } %>
+</div>
+
+<div class="text-center mt-4">
+    <form action="/user/generate-referral" method="POST">
+        <button
+            type="submit"
+            class="btn generate-btn"
+            <%= user.referralCode ? "disabled" : "" %>
+        >
+            Generate Referral Code
+        </button>
+    </form>
+</div>
+
 
             </div>
         </div>
