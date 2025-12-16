@@ -74,14 +74,12 @@ const buildDateFilter = (type, from, to) => {
       $lte: dayjs().endOf("day").toDate()
     };
   }
-
   if (type === "week") {
     return {
       $gte: dayjs().startOf("isoWeek").toDate(),
       $lte: dayjs().endOf("isoWeek").toDate()
     };
   }
-
   if (type === "month") {
     return {
       $gte: dayjs().startOf("month").toDate(),
@@ -439,154 +437,10 @@ const exportSalesPDF = async (req, res) => {
     }
 };
 
-const loadAdminDashboard = async (req, res) => {
-  try {
-
-    const { type, from, to } = req.query;
-
-    const dateFilter = type ? buildDateFilter(type, from, to) : {};
-
-    const filter = { status: { $nin: ["cancelled", "returned", "failed", "return-requested"] } };
-    if (Object.keys(dateFilter).length > 0) filter.createdOn = dateFilter;
-
-    const totalCustomers = await User.countDocuments({ role: "user" });
-
-    const totalOrders = await Order.countDocuments(filter);
-
-    const revenueAgg = await Order.aggregate([
-      { $match: filter },
-      { $group: { _id: null, total: { $sum: "$payableAmount" } } }
-    ]);
-
-    const totalSales = revenueAgg[0]?.total || 0;
-
-    const pendingQuery = { status: "pending" };
-    if (Object.keys(dateFilter).length > 0) pendingQuery.createdOn = dateFilter;
-
-    const totalPending = await Order.countDocuments(pendingQuery);
-
-    let groupId = {};
-
-    if (type === "year") {
-      groupId = { year: { $year: "$createdOn" } };
-    } else if (type === "month") {
-      groupId = { year: { $year: "$createdOn" }, month: { $month: "$createdOn" } };
-    } else if (type === "week") {
-      groupId = { year: { $year: "$createdOn" }, week: { $week: "$createdOn" } };
-    } else {
-      groupId = { year: { $year: "$createdOn" }, month: { $month: "$createdOn" }, day: { $dayOfMonth: "$createdOn" } };
-    }
-
-    let sortBy = {};
-
-    if (type === "year") {
-      sortBy = { "_id.year": 1 };
-    } else if (type === "month") {
-      sortBy = { "_id.year": 1, "_id.month": 1 };
-    } else if (type === "week") {
-      sortBy = { "_id.year": 1, "_id.week": 1 };
-    } else {
-      sortBy = { "_id.year": 1, "_id.month": 1, "_id.day": 1 };
-    }
-
-    const salesAgg = await Order.aggregate([
-      { $match: filter },
-      {
-        $group: {
-          _id: groupId,
-          totalSales: { $sum: "$payableAmount" }
-        }
-      },
-      { $sort: sortBy }
-    ]);
-
-    const chartLabels = [];
-    const chartData = [];
-
-    for (const row of salesAgg) {
-      const id = row._id;
-
-      if (type === "year") {
-        chartLabels.push(String(id.year));
-      } else if (type === "month") {
-        const date = new Date(id.year, id.month - 1, 1);
-        chartLabels.push(date.toLocaleString("default", { month: "short", year: "numeric" }));
-      } else if (type === "week") {
-        chartLabels.push(`W${id.week} ${id.year}`);
-      } else {
-        const date = new Date(id.year, id.month - 1, id.day);
-        chartLabels.push(date.toLocaleDateString("en-IN"));
-      }
-
-      chartData.push(Number(row.totalSales.toFixed(2)));
-    }
-
-    const topProducts = await Order.aggregate([
-      { $match: filter },
-      { $unwind: "$orderedItems" },
-      {
-        $group: {
-          _id: "$orderedItems.productName",
-          totalQty: { $sum: "$orderedItems.quantity" }
-        }
-      },
-      { $sort: { totalQty: -1 } },
-      { $limit: 3 }
-    ]);
-
-    const topCategories = await Order.aggregate([
-      { $match: filter },
-      { $unwind: "$orderedItems" },
-      {
-        $group: {
-          _id: "$orderedItems.category",
-          totalQty: { $sum: "$orderedItems.quantity" }
-        }
-      },
-      { $sort: { totalQty: -1 } },
-      { $limit: 3 }
-    ]);
-
-    const topSubcategories = await Order.aggregate([
-      { $match: filter },
-      { $unwind: "$orderedItems" },
-      {
-        $group: {
-          _id: "$orderedItems.subCategory",
-          totalQty: { $sum: "$orderedItems.quantity" }
-        }
-      },
-      { $sort: { totalQty: -1 } },
-      { $limit: 3 }
-    ]);
-
-    res.render("admin/dashboard", {
-      totalCustomers,
-      totalOrders,
-      totalSales,
-      totalPending,
-      topProducts,
-      topCategories,
-      topSubcategories,
-      chartLabels,
-      chartData,
-      type,
-      from,
-      to
-    });
-
-  } catch (err) {
-    console.error("Dashboard Error:", err);
-    res.redirect("/admin/pageerror");
-  }
-};
-
-
 
 module.exports = {
   loadAdminLogin,
   adminLogin,
-  loadAdminDashboard,
   logout,
   getSalesReport,
   exportSalesExcel,

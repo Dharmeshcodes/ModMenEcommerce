@@ -147,7 +147,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Transaction ID</th>
+                  <!-- <th>Transaction ID</th> -->
                   <th>Date</th>
                   <th>Amount (₹)</th>
                   <th>Description</th>
@@ -163,7 +163,7 @@
 
                 <% wallet.transactions.forEach(tr => { %>
                   <tr>
-                    <td><%= tr.transactionId || tr.orderid %></td>
+                    <!-- <td><%= tr.transactionId || tr.orderid %></td> -->
                     <td><%= new Date(tr.createdAt).toLocaleString("en-GB") %></td>
                     <td><%= tr.amount %></td>
                     <td><%= tr.description %></td>

@@ -198,13 +198,23 @@ const updateOrderItemStatus = async (req, res) => {
       return res.status(404).json({ success: false, msg: "Item not found" });
     }
 
-    const blockedBackwards = ["pending", "confirmed", "shipped", "out_for_delivery"];
-    if (item.status === "delivered" && blockedBackwards.includes(newStatus)) {
-      return res.json({
-        success: false,
-        msg: "Delivered product cannot be moved back to shipping stages"
-      });
-    }
+    const blockedBackwards = ["pending", "confirmed", "shipped", "out_for_delivery", "cancelled"];
+
+        if (item.status === "delivered" && blockedBackwards.includes(newStatus)) {
+          return res.json({
+            success: false,
+            msg: "Delivered product status cannot be changed"
+          });
+        }
+
+        if (item.status === "cancelled" && item.status !== newStatus) {
+          return res.json({
+            success: false,
+            msg: "Cancelled product status cannot be changed"
+          });
+        }
+
+
     item.status = newStatus;
 
     const allCancelled = order.orderedItems.every(i => i.status === "cancelled");

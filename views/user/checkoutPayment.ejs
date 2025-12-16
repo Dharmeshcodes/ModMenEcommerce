@@ -50,7 +50,7 @@
             <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
 
             <label class="method-item">
-              <input type="radio" name="method" value="razorpay" id="razorpayOption">
+              <input type="radio" name="method" value="razorpay" id="razorpayOption" checked>
               <div>
                 <div class="method-label">Online Payment (Razorpay)</div>
                 <div class="small-muted">Secure UPI/Card payment</div>
@@ -58,7 +58,7 @@
             </label>
 
             <label class="method-item">
-              <input type="radio" name="method" value="cod" id="codOption" checked>
+              <input type="radio" name="method" value="cod" id="codOption">
               <div>
                 <div class="method-label">Cash on Delivery</div>
                 <div class="small-muted">Pay after delivery</div>
@@ -170,7 +170,8 @@
             </div>
 
             <input type="hidden" id="totalPayable" value="<%= (typeof payableTotal === 'number' ? payableTotal : safePayable).toFixed(2) %>">
-            <input type="hidden" id="walletBalance" value="<%= user ? user.walletBalance || 0 : 0 %>">
+            <input type="hidden" id="walletBalance" value="<%= walletBalance %>">
+
             <input type="hidden" id="totalToPay" value="<%= safePayable %>">
 
             <div class="mt-3">
@@ -233,6 +234,7 @@
           discountEl.innerText = `-₹${data.discount}`;
           totalEl.innerText = `₹${Number(data.newTotal).toFixed(2)}`;
           totalPayableInput.value = Number(data.newTotal).toFixed(2);
+          validatePaymentMethods()
           message.innerText = `Coupon ${code} applied`;
         } else {
           message.innerText = data.message || "Failed to apply coupon";
@@ -248,6 +250,7 @@
       discountEl.innerText = "-₹0";
       totalEl.innerText = `₹${originalPayable.toFixed(2)}`;
       totalPayableInput.value = originalPayable.toFixed(2);
+      validatePaymentMethods()
       message.innerText = "";
     }
   }
@@ -309,38 +312,69 @@ document.getElementById("placeOrderBtn").addEventListener("click", () => {
     return;
   }
   const methodEl = document.querySelector("input[name='method']:checked");
-  const method = methodEl ? methodEl.value : "cod";
+  const method = methodEl ? methodEl.value : "razorpay";
+
   window.location.href = `/user/order-review?addressId=${addressId}&paymentMethod=${method}`;
 });
 </script>
 
 <!-- Payment Validation Script -->
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("payable:", document.getElementById("totalPayable").value);
+console.log("wallet:", document.getElementById("walletBalance").value);
 
-  const payable = Number(document.getElementById("totalToPay").value || 0);
-  const wallet = Number(document.getElementById("walletBalance").value || 0);
 
+  const razorpayRadio = document.getElementById("razorpayOption");
   const codRadio = document.getElementById("codOption");
   const walletRadio = document.getElementById("walletOption");
 
   const codError = document.getElementById("codError");
   const walletError = document.getElementById("walletError");
 
-  if (payable > 1000) {
-    codRadio.disabled = true;
-    codError.style.display = "block";
-    codError.innerText = "COD not available for orders above ₹1000.";
-  }
+  window.validatePaymentMethods = function () {
+    const payable = Number(document.getElementById("totalPayable").value || 0);
+    const wallet = Number(document.getElementById("walletBalance").value || 0);
 
-  if (wallet < payable) {
-    walletRadio.disabled = true;
-    walletError.style.display = "block";
-    walletError.innerText = "Wallet balance is lower than the payable amount.";
-  }
+    // COD validation
+    if (payable > 1000) {
+      codRadio.disabled = true;
+      codError.style.display = "block";
+      codError.innerText = "COD not available for orders above ₹1000.";
 
+      if (codRadio.checked) {
+        codRadio.checked = false;
+        razorpayRadio.checked = true;
+      }
+    } else {
+      codRadio.disabled = false;
+      codError.style.display = "none";
+    }
+
+    // Wallet validation
+    if (wallet < payable) {
+      walletRadio.disabled = true;
+      walletError.style.display = "block";
+      walletError.innerText = "Wallet balance is lower than the payable amount.";
+
+      if (walletRadio.checked) {
+        walletRadio.checked = false;
+        razorpayRadio.checked = true;
+      }
+    } else {
+      walletRadio.disabled = false;
+      walletError.style.display = "none";
+    }
+  };
+
+  // Initial validation
+  validatePaymentMethods();
 });
 </script>
+
+
+
 
 </body>
 </html>

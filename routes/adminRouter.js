@@ -7,6 +7,7 @@ const subcategoryController=require('../controllers/admin/subcategoryController'
 const orderController=require("../controllers/admin/orderController")
 const productController=require('../controllers/admin/productController');
 const couponController=require("../controllers/admin/couponController");
+const dashboardController=require("../controllers/admin/dashboardontroller")
 const {
   uploadProductImages,
   uploadCategoryImages,
@@ -93,7 +94,7 @@ router.get("/sales-report", adminAuth,adminController.getSalesReport)
 router.get("/sales-report/export/pdf", adminAuth, adminController.exportSalesPDF)
 router.get("/sales-report/export/excel", adminAuth, adminController.exportSalesExcel )
 
-router.get('/dashboard', adminAuth , adminController.loadAdminDashboard);
+router.get('/dashboard', adminAuth ,dashboardController.loadAdminDashboard);
 
 
 

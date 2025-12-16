@@ -455,7 +455,6 @@ const closeIcon = document.getElementById("searchClear");
 const searchIcon = document.querySelector(".search-icon");
 const applyFiltersBtn = document.getElementById("applyFilters");
 
-/* URL BUILDER */
 function buildSaleUrl(extraParams = {}) {
   const params = new URLSearchParams();
   const searchVal = searchInput.value.trim();
@@ -480,7 +479,6 @@ function buildSaleUrl(extraParams = {}) {
   return "/user/sale?" + params.toString();
 }
 
-/* SEARCH */
 searchInput.addEventListener("input", () => {
   closeIcon.style.display = searchInput.value.trim() ? "block" : "none";
 });

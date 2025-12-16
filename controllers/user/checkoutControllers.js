@@ -4,6 +4,8 @@ const SubCategory = require("../../models/subcategorySchema");
 const User = require("../../models/userSchema");
 const Cart = require("../../models/cartSchema");
 const Address = require("../../models/adressSchema");
+const Wallet = require("../../models/walletSchema");
+
 
 
 const getCheckoutPage = async (req, res) => {
@@ -211,6 +213,9 @@ const loadPaymentPage = async (req, res) => {
       payableTotal -= appliedCoupon.discount;
       if (payableTotal < 0) payableTotal = 0;
     }
+    const walletDoc = await Wallet.findOne({ userId });
+const walletBalance = walletDoc ? walletDoc.balance : 0;
+
 
     return res.render("user/checkoutPayment", {
       user: userData,
@@ -222,7 +227,8 @@ const loadPaymentPage = async (req, res) => {
       sgst,
       shippingCharge,
       payableTotal,
-      appliedCoupon
+      appliedCoupon,
+      walletBalance
     });
 
   } catch (err) {

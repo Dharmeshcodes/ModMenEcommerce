@@ -126,7 +126,7 @@ const confirmOrder = async (req, res) => {
       subtotal,
       discountAmount: offerDiscount,
       offerDiscount,
-      shippingCharge,
+      deliveryCharge:shippingCharge,
       couponDiscount,
       appliedCoupon: appliedCoupon ? appliedCoupon.code : null,
       payableAmount: payableTotal,

@@ -3,7 +3,6 @@ const Product = require("../../models/productSchema");
 const Order = require("../../models/orderSchema");
 const mongoose = require("mongoose");
 
-
 const addReview = async (req, res) => {
   try {
     const userId = req.session.user?._id;
@@ -17,35 +16,41 @@ const addReview = async (req, res) => {
       return res.json({ success: false, message: "Invalid rating" });
     }
 
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+
     const delivered = await Order.findOne({
       userId,
-      "orderedItems.productId": productId,
-      "orderedItems.status": "delivered"
+      orderedItems: {
+        $elemMatch: {
+          productId: productObjectId,
+          status: "delivered"
+        }
+      }
     });
 
     if (!delivered) {
       return res.json({ success: false, message: "You can review only after delivery" });
     }
 
-    const existing = await Review.findOne({ userId, productId });
+    const existing = await Review.findOne({ userId, productId: productObjectId });
     if (existing) {
       return res.json({ success: false, message: "You already reviewed this product" });
     }
 
     await Review.create({
       userId,
-      productId,
+      productId: productObjectId,
       rating,
       comment: comment || ""
     });
 
     const stats = await Review.aggregate([
-      { $match: { productId: new mongoose.Types.ObjectId(productId) } },
+      { $match: { productId: productObjectId } },
       { $group: { _id: null, avg: { $avg: "$rating" } } }
     ]);
 
     const avgRating = stats[0]?.avg || 0;
-    await Product.findByIdAndUpdate(productId, { averageRating: avgRating });
+    await Product.findByIdAndUpdate(productObjectId, { averageRating: avgRating });
 
     return res.json({ success: true, message: "Review added" });
 
@@ -54,7 +59,6 @@ const addReview = async (req, res) => {
     return res.json({ success: false, message: "Something went wrong" });
   }
 };
-
 
 const deleteReview = async (req, res) => {
   try {
@@ -79,7 +83,7 @@ const deleteReview = async (req, res) => {
     await Review.findByIdAndDelete(reviewId);
 
     const stats = await Review.aggregate([
-      { $match: { productId: new mongoose.Types.ObjectId(productId) } },
+      { $match: { productId } },
       { $group: { _id: null, avg: { $avg: "$rating" } } }
     ]);
 
