@@ -29,6 +29,7 @@ const loadUserCoupons = async (req, res) => {
   }
 };
 
+
 async function computeTotals(userId) {
   const cart = await Cart.findOne({ userId }).populate("items.productId");
   let subtotal = 0;
@@ -38,10 +39,8 @@ async function computeTotals(userId) {
   });
 
   const tax = subtotal * 0.18;
-  const shipping = subtotal < 1000 ? 50 : 0;
-  const payable = subtotal + tax + shipping;
 
-  return { subtotal, tax, shipping, payable };
+  return { subtotal, tax };
 }
 
 const applyCoupon = async (req, res) => {
@@ -66,11 +65,15 @@ const applyCoupon = async (req, res) => {
     if (userUsedCount >= coupon.usagePerUser)
       return res.status(400).json({ message: "You already used this coupon" });
 
-    const { subtotal, tax, shipping, payable } = await computeTotals(userId);
+    const { subtotal, tax } = await computeTotals(userId);
 
-    if (subtotal < coupon.minimumOrderAmount) {
+   
+    const couponBaseAmount = subtotal + tax;
+
+    
+    if (couponBaseAmount < coupon.minimumOrderAmount) {
       return res.status(400).json({
-        message: `Minimum order amount is ₹${coupon.minimumOrderAmount}`
+        message: `Minimum order amount of ₹${coupon.minimumOrderAmount} required`
       });
     }
 
@@ -85,14 +88,14 @@ const applyCoupon = async (req, res) => {
       discount = coupon.discountValue;
     }
 
-    const finalTotal = payable - discount;
+   
+    const finalTotal = subtotal + tax - discount;
 
     req.session.appliedCoupon = {
       code: coupon.code,
       discount,
       subtotal,
       tax,
-      shipping,
       finalTotal
     };
 
@@ -108,10 +111,12 @@ const applyCoupon = async (req, res) => {
   }
 };
 
+
 const cancelCoupon = async (req, res) => {
   delete req.session.appliedCoupon;
   return res.json({ success: true });
 };
+
 
 const availableCoupons = async (req, res) => {
   try {

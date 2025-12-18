@@ -29,7 +29,6 @@ const loadOnlinePaymentPage = async (req, res) => {
         return res.redirect("/user/cart?error=OutOfStock");
       }
     }
-
     if (!order.paymentSessionId) {
       const paymentSessionId = crypto.randomUUID();
 

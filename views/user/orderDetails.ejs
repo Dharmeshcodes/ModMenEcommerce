@@ -429,53 +429,53 @@ document.querySelectorAll('.cancelBtn').forEach(btn => {
         location.reload();
     });
 });
-//single return 
 document.querySelectorAll('.return-item-btn').forEach(btn => {
-    btn.addEventListener('click', async function () {
+  btn.addEventListener('click', async function () {
 
-        const orderId = this.dataset.order;
-        const itemId  = this.dataset.item;
+    const orderId = this.dataset.order;
+    const itemId  = this.dataset.item;
 
-        const { value: reason } = await Swal.fire({
-            title: "Return Item",
-            input: "text",
-            inputLabel: "Enter reason for return",
-            inputPlaceholder: "e.g. Wrong size, damaged product, etc.",
-            showCancelButton: true,
-            confirmButtonText: "Submit",
-            cancelButtonText: "Close",
-            inputValidator: (value) => {
-                if (!value) return "Return reason is required!";
-            }
-        });
-
-        if (!reason) return;
-
-        const response = await fetch(`/user/order/${orderId}/return-item/${itemId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reason })
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok || !data.success) {
-            return Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: data.message || "Something went wrong!"
-            });
-        }
-
-        await Swal.fire({
-            icon: "success",
-            title: "Return Requested",
-            text: "Your return request has been submitted."
-        });
-
-        location.reload();
+    const { value: reason } = await Swal.fire({
+      title: "Return Item",
+      input: "text",
+      inputLabel: "Enter reason for return",
+      inputPlaceholder: "e.g. Wrong size, damaged product, etc.",
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+      cancelButtonText: "Close",
+      inputValidator: (value) => {
+        if (!value) return "Return reason is required!";
+      }
     });
+
+    if (!reason) return;
+
+    const response = await fetch(`/user/order/${orderId}/return-item/${itemId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.success) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Action Not Allowed",
+        text: data.message || "Item cannot be returned."
+      });
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "Return Requested",
+      text: data.message || "Your return request has been submitted."
+    });
+
+    location.reload();
+  });
 });
+
 
 document.querySelectorAll('.return-order-btn').forEach(btn => {
   btn.addEventListener('click', async function () {

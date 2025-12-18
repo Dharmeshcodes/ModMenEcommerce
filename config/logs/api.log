@@ -11463,3 +11463,639 @@
 {"level":"info","message":"Request: POST /admin/login - Body: { email: 'dharmeshthse@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-12-16 09:19:48"}
 {"level":"info","message":"Admin login attempt: { email: 'dharmeshthse@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-12-16 09:19:48"}
 {"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-12-16 09:19:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-16 09:25:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-16 09:25:41"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:39:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:39:12"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-16 09:40:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-16 09:47:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-16 09:47:50"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-16 09:47:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:48:02"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:48:13"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:48:14"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 09:48:18"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:48:18"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:48:24"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:48:26"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:48:27"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:48:41"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:48:58"}
+{"level":"info","message":"Request: GET /admin/adminProducts?page=1&search=IndoPrimo%20Men%27s%20Satin%20Shirt&sortBy=createdAt&sortOrder=desc - Body: undefined","timestamp":"2025-12-16 09:49:05"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:49:08"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/693c4d861786956dd8ee1e57?_method=PATCH - Body: undefined","timestamp":"2025-12-16 09:49:18"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:49:19"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:49:37"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:49:38"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:49:50"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:49:52"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:50:02"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/693c4d861786956dd8ee1e57?_method=PATCH - Body: undefined","timestamp":"2025-12-16 09:50:15"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:50:15"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 09:51:31"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:51:32"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:51:47"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:52:07"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/693c4d861786956dd8ee1e57?_method=PATCH - Body: undefined","timestamp":"2025-12-16 09:52:22"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:52:23"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:52:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:52:35"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 09:53:05"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:53:07"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:53:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:53:12"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 09:53:13"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:53:14"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:53:16"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:53:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:53:21"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-16 09:53:29"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/693c4d861786956dd8ee1e57?_method=PATCH - Body: undefined","timestamp":"2025-12-16 09:53:38"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:53:39"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 09:54:08"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:54:09"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 09:54:21"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:54:23"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 09:54:32"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:54:34"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=razorpay - Body: undefined","timestamp":"2025-12-16 09:54:39"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:54:41"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'razorpay' }","timestamp":"2025-12-16 09:54:45"}
+{"level":"info","message":"Request: GET /user/online-payment/MM086706813 - Body: undefined","timestamp":"2025-12-16 09:54:47"}
+{"level":"info","message":"Request: POST /user/verify-payment - Body: {\n  razorpay_order_id: 'order_Rs9MkXAcFDDmGx',\n  razorpay_payment_id: 'pay_Rs9NBoDUDkm3UU',\n  razorpay_signature: null,\n  orderId: 'MM086706813'\n}","timestamp":"2025-12-16 09:55:22"}
+{"level":"info","message":"Request: GET /user/orderFailed/MM086706813 - Body: undefined","timestamp":"2025-12-16 09:55:23"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-16 09:55:34"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-16 09:56:07"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/692b25ac78ef6de4b109d949 - Body: undefined","timestamp":"2025-12-16 09:56:34"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/692b25ac78ef6de4b109d949 - Body: {\n  name: '20% Discount',\n  code: 'SAVE20',\n  description: 'Get 20% off up to ₹800 on orders above ₹4000.',\n  type: 'percentage',\n  discountValue: '20',\n  maxDiscountAmount: '800',\n  minimumOrderAmount: '3000',\n  startDate: '2025-11-29',\n  expiryDate: '2025-12-30',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-16 09:56:44"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-16 09:56:46"}
+{"level":"info","message":"Request: GET /user/order/MM086706813 - Body: undefined","timestamp":"2025-12-16 09:56:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:56:59"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-16 09:57:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:57:07"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/69367f83b7724927dc43c18d - Body: undefined","timestamp":"2025-12-16 09:57:45"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/69367f83b7724927dc43c18d - Body: {\n  name: 'Flat 20% OFF',\n  code: 'FLAT20',\n  description: 'coupon for every purchase',\n  type: 'percentage',\n  discountValue: '20',\n  maxDiscountAmount: '200',\n  minimumOrderAmount: '3000',\n  startDate: '2025-12-08',\n  expiryDate: '2025-12-12',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-16 09:58:01"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-16 09:58:04"}
+{"level":"info","message":"Request: GET /user/product/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-12-16 09:58:18"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:58:21"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-16 09:58:23"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-12-16 09:58:29"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:58:30"}
+{"level":"info","message":"Request: GET /user/product/6916847e464c8c99c10720dd - Body: undefined","timestamp":"2025-12-16 09:58:49"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:58:50"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '6916847e464c8c99c10720dd',\n  size: 'M',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-12-16 09:58:53"}
+{"level":"info","message":"Request: GET /user/product/68f1ef85427bddf29a00d825 - Body: undefined","timestamp":"2025-12-16 09:58:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:59:00"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68f1ef85427bddf29a00d825',\n  size: 'M',\n  color: 'pink',\n  quantity: 1\n}","timestamp":"2025-12-16 09:59:03"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 09:59:08"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:59:10"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-16 09:59:17"}
+{"level":"info","message":"Request: GET /user/product/68f1ef85427bddf29a00d825 - Body: undefined","timestamp":"2025-12-16 09:59:37"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 09:59:38"}
+{"level":"info","message":"Request: GET /user/product/6916aa231d899c48060e96ba - Body: undefined","timestamp":"2025-12-16 09:59:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:00:01"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 10:00:51"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:00:53"}
+{"level":"info","message":"Request: POST /user/removecartitem - Body: {\n  productId: '6916aa231d899c48060e96ba',\n  size: 'M',\n  color: 'multicolor'\n}","timestamp":"2025-12-16 10:00:56"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-16 10:01:00"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:01:05"}
+{"level":"info","message":"Request: GET /user/sale?sortBy=pricelowhigh - Body: undefined","timestamp":"2025-12-16 10:01:15"}
+{"level":"info","message":"Request: GET /user/sale?sortBy=pricelowhigh - Body: undefined","timestamp":"2025-12-16 10:01:21"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:01:28"}
+{"level":"info","message":"Request: GET /user/product/692fb0eef1d1320174d8c8e1 - Body: undefined","timestamp":"2025-12-16 10:01:41"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:01:42"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '692fb0eef1d1320174d8c8e1',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-16 10:01:46"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 10:01:51"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:01:51"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-16 10:01:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:01:59"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 10:02:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:02:05"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 10:02:27"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:02:29"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-16 10:02:32"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'SAVE20' }","timestamp":"2025-12-16 10:02:42"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=razorpay - Body: undefined","timestamp":"2025-12-16 10:02:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:02:56"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-16 10:02:58"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:03:00"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-16 10:03:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:03:07"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-16 10:03:13"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM595392150 - Body: undefined","timestamp":"2025-12-16 10:03:16"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:03:17"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-16 10:03:24"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:03:25"}
+{"level":"info","message":"Request: GET /user/order/MM595392150 - Body: undefined","timestamp":"2025-12-16 10:03:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:03:34"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM595392150/6940e10bf1b51bd5f0489ce7 - Body: { reason: 'product size dsnt match' }","timestamp":"2025-12-16 10:03:57"}
+{"level":"info","message":"Request: GET /user/order/MM595392150 - Body: undefined","timestamp":"2025-12-16 10:04:00"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:04:01"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-16 10:04:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:04:09"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-16 10:04:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:04:20"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-16 10:04:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:04:58"}
+{"level":"info","message":"Request: GET /user/order/MM595392150 - Body: undefined","timestamp":"2025-12-16 10:05:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-16 10:05:04"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-16 12:07:27"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-16 12:07:27"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-17 21:07:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-17 21:07:54"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-17 21:08:39"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-17 21:08:41"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-12-17 21:08:43"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-17 21:08:51"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-17 21:08:51"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-12-17 21:09:00"}
+{"level":"info","message":"Request: GET /admin/customers - Body: undefined","timestamp":"2025-12-17 21:09:05"}
+{"level":"info","message":"Request: GET /admin/customerDetails/693efd8e7e4fe68c1065e016 - Body: undefined","timestamp":"2025-12-17 21:48:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 11:41:54"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 11:41:54"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-18 11:52:18"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-18 11:52:21"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:52:23"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-12-18 11:52:23"}
+{"level":"info","message":"Request: GET /admin/login - Body: undefined","timestamp":"2025-12-18 11:52:25"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-12-18 11:52:25"}
+{"level":"info","message":"Request: GET /user/product/68c536d83f0c0fad695a5763 - Body: undefined","timestamp":"2025-12-18 11:52:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:52:34"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c536d83f0c0fad695a5763',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 11:52:37"}
+{"level":"info","message":"Request: GET /user/product/68b18fc6f57f15ae13f3e5c7 - Body: undefined","timestamp":"2025-12-18 11:52:52"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:52:53"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68b18fc6f57f15ae13f3e5c7',\n  size: 'M',\n  color: 'mixedGrey',\n  quantity: 1\n}","timestamp":"2025-12-18 11:52:58"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 11:53:11"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:53:20"}
+{"level":"info","message":"Request: GET /user/product/68c5560b3f0c0fad695a5b12 - Body: undefined","timestamp":"2025-12-18 11:53:36"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:53:37"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c5560b3f0c0fad695a5b12',\n  size: 'S',\n  color: 'multicolor10',\n  quantity: 1\n}","timestamp":"2025-12-18 11:53:40"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 11:53:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:53:55"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 11:53:56"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 11:54:05"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:54:07"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 11:54:15"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:54:17"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 11:54:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:54:36"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 11:55:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:55:05"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:55:10"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 11:55:30"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/692b254d78ef6de4b109d93e - Body: undefined","timestamp":"2025-12-18 11:55:48"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/692b254d78ef6de4b109d93e - Body: {\n  name: 'Flat ₹300 OFF',\n  code: 'FLAT300',\n  description: 'Save ₹300 on purchases above ₹2500.',\n  type: 'fixed',\n  discountValue: '300',\n  maxDiscountAmount: '500',\n  minimumOrderAmount: '3000',\n  startDate: '2025-11-29',\n  expiryDate: '2025-12-25',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-18 11:56:05"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 11:56:07"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:56:10"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 11:56:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:56:20"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:56:22"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'FLAT300' }","timestamp":"2025-12-18 11:56:35"}
+{"level":"info","message":"Request: POST /user/cancel-coupon - Body: undefined","timestamp":"2025-12-18 11:57:06"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/692b25ac78ef6de4b109d949 - Body: undefined","timestamp":"2025-12-18 11:57:12"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/692b25ac78ef6de4b109d949 - Body: {\n  name: '20% Discount',\n  code: 'SAVE20',\n  description: 'Get 20% off up to ₹800 on orders above ₹4000.',\n  type: 'percentage',\n  discountValue: '20',\n  maxDiscountAmount: '800',\n  minimumOrderAmount: '5000',\n  startDate: '2025-11-29',\n  expiryDate: '2025-12-30',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-18 11:57:19"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 11:57:22"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:57:26"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 11:57:31"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:57:32"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:58:43"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'SAVE20' }","timestamp":"2025-12-18 11:58:56"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'SAVE20' }","timestamp":"2025-12-18 11:59:10"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 11:59:17"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'FLAT300' }","timestamp":"2025-12-18 11:59:29"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 11:59:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 11:59:59"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 12:00:05"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM407049866 - Body: undefined","timestamp":"2025-12-18 12:00:07"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:07"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 12:00:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:10"}
+{"level":"info","message":"Request: GET /user/order/MM407049866 - Body: undefined","timestamp":"2025-12-18 12:00:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:13"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM407049866/69439f6fb297c849b64581ff - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 12:00:23"}
+{"level":"info","message":"Request: GET /user/order/MM407049866 - Body: undefined","timestamp":"2025-12-18 12:00:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:25"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM407049866/69439f6fb297c849b64581fe - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 12:00:31"}
+{"level":"info","message":"Request: GET /user/order/MM407049866 - Body: undefined","timestamp":"2025-12-18 12:00:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:34"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM407049866/69439f6fb297c849b64581fd - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 12:00:40"}
+{"level":"info","message":"Request: GET /user/order/MM407049866 - Body: undefined","timestamp":"2025-12-18 12:00:42"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:43"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 12:00:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:00:58"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 12:01:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 12:01:02"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:11:48"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:11:48"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:12:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:12:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:12:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:12:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:16:18"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:16:18"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:17:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:17:17"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 12:45:12"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 12:45:12"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:06:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:06:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:06:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:06:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:07:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:07:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:07:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:07:23"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-12-18 13:12:56"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 13:13:00"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 13:13:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:13:10"}
+{"level":"info","message":"Request: GET /user/sale?page=2 - Body: undefined","timestamp":"2025-12-18 13:13:15"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:13:16"}
+{"level":"info","message":"Request: GET /user/product/68c52fe23f0c0fad695a5655 - Body: undefined","timestamp":"2025-12-18 13:13:21"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:13:21"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c52fe23f0c0fad695a5655',\n  size: 'M',\n  color: 'brown',\n  quantity: 1\n}","timestamp":"2025-12-18 13:13:27"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 13:13:35"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:13:39"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-18 13:14:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:14:13"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-18 13:14:15"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 13:14:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:14:34"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 13:14:37"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:14:39"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 13:14:44"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:14:45"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 13:14:56"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/69367f83b7724927dc43c18d - Body: undefined","timestamp":"2025-12-18 13:15:21"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/69367f83b7724927dc43c18d - Body: {\n  name: 'Flat 20% OFF',\n  code: 'FLAT20',\n  description: 'coupon for every purchase',\n  type: 'percentage',\n  discountValue: '20',\n  maxDiscountAmount: '200',\n  minimumOrderAmount: '3000',\n  startDate: '2025-12-08',\n  expiryDate: '2025-12-30',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-18 13:15:30"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 13:15:32"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 13:15:40"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 13:15:52"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'FLAT20' }","timestamp":"2025-12-18 13:16:04"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 13:16:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:16:11"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 13:16:38"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:16:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:16:41"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 13:16:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:16:44"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:16:46"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:16:47"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b65 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:16:55"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:17:00"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:17:01"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 13:17:21"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:17:28"}
+{"level":"info","message":"Request: GET /admin/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:17:36"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b65 - Body: { reason: 'item mismatch' }","timestamp":"2025-12-18 13:17:51"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:17:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:17:54"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 13:18:01"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:18:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:19:40"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:19:40"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 13:26:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:26:39"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:26:41"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:26:41"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b65 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 13:26:49"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:26:54"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:26:54"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b65 - Body: { reason: 'item mismatch' }","timestamp":"2025-12-18 13:27:01"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:27:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:27:04"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 13:27:05"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:27:06"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:30:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:30:06"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:30:24"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:30:24"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:30:32"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:30:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:30:39"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:30:39"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 13:30:45"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:30:46"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:30:47"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:30:48"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b65 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:30:54"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM000006840/6943b16047e405e012171b64 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:31:06"}
+{"level":"info","message":"Request: POST /user/cancel-order/MM000006840 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:31:22"}
+{"level":"info","message":"Request: GET /user/order/MM000006840 - Body: undefined","timestamp":"2025-12-18 13:31:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:31:26"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 13:31:28"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:31:29"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:33:05"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:33:05"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:33:10"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:33:10"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 13:33:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:20"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-18 13:33:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:24"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-18 13:33:26"}
+{"level":"info","message":"Request: GET /user/product/68c559533f0c0fad695a5b87 - Body: undefined","timestamp":"2025-12-18 13:33:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:34"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c559533f0c0fad695a5b87',\n  size: 'XL',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 13:33:37"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-18 13:33:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:44"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-12-18 13:33:48"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:48"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 13:33:52"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 13:33:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:33:59"}
+{"level":"info","message":"Request: GET /user/product/68c5579a3f0c0fad695a5b22 - Body: undefined","timestamp":"2025-12-18 13:34:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:34:11"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c5579a3f0c0fad695a5b22',\n  size: 'L',\n  color: 'blue',\n  quantity: 1\n}","timestamp":"2025-12-18 13:34:15"}
+{"level":"info","message":"Request: POST /user/wishlist/toggle - Body: { productId: '68c5579a3f0c0fad695a5b22' }","timestamp":"2025-12-18 13:34:18"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 13:34:22"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:34:23"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 13:34:30"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:34:31"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 13:34:36"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:34:38"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 13:34:43"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'DIWALI50' }","timestamp":"2025-12-18 13:34:48"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 13:35:03"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:35:04"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 13:35:07"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:35:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:35:10"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 13:35:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:35:12"}
+{"level":"info","message":"Request: GET /user/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:35:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:35:14"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:35:22"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 13:35:29"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:35:31"}
+{"level":"info","message":"Request: GET /user/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:35:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:35:38"}
+{"level":"info","message":"Request: POST /user/order/MM109227844/return-item/6943b5b574dc4c2788c4d3e3 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 13:35:50"}
+{"level":"info","message":"Request: POST /user/order/MM109227844/return-item/6943b5b574dc4c2788c4d3e5 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 13:35:59"}
+{"level":"info","message":"Request: POST /user/order/MM109227844/return-order - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 13:36:08"}
+{"level":"info","message":"Request: GET /user/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:36:12"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:36:12"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:36:17"}
+{"level":"info","message":"Request: GET /admin/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:36:25"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/item/6943b5b574dc4c2788c4d3e3/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 13:36:31"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/item/6943b5b574dc4c2788c4d3e4/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 13:36:34"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/item/6943b5b574dc4c2788c4d3e3/return-decision - Body: { decision: 'accept_addstock' }","timestamp":"2025-12-18 13:38:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 13:40:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 13:40:16"}
+{"level":"info","message":"Request: GET /admin/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:40:18"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/item/6943b5b574dc4c2788c4d3e4/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 13:40:21"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/item/6943b5b574dc4c2788c4d3e5/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 13:40:24"}
+{"level":"info","message":"Request: POST /admin/order/MM109227844/return-decision - Body: { decision: 'accept_addstock' }","timestamp":"2025-12-18 13:40:33"}
+{"level":"info","message":"Request: GET /admin/order/MM109227844 - Body: undefined","timestamp":"2025-12-18 13:40:35"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 13:40:48"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:40:48"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 13:47:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:05"}
+{"level":"info","message":"Request: GET /user/product/693c4fe61786956dd8ee2086 - Body: undefined","timestamp":"2025-12-18 13:47:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:09"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4fe61786956dd8ee2086',\n  size: 'S',\n  color: 'light blue',\n  quantity: 1\n}","timestamp":"2025-12-18 13:47:13"}
+{"level":"info","message":"Request: GET /user/product/68c52e453f0c0fad695a5614 - Body: undefined","timestamp":"2025-12-18 13:47:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:20"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c52e453f0c0fad695a5614',\n  size: 'S',\n  color: 'Maroon',\n  quantity: 1\n}","timestamp":"2025-12-18 13:47:22"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 13:47:26"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:26"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 13:47:28"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:29"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 13:47:33"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:34"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 13:47:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:39"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 13:47:42"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:47:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:43"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 13:47:45"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:47:45"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:47:50"}
+{"level":"info","message":"Request: POST /admin/order/MM862803308/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 13:47:58"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 13:48:00"}
+{"level":"info","message":"Request: GET /user/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:48:04"}
+{"level":"info","message":"Request: POST /user/order/MM862803308/return-item/6943b8a609aacd2f7c5176a1 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:48:12"}
+{"level":"info","message":"Request: GET /user/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:48:14"}
+{"level":"info","message":"Request: GET /admin/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:19"}
+{"level":"info","message":"Request: POST /admin/order/MM862803308/item/6943b8a609aacd2f7c5176a1/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 13:48:23"}
+{"level":"info","message":"Request: GET /admin/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:25"}
+{"level":"info","message":"Request: POST /user/order/MM862803308/return-order - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 13:48:39"}
+{"level":"info","message":"Request: GET /user/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:41"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 13:48:42"}
+{"level":"info","message":"Request: GET /admin/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:49"}
+{"level":"info","message":"Request: POST /admin/order/MM862803308/return-decision - Body: { decision: 'accept_addstock' }","timestamp":"2025-12-18 13:48:52"}
+{"level":"info","message":"Request: GET /admin/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 13:48:55"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM862803308/6943b8a609aacd2f7c5176a2 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:04:49"}
+{"level":"info","message":"Request: GET /user/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 14:04:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:04:54"}
+{"level":"info","message":"Request: GET /admin/order/MM862803308 - Body: undefined","timestamp":"2025-12-18 14:05:11"}
+{"level":"info","message":"Request: POST /admin/order/MM862803308/item/6943b8a609aacd2f7c5176a2/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 14:06:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:09:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:09:21"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:09:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:09:28"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 14:10:05"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:06"}
+{"level":"info","message":"Request: GET /user/product/69143a80563634a46ac8658f - Body: undefined","timestamp":"2025-12-18 14:10:11"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:11"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '69143a80563634a46ac8658f',\n  size: 'M',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 14:10:14"}
+{"level":"info","message":"Request: GET /user/product/68c55a613f0c0fad695a5bcc - Body: undefined","timestamp":"2025-12-18 14:10:24"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:25"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c55a613f0c0fad695a5bcc',\n  size: 'L',\n  color: 'white',\n  quantity: 1\n}","timestamp":"2025-12-18 14:10:29"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 14:10:36"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:36"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 14:10:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:39"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 14:10:43"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:44"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 14:10:47"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:48"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 14:10:51"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:10:52"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:53"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 14:10:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:10:56"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:10:59"}
+{"level":"info","message":"Request: GET /admin/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:11:02"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:11:04"}
+{"level":"info","message":"Request: POST /admin/order/MM25264970/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 14:11:12"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:11:14"}
+{"level":"info","message":"Request: GET /user/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:11:18"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:11:18"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM25264970/6943be1430ed407a7d30af40 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:11:29"}
+{"level":"info","message":"Request: POST /user/order/MM25264970/return-item/6943be1430ed407a7d30af40 - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:11:36"}
+{"level":"info","message":"Request: GET /user/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:11:38"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:11:38"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM25264970/6943be1430ed407a7d30af41 - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:11:47"}
+{"level":"info","message":"Request: GET /admin/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:12:01"}
+{"level":"info","message":"Request: POST /admin/order/MM25264970/item/6943be1430ed407a7d30af40/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:12:04"}
+{"level":"info","message":"Request: GET /admin/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:12:06"}
+{"level":"info","message":"Request: POST /user/order/MM25264970/return-order - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:12:18"}
+{"level":"info","message":"Request: GET /user/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:12:20"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:12:20"}
+{"level":"info","message":"Request: GET /admin/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:12:30"}
+{"level":"info","message":"Request: POST /admin/order/MM25264970/item/6943be1430ed407a7d30af41/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:12:32"}
+{"level":"info","message":"Request: GET /admin/order/MM25264970 - Body: undefined","timestamp":"2025-12-18 14:12:34"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:12:42"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:12:43"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:12:46"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:12:47"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:22:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:22:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:28:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:28:17"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:29:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:29:46"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-18 14:31:25"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-18 14:31:25"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:31:41"}
+{"level":"info","message":"Request: GET /user/coupen - Body: undefined","timestamp":"2025-12-18 14:31:48"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:31:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:31:53"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 14:32:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:32:04"}
+{"level":"info","message":"Request: GET /user/profile - Body: undefined","timestamp":"2025-12-18 14:32:13"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:32:14"}
+{"level":"info","message":"Request: GET /user/coupon - Body: undefined","timestamp":"2025-12-18 14:32:16"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:32:16"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:32:21"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:32:22"}
+{"level":"info","message":"Request: GET /user/coupen - Body: undefined","timestamp":"2025-12-18 14:32:25"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:33:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:33:04"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:33:08"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:33:08"}
+{"level":"info","message":"Request: GET /user/coupon - Body: undefined","timestamp":"2025-12-18 14:33:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:33:10"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 14:33:24"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/692fb286f1d1320174d8cb19 - Body: undefined","timestamp":"2025-12-18 14:33:44"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/692fb286f1d1320174d8cb19 - Body: {\n  name: 'review',\n  code: 'REVIE',\n  description: 'revire coupon',\n  type: 'percentage',\n  discountValue: '10',\n  maxDiscountAmount: '2100',\n  minimumOrderAmount: '2000',\n  startDate: '2025-12-03',\n  expiryDate: '2026-01-02',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-18 14:34:04"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 14:34:06"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-18 14:34:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:11"}
+{"level":"info","message":"Request: GET /user/product/692fb0eef1d1320174d8c8e1 - Body: undefined","timestamp":"2025-12-18 14:34:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:20"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '692fb0eef1d1320174d8c8e1',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 14:34:22"}
+{"level":"info","message":"Request: GET /user/product/68c536d83f0c0fad695a5763 - Body: undefined","timestamp":"2025-12-18 14:34:27"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:27"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c536d83f0c0fad695a5763',\n  size: 'S',\n  color: 'multicolor',\n  quantity: 1\n}","timestamp":"2025-12-18 14:34:30"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 14:34:37"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:37"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 14:34:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:41"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 14:34:51"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:34:52"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 14:34:57"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'REVIE' }","timestamp":"2025-12-18 14:35:02"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 14:35:17"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:35:18"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 14:35:21"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM722957709 - Body: undefined","timestamp":"2025-12-18 14:35:23"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:35:23"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 14:35:25"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:35:26"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:35:30"}
+{"level":"info","message":"Request: POST /admin/order/MM722957709/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 14:35:37"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:35:39"}
+{"level":"info","message":"Request: GET /user/order/MM722957709 - Body: undefined","timestamp":"2025-12-18 14:35:44"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:35:44"}
+{"level":"info","message":"Request: POST /user/cancelItem/MM722957709/6943c3d2df722d457158bd8c - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:35:52"}
+{"level":"info","message":"Request: POST /user/order/MM722957709/return-item/6943c3d2df722d457158bd8d - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:36:03"}
+{"level":"info","message":"Request: POST /user/order/MM722957709/return-order - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:36:13"}
+{"level":"info","message":"Request: GET /user/order/MM722957709 - Body: undefined","timestamp":"2025-12-18 14:36:16"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:36:16"}
+{"level":"info","message":"Request: GET /user/wallet - Body: undefined","timestamp":"2025-12-18 14:36:27"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:36:27"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 14:36:47"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:36:48"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-18 14:36:56"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:36:57"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-18 14:36:59"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 14:37:06"}
+{"level":"info","message":"Request: GET /admin/edit-coupon/692b270c78ef6de4b109d95f - Body: undefined","timestamp":"2025-12-18 14:37:12"}
+{"level":"info","message":"Request: PATCH /admin/edit-coupon/692b270c78ef6de4b109d95f - Body: {\n  name: 'Mega Flat ₹5000 OFF',\n  code: 'MEGA5000',\n  description: 'Get flat ₹10000 off on mega sale orders above ₹30000. New Year Gift!!!!!!',\n  type: 'fixed',\n  discountValue: '5000',\n  maxDiscountAmount: '5000',\n  minimumOrderAmount: '15000',\n  startDate: '2025-12-25',\n  expiryDate: '2026-01-05',\n  usagePerUser: '1',\n  status: 'true'\n}","timestamp":"2025-12-18 14:37:52"}
+{"level":"info","message":"Request: GET /admin/coupon-list - Body: undefined","timestamp":"2025-12-18 14:37:55"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-18 14:37:59"}
+{"level":"info","message":"Request: GET /user/product/68c55a613f0c0fad695a5bcc - Body: undefined","timestamp":"2025-12-18 14:38:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:05"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c55a613f0c0fad695a5bcc',\n  size: 'M',\n  color: 'white',\n  quantity: 1\n}","timestamp":"2025-12-18 14:38:07"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-18 14:38:14"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:15"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'L',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-18 14:38:17"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 14:38:22"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:23"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '693c4d861786956dd8ee1e57', size: 'L', color: 'Air blue' }","timestamp":"2025-12-18 14:38:30"}
+{"level":"info","message":"Request: POST /user/incresecartqty - Body: { productId: '68c55a613f0c0fad695a5bcc', size: 'M', color: 'white' }","timestamp":"2025-12-18 14:38:34"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 14:38:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:41"}
+{"level":"info","message":"Request: GET /user/sale?sortBy=pricehighlow - Body: undefined","timestamp":"2025-12-18 14:38:47"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:48"}
+{"level":"info","message":"Request: GET /user/product/68c5579a3f0c0fad695a5b22 - Body: undefined","timestamp":"2025-12-18 14:38:50"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:38:51"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '68c5579a3f0c0fad695a5b22',\n  size: 'M',\n  color: 'blue',\n  quantity: 1\n}","timestamp":"2025-12-18 14:38:53"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-18 14:39:02"}
+{"level":"info","message":"Request: GET /admin/updateProduct/693c4fe61786956dd8ee2086 - Body: undefined","timestamp":"2025-12-18 14:39:12"}
+{"level":"info","message":"Request: PATCH /admin/updateProduct/693c4fe61786956dd8ee2086?_method=PATCH - Body: undefined","timestamp":"2025-12-18 14:39:37"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-18 14:39:39"}
+{"level":"info","message":"Request: GET /user/sale - Body: undefined","timestamp":"2025-12-18 14:39:45"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:39:47"}
+{"level":"info","message":"Request: GET /user/product/693c4fe61786956dd8ee2086 - Body: undefined","timestamp":"2025-12-18 14:39:50"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:39:51"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4fe61786956dd8ee2086',\n  size: 'S',\n  color: 'light blue',\n  quantity: 1\n}","timestamp":"2025-12-18 14:39:53"}
+{"level":"info","message":"Request: GET /user/cart - Body: undefined","timestamp":"2025-12-18 14:39:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:40:00"}
+{"level":"info","message":"Request: POST /user/decreasecartqty - Body: { productId: '68c55a613f0c0fad695a5bcc', size: 'M', color: 'white' }","timestamp":"2025-12-18 14:40:04"}
+{"level":"info","message":"Request: GET /user/checkout-address - Body: undefined","timestamp":"2025-12-18 14:40:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:40:12"}
+{"level":"info","message":"Request: GET /user/checkoutPayment?addressId=69402bfe695385fb6fd18ce3 - Body: undefined","timestamp":"2025-12-18 14:40:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:40:36"}
+{"level":"info","message":"Request: GET /user/available-coupons - Body: undefined","timestamp":"2025-12-18 14:40:43"}
+{"level":"info","message":"Request: POST /user/apply-coupon - Body: { code: 'SAVE20' }","timestamp":"2025-12-18 14:40:51"}
+{"level":"info","message":"Request: GET /user/order-review?addressId=69402bfe695385fb6fd18ce3&paymentMethod=wallet - Body: undefined","timestamp":"2025-12-18 14:41:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:03"}
+{"level":"info","message":"Request: POST /user/confirmOrder - Body: { addressId: '69402bfe695385fb6fd18ce3', paymentMethod: 'wallet' }","timestamp":"2025-12-18 14:41:06"}
+{"level":"info","message":"Request: GET /user/orderSuccess/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:08"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:08"}
+{"level":"info","message":"Request: GET /user/order - Body: undefined","timestamp":"2025-12-18 14:41:10"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:10"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:41:15"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/editStatus - Body: { newStatus: 'confirmed' }","timestamp":"2025-12-18 14:41:21"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:41:23"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:26"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:27"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:30"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:30"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:34"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/editStatus - Body: { newStatus: 'delivered' }","timestamp":"2025-12-18 14:41:42"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:41:44"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:47"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:48"}
+{"level":"info","message":"Request: POST /user/order/MM067734287/return-item/6943c52bdf722d457158c22b - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:41:53"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:41:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:41:55"}
+{"level":"info","message":"Request: POST /user/order/MM067734287/return-item/6943c52bdf722d457158c22c - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:42:02"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:42:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:42:04"}
+{"level":"info","message":"Request: POST /user/order/MM067734287/return-item/6943c52bdf722d457158c22e - Body: { reason: 'choosw wrong product shirt' }","timestamp":"2025-12-18 14:42:17"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:42:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:42:19"}
+{"level":"info","message":"Request: POST /user/order/MM067734287/return-item/6943c52bdf722d457158c22d - Body: { reason: 'choosw wrong product' }","timestamp":"2025-12-18 14:42:32"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:42:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:42:34"}
+{"level":"info","message":"Request: GET /admin/orders - Body: undefined","timestamp":"2025-12-18 14:42:45"}
+{"level":"info","message":"Request: GET /admin/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:42:50"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22b/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:42:53"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22c/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:42:56"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22d/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:42:59"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22e/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:43:02"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22e/return-decision - Body: { decision: 'reject' }","timestamp":"2025-12-18 14:43:04"}
+{"level":"info","message":"Request: GET /admin/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:43:06"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/item/6943c52bdf722d457158c22d/return-decision - Body: { decision: 'reject' }","timestamp":"2025-12-18 14:43:08"}
+{"level":"info","message":"Request: GET /admin/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:43:09"}
+{"level":"info","message":"Request: POST /admin/order/MM067734287/return-decision - Body: { decision: 'accept_nostock' }","timestamp":"2025-12-18 14:43:12"}
+{"level":"info","message":"Request: GET /admin/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:43:15"}
+{"level":"info","message":"Request: GET /user/order/MM067734287 - Body: undefined","timestamp":"2025-12-18 14:43:30"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-18 14:43:30"}

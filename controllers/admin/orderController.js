@@ -257,24 +257,65 @@ const updateOrderItemStatus = async (req, res) => {
     return res.status(500).json({ success: false, msg: "Server error" });
   }
 };
-
 const returnItemDecision = async (req, res) => {
   try {
     const { orderId, itemId } = req.params;
     const { decision } = req.body;
 
     if (!["accept_nostock", "accept_addstock", "reject"].includes(decision)) {
-      return res.status(400).json({ success: false, message: "Invalid decision" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid decision"
+      });
     }
 
     const order = await Order.findOne({ orderId });
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found"
+      });
+    }
 
-    const item = order.orderedItems.find(i => i._id.toString() === itemId);
-    if (!item) return res.status(404).json({ success: false, message: "Item not found" });
+    const item = order.orderedItems.find(
+      i => i._id.toString() === itemId
+    );
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        message: "Item not found"
+      });
+    }
 
     if (item.status !== "return_requested") {
-      return res.status(400).json({ success: false, message: "No return request on this item" });
+      return res.status(400).json({
+        success: false,
+        message: "No return request on this item"
+      });
+    }
+
+    if (
+      (decision === "accept_nostock" || decision === "accept_addstock") &&
+      order.appliedCoupon &&
+      order.couponDiscount > 0
+    ) {
+      const coupon = await Coupon.findOne({ code: order.appliedCoupon });
+
+      if (coupon) {
+        const remainingSubtotal = order.orderedItems
+          .filter(i =>
+            i._id.toString() !== itemId &&
+            !["cancelled", "returned"].includes(i.status)
+          )
+          .reduce((sum, i) => sum + (i.salePrice * i.quantity), 0);
+
+        if (remainingSubtotal < coupon.minimumOrderAmount) {
+          return res.status(400).json({
+            success: false,
+            message: "Single item return not allowed as applied coupon will become invalid"
+          });
+        }
+      }
     }
 
     if (decision === "reject") {
@@ -282,10 +323,37 @@ const returnItemDecision = async (req, res) => {
     }
 
     if (decision === "accept_nostock" || decision === "accept_addstock") {
+      const itemTotal = item.salePrice * item.quantity;
+
+      const orderSaleTotal = order.orderedItems
+        .filter(i => !["cancelled", "returned"].includes(i.status))
+        .reduce((sum, i) => sum + (i.salePrice * i.quantity), 0);
+
+      let couponShare = 0;
+      if (order.couponDiscount > 0 && orderSaleTotal > 0) {
+        couponShare = Math.round(
+          (itemTotal / orderSaleTotal) * order.couponDiscount
+        );
+      }
+
+      const cgst = itemTotal * 0.09;
+      const sgst = itemTotal * 0.09;
+
+      let refundAmount = itemTotal + cgst + sgst - couponShare;
+
+      const remainingActiveItems = order.orderedItems.filter(i =>
+        i._id.toString() !== itemId &&
+        !["cancelled", "returned"].includes(i.status)
+      );
+
+      if (remainingActiveItems.length === 0 && order.deliveryCharge > 0) {
+        refundAmount += order.deliveryCharge;
+      }
+
       item.status = "returned";
 
       if (order.paymentMethod !== "cod") {
-        await addMoneyToWallet(order.userId, item.finalPrice, {
+        await addMoneyToWallet(order.userId, refundAmount, {
           description: "Refund for returned item",
           method: order.paymentMethod,
           orderId
@@ -295,8 +363,12 @@ const returnItemDecision = async (req, res) => {
       if (decision === "accept_addstock") {
         const product = await Product.findById(item.productId);
         if (product) {
-          const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
-          if (variant) variant.variantQuantity += item.quantity;
+          const variant = product.variants.find(
+            v => v.size === item.size && v.color === item.color
+          );
+          if (variant) {
+            variant.variantQuantity += item.quantity;
+          }
           await product.save();
         }
       }
@@ -315,9 +387,17 @@ const returnItemDecision = async (req, res) => {
     order.markModified("orderedItems");
     await order.save();
 
-    return res.json({ success: true, message: `Item return ${decision} processed` });
+    return res.status(200).json({
+      success: true,
+      message: `Item return ${decision} processed`
+    });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: "Something went wrong" });
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong"
+    });
   }
 };
 
@@ -327,26 +407,49 @@ const returnFullOrderDecision = async (req, res) => {
     const { decision } = req.body;
 
     if (!["accept_nostock", "accept_addstock", "reject"].includes(decision)) {
-      return res.status(400).json({ success: false, message: "Invalid decision" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid decision"
+      });
     }
 
     const order = await Order.findOne({ orderId });
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found"
+      });
+    }
 
     if (order.status !== "return_requested") {
-      return res.status(400).json({ success: false, message: "Full order return not requested" });
+      return res.status(400).json({
+        success: false,
+        message: "Full order return not requested"
+      });
+    }
+
+    const returnRequestedItems = order.orderedItems.filter(
+      i => i.status === "return_requested"
+    );
+
+    if (returnRequestedItems.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No items eligible for return"
+      });
     }
 
     if (decision === "reject") {
-      order.orderedItems.forEach(i => {
-        if (i.status === "return_requested") i.status = "delivered";
+      returnRequestedItems.forEach(i => {
+        i.status = "delivered";
       });
+
       order.status = "delivered";
     }
 
     if (decision === "accept_nostock" || decision === "accept_addstock") {
-      order.orderedItems.forEach(i => {
-        if (i.status === "return_requested") i.status = "returned";
+      returnRequestedItems.forEach(i => {
+        i.status = "returned";
       });
 
       if (order.paymentMethod !== "cod") {
@@ -358,29 +461,40 @@ const returnFullOrderDecision = async (req, res) => {
       }
 
       if (decision === "accept_addstock") {
-        for (const item of order.orderedItems) {
+        for (const item of returnRequestedItems) {
           const product = await Product.findById(item.productId);
           if (product) {
-            const variant = product.variants.find(v => v.size === item.size && v.color === item.color);
-            if (variant) variant.variantQuantity += item.quantity;
+            const variant = product.variants.find(
+              v => v.size === item.size && v.color === item.color
+            );
+            if (variant) {
+              variant.variantQuantity += item.quantity;
+            }
             await product.save();
           }
         }
       }
 
       order.status = "returned";
+      order.paymentStatus = "refunded";
     }
 
     order.markModified("orderedItems");
     await order.save();
 
-    return res.json({ success: true, message: `Order return ${decision} processed` });
+    return res.status(200).json({
+      success: true,
+      message: `Order return ${decision} processed`
+    });
+
   } catch (err) {
-    return res.status(500).json({ success: false, message: "Something went wrong" });
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong"
+    });
   }
 };
-
-
 
 
 
