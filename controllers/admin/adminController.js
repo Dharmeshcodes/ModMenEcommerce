@@ -1,13 +1,15 @@
 const User = require('../../models/userSchema');
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const {apiLogger, errorLogger}=require('../../config/logger');
 const Order = require("../../models/orderSchema");
 const dayjs = require("dayjs");
 const isoWeek = require("dayjs/plugin/isoWeek");
 dayjs.extend(isoWeek);
 const ExcelJS = require("exceljs");
 const puppeteer = require("puppeteer");
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
+
 
 
 const loadAdminLogin = async (req, res) => {
@@ -18,7 +20,8 @@ const loadAdminLogin = async (req, res) => {
     res.render('admin/login', { message: null }); 
   } catch (error) {
     errorLogger.error('there is an error in loading admin login page: %o',error);
-    res.status(500).send('Server error loading admin login');
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(MESSAGES.COMMON.SOMETHING_WENT_WRONG);
   }
 };
 
@@ -29,12 +32,12 @@ const adminLogin = async (req, res) => {
 
     const admin = await User.findOne({ email, role: 'admin' });
     if (!admin) {
-      return res.render('admin/login', { message: 'Admin not found or invalid credentials' });
+      return res.render('admin/login', { message: MESSAGES.AUTH.INVALID_CREDENTIALS});
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
-      return res.render('admin/login', { message: 'Invalid password' });
+      return res.render('admin/login', { message:MESSAGES.AUTH.INVALID_CREDENTIALS });
     }
 
     req.session.admin =admin._id;
@@ -42,7 +45,7 @@ const adminLogin = async (req, res) => {
 
   } catch (error) {
      errorLogger.error('Admin login failed: %o', error);
-    res.render('admin/login', { message: 'Login failed, please try again later' });
+    res.render('admin/login', { message: MESSAGES.COMMON.SOMETHING_WENT_WRONG });
   }
 };
 
@@ -104,98 +107,99 @@ const buildDateFilter = (type, from, to) => {
   return {};
 };
 
-
 const getSalesReport = async (req, res) => {
   try {
-      const { type, from, to, search } = req.query;
+    apiLogger.info("Admin sales report accessed", { query: req.query });
 
-      const page = parseInt(req.query.page) || 1;
-      const limit = 10;
-      const skip = (page - 1) * limit;
+    const { type, from, to, search } = req.query;
 
-      const query = { status: "delivered" };
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
-      if (type) {
-        query.createdOn = buildDateFilter(type, from, to);
-      }
+    const query = { status: "delivered" };
 
-      if (search) {
-        query.$or = [
-          { "orderedItems.productName": { $regex: search, $options: "i" } },
-          { "userId.fullName": { $regex: search, $options: "i" } }
-        ];
-      }
-
-      const orders = await Order.find(query)
-  .populate("userId")
-  .populate({
-      path: "orderedItems.productId",
-      populate: { path: "categoryId" }
-  })
-  .sort({ createdOn: -1 });
-
-      const salesRows = [];
-      let totalSales = 0;
-      let totalRevenue = 0;
-      let totalProductDiscount = 0;
-      let totalCouponDiscount = 0;
-
-      for (const order of orders) {
-        totalRevenue += order.payableAmount;
-        totalProductDiscount += order.discountAmount;
-        totalCouponDiscount += order.couponDiscount;
-
-        for (const item of order.orderedItems) {
-          if (item.status !== "delivered") continue;
-
-          totalSales++;
-
-          const product = item.productId;
-          const discount = (item.price - item.salePrice) * item.quantity;
-          const total = item.salePrice * item.quantity;
-
-          salesRows.push({
-            orderId: order.orderId,
-            buyer: order.userId?.fullName || "Unknown",
-            productName: item.productName,
-            productId: product?._id || "",
-            quantity: item.quantity,
-            price: item.price,
-            category: product?.categoryId.name || "N/A",
-            discount,
-            total,
-            deliveredOn: item.deliveredOn || null,
-            orderDate: new Date(order.createdOn).toLocaleDateString("en-IN")
-
-          });
-        }
-      }
-
-      const totalPages = Math.ceil(salesRows.length / limit);
-      const salesData = salesRows.slice(skip, skip + limit);
-
-      const filterQuery = new URLSearchParams(req.query).toString();
-
-      res.render("admin/salesReport", {
-        salesData,
-        totalSales,
-        totalRevenue,
-        totalProductDiscount,
-        totalCouponDiscount,
-        type,
-        from,
-        to,
-        search,
-        totalPages,
-        currentPage: page,
-        filterQuery
-      });
-
-    } catch (error) {
-      console.log("Sales Report Error:", error);
-      res.redirect("/admin/pageerror");
+    if (type) {
+      query.createdOn = buildDateFilter(type, from, to);
     }
-  };
+
+    if (search) {
+      query.$or = [
+        { "orderedItems.productName": { $regex: search, $options: "i" } },
+        { "userId.fullName": { $regex: search, $options: "i" } }
+      ];
+    }
+
+    const orders = await Order.find(query)
+      .populate("userId")
+      .populate({
+        path: "orderedItems.productId",
+        populate: { path: "categoryId" }
+      })
+      .sort({ createdOn: -1 });
+
+    const salesRows = [];
+    let totalSales = 0;
+    let totalRevenue = 0;
+    let totalProductDiscount = 0;
+    let totalCouponDiscount = 0;
+
+    for (const order of orders) {
+      totalRevenue += order.payableAmount;
+      totalProductDiscount += order.discountAmount;
+      totalCouponDiscount += order.couponDiscount;
+
+      for (const item of order.orderedItems) {
+        if (item.status !== "delivered") continue;
+
+        totalSales++;
+
+        const product = item.productId;
+        const discount = (item.price - item.salePrice) * item.quantity;
+        const total = item.salePrice * item.quantity;
+
+        salesRows.push({
+          orderId: order.orderId,
+          buyer: order.userId?.fullName || "Unknown",
+          productName: item.productName,
+          productId: product?._id || "",
+          quantity: item.quantity,
+          price: item.price,
+          category: product?.categoryId.name || "N/A",
+          discount,
+          total,
+          deliveredOn: item.deliveredOn || null,
+          orderDate: new Date(order.createdOn).toLocaleDateString("en-IN")
+        });
+      }
+    }
+
+    const totalPages = Math.ceil(salesRows.length / limit);
+    const salesData = salesRows.slice(skip, skip + limit);
+
+    const filterQuery = new URLSearchParams(req.query).toString();
+
+    res.render("admin/salesReport", {
+      salesData,
+      totalSales,
+      totalRevenue,
+      totalProductDiscount,
+      totalCouponDiscount,
+      type,
+      from,
+      to,
+      search,
+      totalPages,
+      currentPage: page,
+      filterQuery
+    });
+
+  } catch (error) {
+    errorLogger.error("Sales report error", { error });
+    res.redirect("/admin/pageerror");
+  }
+};
+
 
 const exportSalesExcel = async (req, res) => {
     try {
@@ -324,8 +328,8 @@ const exportSalesExcel = async (req, res) => {
         await workbook.xlsx.write(res);
         res.end();
     } catch (err) {
-        console.log(err);
-        res.redirect("/admin/pageerror");
+         errorLogger.error("Sales excel export error", { error: err });
+        res.redirect("/admin/pageerror")
     }
 };
 
@@ -432,8 +436,8 @@ const exportSalesPDF = async (req, res) => {
         res.setHeader("Content-Disposition", "attachment; filename=sales-report.pdf");
         res.send(pdfBuffer);
     } catch (err) {
-        console.log(err);
-        res.redirect("/admin/pageerror");
+         errorLogger.error("Sales PDF export error", { error: err });
+        res.redirect("/admin/pageerror")
     }
 };
 

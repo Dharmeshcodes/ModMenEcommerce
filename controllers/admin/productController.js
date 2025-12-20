@@ -4,10 +4,13 @@ const Subcategory = require('../../models/subcategorySchema');
 const User = require('../../models/userSchema');
 const fs = require('fs');
 const path = require('path');
-const sharp = require('sharp');
+
 const mongoose = require('mongoose');
 const { calculateBestPrice } = require('../../utils/offerUtils');
 const { getSalePrice } = require('../../utils/offerUtils');
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
 
 
 const getProducts = async (req, res) => {

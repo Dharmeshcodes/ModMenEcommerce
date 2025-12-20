@@ -125,7 +125,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     address: {
-      type: String,     // saved as snapshot string
+      type: String,    
       required: true
     },
 
@@ -150,7 +150,13 @@ const orderSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: ["pending", "completed", "failed", "refunded"],
+      enum: [
+        "pending",
+        "failed",
+        "completed",
+        "captured_but_failed",
+        "refunded"
+      ],
       default: "pending"
     },
     razorpayOrderId: {

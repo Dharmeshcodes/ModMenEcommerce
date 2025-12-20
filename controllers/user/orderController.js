@@ -270,21 +270,29 @@ const getUserOrders = async (req, res) => {
     return res.status(500).send("Server Error");
   }
 };
-
 const getOrderDetails = async (req, res) => {
   try {
     const userId = req.session.user._id;
     const orderId = req.params.orderId;
-    const order = await Order.findOne({ orderId, userId }).populate("orderedItems.productId", "images").lean();
+
+    const error = req.query.error || null;  
+
+    const order = await Order.findOne({ orderId, userId })
+      .populate("orderedItems.productId", "images")
+      .lean();
+
     if (!order) return res.status(404).send("Order not found");
+
     const createdDate = new Date(order.createdOn || order.createdAt);
     const expectedDate = new Date(createdDate);
     expectedDate.setDate(createdDate.getDate() + 10);
     const expectedDelivery = expectedDate.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-    const baseSubtotal = order.subTotal || order.subtotal || 0;
+
+    const baseSubtotal = order.subTotal || 0;
     const cgst = Math.round(baseSubtotal * 0.09);
     const sgst = Math.round(baseSubtotal * 0.09);
     const gstTotal = cgst + sgst;
+
     let items = [];
     for (const item of order.orderedItems) {
       let mainImage = "/images/no-img.png";
@@ -292,6 +300,7 @@ const getOrderDetails = async (req, res) => {
       if (product?.images?.length > 0) {
         mainImage = product.images.find(i => i.isMain)?.url || product.images[0].url;
       }
+
       items.push({
         productName: item.productName,
         size: item.size,
@@ -303,12 +312,23 @@ const getOrderDetails = async (req, res) => {
         itemId: item._id
       });
     }
-    return res.render("user/orderDetails", { order, items, expectedDelivery, cgst, sgst, gstTotal, user: req.session.user });
+
+    return res.render("user/orderDetails", {
+      order,
+      items,
+      expectedDelivery,
+      cgst,
+      sgst,
+      gstTotal,
+      user: req.session.user,
+      error            
+    });
   } catch (error) {
     console.log("Error in getOrderDetails:", error);
     return res.status(500).send("Server Error");
   }
 };
+
 const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.params;

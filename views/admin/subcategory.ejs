@@ -275,12 +275,22 @@
     <div style="font-weight: bold; color: #007bff;">
       <%= subcat.offer.subcategoryOffer %>% OFF
     </div>
-    <button class="offer-btn" style="margin-top:5px;" 
-            onclick="openOfferModal('<%= subcat._id %>', '<%= subcat.offer.subcategoryOffer %>', '<%= subcat.offer.maxRedeem %>', 
-                                     '<%= subcat.offer.startDate.toISOString().slice(0,10) %>', 
-                                     '<%= subcat.offer.validUntil.toISOString().slice(0,10) %>')">
-      Edit Offer
-    </button>
+    <button class="offer-btn"
+  onclick="openOfferModal(
+    '<%= subcat._id %>',
+    '<%= subcat.offer.subcategoryOffer %>',
+    '<%= subcat.offer.maxRedeem %>',
+    '<%= subcat.offer.startDate.toISOString().slice(0,10) %>',
+    '<%= subcat.offer.validUntil.toISOString().slice(0,10) %>'
+  )">
+  Edit
+</button>
+
+<button class="delete-btn-small"
+  onclick="confirmDeleteOffer('<%= subcat._id %>')">
+  <i class="fas fa-trash"></i>
+</button>
+
   <% } else { %>
     <button class="offer-btn" onclick="openOfferModal('<%= subcat._id %>')">Add Offer</button>
   <% } %>
@@ -344,8 +354,13 @@
         }
       });
     }
-
-    function openOfferModal(subcategoryId, existingOffer = '', existingMax = '', existingStart = '', existingEnd = '') {
+function openOfferModal(
+    subcategoryId,
+    existingOffer = '',
+    existingMax = '',
+    existingStart = '',
+    existingEnd = ''
+  ) {
     Swal.fire({
       title: existingOffer ? 'Edit Offer' : 'Add Offer',
       html:
@@ -369,12 +384,30 @@
           Swal.showValidationMessage('Offer must be between 1 and 100');
           return false;
         }
+
         if (maxRedeem < 0) {
           Swal.showValidationMessage('Max Redeem cannot be negative');
           return false;
         }
-        if (!startDate || !validUntil || new Date(startDate) > new Date(validUntil)) {
-          Swal.showValidationMessage('Invalid dates');
+
+        if (!startDate || !validUntil) {
+          Swal.showValidationMessage('Start date and expiry date are required');
+          return false;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const start = new Date(startDate);
+        const end = new Date(validUntil);
+
+        if (start < today) {
+          Swal.showValidationMessage('Start date must be today or later');
+          return false;
+        }
+
+        if (end <= start) {
+          Swal.showValidationMessage('Expiry date must be after start date');
           return false;
         }
 
@@ -387,15 +420,18 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(result.value)
         })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            Swal.fire('Success!', data.message, 'success').then(() => location.reload());
-          } else {
-            Swal.fire('Error!', data.message, 'error');
-          }
-        })
-        .catch(() => Swal.fire('Error!', 'Server error occurred', 'error'));
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire('Success!', data.message, 'success')
+                .then(() => location.reload());
+            } else {
+              Swal.fire('Error!', data.message, 'error');
+            }
+          })
+          .catch(() => {
+            Swal.fire('Error!', 'Server error occurred', 'error');
+          });
       }
     });
   }
@@ -428,6 +464,38 @@
         }
       });
     }
+
+    function confirmDeleteOffer(subcategoryId) {
+    Swal.fire({
+      title: 'Delete Offer?',
+      text: 'This will remove the offer from this subcategory.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/admin/subcategory/offer/' + subcategoryId, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire('Deleted!', data.message, 'success')
+              .then(() => location.reload());
+          } else {
+            Swal.fire('Error!', data.message, 'error');
+          }
+        })
+        .catch(() => {
+          Swal.fire('Error!', 'Server error occurred', 'error');
+        });
+      }
+    });
+  }
   </script>
 </body>
 </html>

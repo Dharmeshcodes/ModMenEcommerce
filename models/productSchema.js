@@ -95,11 +95,10 @@ const productSchema = new Schema({
   offer: offerSchema,
 
   displayOffer: {
-    type: Number,
-    default: function () {
-      return this.offer ? this.offer.productOffer : 0;
-    },
-  },
+  type: Number,
+  default: 0,
+},
+
 
   offerSource: {
     type: String,

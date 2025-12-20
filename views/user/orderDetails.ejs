@@ -310,6 +310,37 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+
+     const pageError = "<%= error || '' %>";
+
+  if (pageError === "OUT_OF_STOCK_AFTER_PAYMENT") {
+    Swal.fire({
+      icon: "warning",
+      title: "Order Failed After Payment",
+      text: "Payment was successful, but the item went out of stock. Your refund will be processed shortly.",
+      confirmButtonText: "OK"
+    });
+  }
+
+  if (pageError === "OUT_OF_STOCK_BEFORE_PAYMENT") {
+    Swal.fire({
+      icon: "error",
+      title: "Item Out of Stock",
+      text: "One or more items went out of stock before payment. Please try again later.",
+      confirmButtonText: "OK"
+    });
+  }
+  if (pageError === "PAYMENT_ALREADY_COMPLETED") {
+  Swal.fire({
+    icon: "info",
+    title: "Payment Already Completed",
+    text: "This order has already been paid successfully.",
+    confirmButtonText: "OK"
+  });
+}
+
+
+
     const statuses = ["pending","confirmed","shipped","out_for_delivery","delivered","cancelled","return_requested","returned","failed"];
     function computeProgressPercent(index){ if(index <= 0) return 0; const steps = statuses.length - 1; return Math.round((index / steps) * 100); }
 
@@ -545,6 +576,8 @@ document.getElementById("retryPaymentBtn")?.addEventListener("click", async () =
   // Redirect to payment page
   window.location.href = data.redirectURL;
 });
+
+
 
 
 

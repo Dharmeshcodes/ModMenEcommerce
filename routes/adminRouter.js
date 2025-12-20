@@ -53,6 +53,8 @@ router.post('/editSubcategory/:id', adminAuth, uploadSubcategoryImages.single('s
 router.patch('/subcategory/toggleList/:id', adminAuth, subcategoryController.toggleListStatus);
 router.post('/subcategory/offer/:id', adminAuth, subcategoryController.editOffer);
 router.patch('/subcategory/delete/:id', adminAuth, subcategoryController.softDeleteSubcategory);
+router.delete('/subcategory/offer/:id',adminAuth,subcategoryController.deleteSubcategoryOffer);
+
 
 //produc
 

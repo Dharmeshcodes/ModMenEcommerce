@@ -1,4 +1,7 @@
 const Coupon = require("../../models/couponSchema");
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
 
 const loadCouponPage = async (req, res) => {
   try {

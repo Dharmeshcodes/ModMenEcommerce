@@ -89,10 +89,12 @@ router.post('/order/:orderId/return-item/:itemId', orderController.returnSingleI
 router.post('/order/:orderId/return-order', orderController.returnEntireOrder);
 router.get('/order/:orderId/invoice',userAuth,orderController.generateInvoice)
 
-router.get("/online-payment/:orderId",userAuth,validateCartMiddleware,razorpayController.loadOnlinePaymentPage)
-router.post("/verify-payment",userAuth,validateCartMiddleware,razorpayController.verifyRazorpayPayment);
+router.get("/online-payment/:orderId",userAuth,razorpayController.loadOnlinePaymentPage)
+router.post("/verify-payment",userAuth,razorpayController.verifyRazorpayPayment);
 router.get("/orderFailed/:orderId",userAuth, razorpayController.getOrderFailedPage);
-router.get("/retry-payment/:orderId",userAuth,validateCartMiddleware, razorpayController.retryPayment);
+router.get("/retry-payment/:orderId",userAuth, razorpayController.retryPayment);
+
+
 
 
 router.post("/wishlist/toggle",userAuth,wishlistController.toggleWishlist);

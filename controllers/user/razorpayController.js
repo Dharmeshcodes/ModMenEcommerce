@@ -5,6 +5,9 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const redisClient = require("../../config/redis");
 
+const HTTP_STATUS = require("../../constans/httpStatus"); 
+const { apiLogger, errorLogger } = require("../../config/logger"); 
+
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -14,41 +17,44 @@ const loadOnlinePaymentPage = async (req, res) => {
   try {
     const orderId = req.params.orderId;
     const order = await Order.findOne({ orderId });
+
     if (!order) return res.redirect("/user/cart");
 
-    const activePayment = await redisClient.get(`payment_active:${orderId}`);
-    if (activePayment) {
-      return res.redirect(`/user/online-payment/${orderId}`);
+    if (order.paymentStatus === "completed") {
+      return res.redirect(`/user/orderSuccess/${orderId}`);
     }
 
     const cart = await Cart.findOne({ userId: order.userId }).populate("items.productId");
+
     for (let item of cart.items) {
-      const variant = item.productId.variants.find(v => v.size === item.size && v.color === item.color);
+      const variant = item.productId.variants.find(
+        v => v.size === item.size && v.color === item.color
+      );
+
       if (!variant || variant.variantQuantity < item.quantity) {
-        await Order.updateOne({ orderId }, { $set: { status: "cancelled", paymentStatus: "failed" } });
-        return res.redirect("/user/cart?error=OutOfStock");
+        await Order.updateOne(
+          { orderId },
+          { $set: { status: "failed", paymentStatus: "failed" } }
+        );
+
+        return res.redirect(
+          `/user/order/${orderId}?error=OUT_OF_STOCK_BEFORE_PAYMENT`
+        );
       }
     }
-    if (!order.paymentSessionId) {
+
+    if (!order.paymentSessionId || order.paymentStatus === "failed") {
       const paymentSessionId = crypto.randomUUID();
 
-      await redisClient.setEx(
-        `payment_active:${orderId}`,
-        900,
-        paymentSessionId
-      );
-
-      await redisClient.setEx(
-        `payment_session:${paymentSessionId}`,
-        900,
-        "valid"
-      );
+      await redisClient.setEx(`payment_active:${orderId}`, 900, paymentSessionId);
+      await redisClient.setEx(`payment_session:${paymentSessionId}`, 900, "valid");
 
       order.paymentSessionId = paymentSessionId;
       await order.save();
     }
 
-    const amount = Math.round((order.payableAmount || order.payableTotal || 0) * 100);
+    const amount = Math.round((order.payableAmount || 0) * 100);
+
     const razorpayOrder = await razorpayInstance.orders.create({
       amount,
       currency: "INR",
@@ -65,8 +71,8 @@ const loadOnlinePaymentPage = async (req, res) => {
       key_id: process.env.RAZORPAY_KEY_ID
     });
   } catch (error) {
-    console.log("Razorpay load error:", error);
-    return res.redirect("/500");
+    errorLogger.error("Razorpay load error", error); 
+    return res.redirect("/user/Page-404"); 
   }
 };
 
@@ -76,7 +82,7 @@ const verifyRazorpayPayment = async (req, res) => {
 
     const order = await Order.findOne({ orderId });
     if (!order || !order.paymentSessionId) {
-      return res.json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
         success: false,
         message: "Invalid or expired payment session"
       });
@@ -88,7 +94,7 @@ const verifyRazorpayPayment = async (req, res) => {
     if (!sessionValid) {
       return res.json({
         success: false,
-        message: "Payment session expired or already used"
+        redirectURL: `/user/order/${orderId}?error=PAYMENT_ALREADY_COMPLETED`
       });
     }
 
@@ -97,9 +103,14 @@ const verifyRazorpayPayment = async (req, res) => {
         { orderId },
         { $set: { status: "failed", paymentStatus: "failed" } }
       );
+
       await redisClient.del(`payment_active:${orderId}`);
-      await redisClient.del(`payment_session:${order.paymentSessionId}`);
-      return res.json({ success: false, redirectURL: `/user/orderFailed/${orderId}` });
+      await redisClient.del(sessionKey);
+
+      return res.json({
+        success: false,
+        redirectURL: `/user/orderFailed/${orderId}`
+      });
     }
 
     const hash = crypto
@@ -112,40 +123,58 @@ const verifyRazorpayPayment = async (req, res) => {
         { orderId },
         { $set: { status: "failed", paymentStatus: "failed" } }
       );
+
       await redisClient.del(`payment_active:${orderId}`);
-      await redisClient.del(`payment_session:${order.paymentSessionId}`);
-      return res.json({ success: false, redirectURL: `/user/orderFailed/${orderId}` });
+      await redisClient.del(sessionKey);
+
+      return res.json({
+        success: false,
+        redirectURL: `/user/orderFailed/${orderId}`
+      });
     }
 
     const payment = await razorpayInstance.payments.fetch(razorpay_payment_id);
+
     if (payment.status !== "captured") {
       await Order.updateOne(
         { orderId },
         { $set: { status: "failed", paymentStatus: "failed" } }
       );
+
       await redisClient.del(`payment_active:${orderId}`);
-      await redisClient.del(`payment_session:${order.paymentSessionId}`);
-      return res.json({ success: false, redirectURL: `/user/orderFailed/${orderId}` });
+      await redisClient.del(sessionKey);
+
+      return res.json({
+        success: false,
+        redirectURL: `/user/orderFailed/${orderId}`
+      });
     }
 
     const cart = await Cart.findOne({ userId: order.userId }).populate("items.productId");
+
     for (let item of cart.items) {
       const variant = item.productId.variants.find(
         v => v.size === item.size && v.color === item.color
       );
+
       if (!variant || variant.variantQuantity < item.quantity) {
-        await Order.updateOne(
-          { orderId },
-          { $set: { status: "cancelled", paymentStatus: "failed" } }
-        );
+        order.status = "failed";
+        order.paymentStatus = "captured_but_failed";
+        order.orderedItems.forEach(i => (i.status = "failed"));
+        await order.save();
+
         await redisClient.del(`payment_active:${orderId}`);
-        await redisClient.del(`payment_session:${order.paymentSessionId}`);
-        return res.json({ success: false, redirectURL: "/user/cart?error=OutOfStock" });
+        await redisClient.del(sessionKey);
+
+        return res.json({
+          success: false,
+          redirectURL: `/user/order/${orderId}?error=OUT_OF_STOCK_AFTER_PAYMENT`
+        });
       }
     }
 
-    order.paymentStatus = "completed";
     order.status = "confirmed";
+    order.paymentStatus = "completed";
     order.orderedItems.forEach(i => (i.status = "confirmed"));
     await order.save();
 
@@ -156,87 +185,59 @@ const verifyRazorpayPayment = async (req, res) => {
       );
     }
 
-    await Cart.updateOne({ userId: order.userId }, { $set: { items: [] } });
+    await Cart.updateOne(
+      { userId: order.userId },
+      { $set: { items: [] } }
+    );
 
     await redisClient.del(`payment_active:${orderId}`);
-    await redisClient.del(`payment_session:${order.paymentSessionId}`);
+    await redisClient.del(sessionKey);
 
     return res.json({
       success: true,
       redirectURL: `/user/orderSuccess/${order.orderId}`
     });
   } catch (error) {
-    console.log("Payment verification error:", error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-
-const getOrderFailedPage = async (req, res) => {
-  try {
-    const orderId = req.params.orderId;
-    const order = await Order.findOne({ orderId });
-    if (!order) return res.redirect("/user/order");
-    return res.render("user/orderFailed", { order });
-  } catch (error) {
-    console.log("Order failed page error:", error);
-    return res.redirect("/user/Page-404.ejs");
+    errorLogger.error("Payment verification error", error);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ 
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
 const retryPayment = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-
     const order = await Order.findOne({ orderId });
+
     if (!order) {
-      return res.status(400).json({ success: false, message: "Order not found" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+        success: false,
+        message: "Order not found"
+      });
     }
 
     if (order.paymentStatus !== "failed") {
-      return res.status(400).json({ success: false, message: "Payment already completed or retry not allowed" });
-    }
-
-    if (order.status === "cancelled") {
-      return res.status(400).json({ success: false, message: "Order is cancelled. Retry not allowed" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
+        success: false,
+        message: "Retry not allowed for this order"
+      });
     }
 
     await redisClient.del(`payment_active:${orderId}`);
-
     if (order.paymentSessionId) {
       await redisClient.del(`payment_session:${order.paymentSessionId}`);
     }
 
-    const cart = await Cart.findOne({ userId: order.userId }).populate("items.productId");
-    for (let item of cart.items) {
-      const variant = item.productId.variants.find(
-        v => v.size === item.size && v.color === item.color
-      );
-      if (!variant || variant.variantQuantity < item.quantity) {
-        await Order.updateOne(
-          { orderId },
-          { $set: { status: "cancelled", paymentStatus: "failed" } }
-        );
-        return res.json({ success: false, redirectURL: "/user/cart?error=OutOfStock" });
-      }
-    }
-
     const newPaymentSessionId = crypto.randomUUID();
 
-    await redisClient.setEx(
-      `payment_active:${orderId}`,
-      900,
-      newPaymentSessionId
-    );
-
-    await redisClient.setEx(
-      `payment_session:${newPaymentSessionId}`,
-      900,
-      "valid"
-    );
+    await redisClient.setEx(`payment_active:${orderId}`, 900, newPaymentSessionId);
+    await redisClient.setEx(`payment_session:${newPaymentSessionId}`, 900, "valid");
 
     order.paymentSessionId = newPaymentSessionId;
 
-    const amount = Math.round((order.payableAmount || order.payableTotal || 0) * 100);
+    const amount = Math.round((order.payableAmount || 0) * 100);
 
     const razorpayOrder = await razorpayInstance.orders.create({
       amount,
@@ -253,14 +254,29 @@ const retryPayment = async (req, res) => {
       redirectURL: `/user/online-payment/${orderId}`
     });
   } catch (err) {
-    console.log(err);
-    return res.json({ success: false, message: "Error processing retry request" });
+    errorLogger.error("Retry payment error", err); 
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Error processing retry request"
+    });
+  }
+};
+
+const getOrderFailedPage = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await Order.findOne({ orderId });
+    if (!order) return res.redirect("/user/order");
+    return res.render("user/orderFailed", { order });
+  } catch (error) {
+    errorLogger.error("Order failed page error", error); 
+    return res.redirect("/user/Page-404")
   }
 };
 
 module.exports = {
   loadOnlinePaymentPage,
   verifyRazorpayPayment,
-  getOrderFailedPage,
-  retryPayment
+  retryPayment,
+  getOrderFailedPage
 };
