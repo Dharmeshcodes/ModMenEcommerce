@@ -8,13 +8,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
   <!-- FontAwesome CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Cropper CSS (ADDED) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+
   <style>
     body { background-color: #f7f9fb; font-family: 'Segoe UI', Arial, sans-serif; }
     .img-upload-area { border: 2px dashed #dbeafe; border-radius: 10px; background-color: #f8fafc; text-align: center; padding: 32px 10px 24px 10px; cursor: pointer; transition: border-color 0.25s; position: relative; min-height: 140px; }
     .img-upload-area.dragover { border-color: #4f8cff; background: #eaf4ff; }
     .img-prev-holder { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 18px; }
-    .img-prev { width: 90px; height: 90px; border-radius: 7px; object-fit: cover; border: 1.5px solid #a1a1aa; box-shadow: 0 2px 10px rgba(0,0,0,0.07);}
-    .btn-primary { border-radius: 7px !important;}
+    .img-prev { width: 90px; height: 90px; border-radius: 7px; object-fit: cover; border: 1.5px solid #a1a1aa; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .btn-primary { border-radius: 7px !important; }
   </style>
 </head>
 <body>
@@ -55,7 +59,6 @@
                 <button type="button" class="btn btn-outline-primary mt-3" onclick="triggerImageInput()">Add Image</button>
               </div>
               <div id="imageError" class="text-danger small mt-1"></div>
-
             </div>
 
             <!-- Parent Category -->
@@ -68,7 +71,6 @@
                 <% }) %>
               </select>
               <div id="categoryError" class="text-danger small"></div>
-
             </div>
 
             <!-- Subcategory Name -->
@@ -77,7 +79,6 @@
               <input type="text" id="name" name="name" class="form-control" required
                 value="<%= typeof formData !== 'undefined' ? formData.name : '' %>" placeholder="e.g. Denim, Polo" />
                 <div id="nameError" class="text-danger small"></div>
-
             </div>
 
             <!-- Offer Percentage -->
@@ -93,7 +94,6 @@
                 value="<%= typeof formData !== 'undefined' && formData.offer && formData.offer.subcategoryOffer ? formData.offer.subcategoryOffer : '' %>"
                 placeholder="Discount... (optional)" />
                 <div id="offerPercentError" class="text-danger small"></div>
-
             </div>
 
             <!-- Max Redeem -->
@@ -102,14 +102,14 @@
               <input type="number" min="0" class="form-control" id="maxRedeem" name="offer[maxRedeem]"
                 value="<%= typeof formData !== 'undefined' && formData.offer ? formData.offer.maxRedeem : 0 %>" placeholder="Max redeem count (0 for unlimited)" />
               <div id="maxRedeemError" class="text-danger small"></div>
-
-              </div>
+            </div>
 
             <!-- Start Date -->
             <div class="mb-3">
               <label for="startDate" class="form-label fw-semibold">Start Date</label>
               <input type="date" class="form-control" id="startDate" name="offer[startDate]"
                 value="<%= typeof formData !== 'undefined' && formData.offer && formData.offer.startDate ? new Date(formData.offer.startDate).toISOString().slice(0,10) : '' %>" />
+              <div id="startDateError" class="text-danger small"></div>
             </div>
 
             <!-- Valid Until Date -->
@@ -117,6 +117,7 @@
               <label for="validUntil" class="form-label fw-semibold">Valid Until</label>
               <input type="date" class="form-control" id="validUntil" name="offer[validUntil]"
                 value="<%= typeof formData !== 'undefined' && formData.offer && formData.offer.validUntil ? new Date(formData.offer.validUntil).toISOString().slice(0,10) : '' %>" />
+              <div id="validUntilError" class="text-danger small"></div>
             </div>
 
             <!-- Listed / Unlisted -->
@@ -144,35 +145,71 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS Bundle -->
+  <!-- Cropper Modal (simple) -->
+  <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crop Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <img id="cropperImage" style="width:100%; max-height:520px; display:block;" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="cropBtn" class="btn btn-primary">Crop</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle (your existing) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <!-- FontAwesome -->
+  <!-- FontAwesome (your existing) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+  <!-- Cropper JS (ADDED; must come after Bootstrap) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <!-- ---------------------------
+       SCRIPT BLOCK #1 — ORIGINAL preview & validation (kept same)
+       --------------------------- -->
   <script>
     function triggerImageInput() {
       document.getElementById('imageInput').click();
     }
+
     const imgUploadDropzone = document.getElementById('imgUploadDropzone');
     const imageInput = document.getElementById('imageInput');
     const imgPreviews = document.getElementById('imgPreviews');
+
     imgUploadDropzone.addEventListener('click', function (e) {
       if (!e.target.closest('button')) imageInput.click();
     });
+
     imgUploadDropzone.addEventListener('dragover', e => {
       e.preventDefault();
       imgUploadDropzone.classList.add('dragover');
     });
+
     imgUploadDropzone.addEventListener('dragleave', e => {
       e.preventDefault();
       imgUploadDropzone.classList.remove('dragover');
     });
+
     imgUploadDropzone.addEventListener('drop', e => {
       e.preventDefault();
       imgUploadDropzone.classList.remove('dragover');
       imageInput.files = e.dataTransfer.files;
+      // DO NOT call raw showImagePreview directly here — cropper script will open modal.
+      // But keep behavior if cropper not present: call showImagePreview()
+      // We'll let the cropper logic detect the change and open modal.
       showImagePreview();
     });
+
     imageInput.addEventListener('change', showImagePreview);
+
     function showImagePreview() {
       imgPreviews.innerHTML = "";
       if (imageInput.files && imageInput.files.length) {
@@ -191,59 +228,189 @@
 
     document.querySelector("form").addEventListener("submit", function(e) {
 
-  document.getElementById("categoryError").innerText = "";
-  document.getElementById("nameError").innerText = "";
-  document.getElementById("offerPercentError").innerText = "";
-  document.getElementById("maxRedeemError").innerText = "";
-  document.getElementById("imageError").innerText = "";
+      document.getElementById("categoryError").innerText = "";
+      document.getElementById("nameError").innerText = "";
+      document.getElementById("offerPercentError").innerText = "";
+      document.getElementById("maxRedeemError").innerText = "";
+      document.getElementById("imageError").innerText = "";
+      document.getElementById("startDateError").innerText = "";
+      document.getElementById("validUntilError").innerText = "";
 
-  let isValid = true;
+      let isValid = true;
 
-  const category = document.getElementById("categoryId").value.trim();
-  if (category === "") {
-    document.getElementById("categoryError").innerText = "Please select a parent category.";
-    isValid = false;
-  }
+      const category = document.getElementById("categoryId").value.trim();
+      if (category === "") {
+        document.getElementById("categoryError").innerText = "Please select a parent category.";
+        isValid = false;
+      }
 
-  const name = document.getElementById("name").value.trim();
-  if (name.length < 3) {
-    document.getElementById("nameError").innerText = "Subcategory name must be at least 3 characters.";
-    isValid = false;
-  }
+      const name = document.getElementById("name").value.trim();
+      if (name.length < 3) {
+        document.getElementById("nameError").innerText = "Subcategory name must be at least 3 characters.";
+        isValid = false;
+      }
 
-  
-  const offerValue = document.getElementById("subcategoryOffer").value.trim();
-  if (offerValue !== "") {
-    const offerNum = Number(offerValue);
-    if (offerNum < 0 || offerNum > 99) {
-      document.getElementById("offerPercentError").innerText = "Offer must be between 0 and 99.";
-      isValid = false;
-    }
-  }
+      const offerValue = document.getElementById("subcategoryOffer").value.trim();
+      if (offerValue !== "") {
+        const offerNum = Number(offerValue);
+        if (offerNum < 0 || offerNum > 99) {
+          document.getElementById("offerPercentError").innerText = "Offer must be between 0 and 99.";
+          isValid = false;
+        }
+      }
 
- 
-  const maxRedeemValue = document.getElementById("maxRedeem").value.trim();
-  if (maxRedeemValue !== "") {
-    const maxRedeemNum = Number(maxRedeemValue);
-    if (maxRedeemNum < 0) {
-      document.getElementById("maxRedeemError").innerText = "Max redeem cannot be negative.";
-      isValid = false;
-    }
-  }
+      const maxRedeemValue = document.getElementById("maxRedeem").value.trim();
+      if (maxRedeemValue !== "") {
+        const maxRedeemNum = Number(maxRedeemValue);
+        if (maxRedeemNum < 0) {
+          document.getElementById("maxRedeemError").innerText = "Max redeem cannot be negative.";
+          isValid = false;
+        }
+      }
 
-  const imageInput = document.getElementById("imageInput");
-  if (imageInput.files.length > 0) {
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    const file = imageInput.files[0];
+      const imageInputEl = document.getElementById("imageInput");
+      if (imageInputEl.files.length > 0) {
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+        const file = imageInputEl.files[0];
 
-    if (!allowedTypes.includes(file.type)) {
-      document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG or WEBP files are allowed.";
-      isValid = false;
-    }
-  }
+        if (!allowedTypes.includes(file.type)) {
+          document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG or WEBP files are allowed.";
+          isValid = false;
+        }
+      }
 
-  if (!isValid) e.preventDefault();
-});
+      // DATE VALIDATION: start date should not be before today; validUntil should be >= start (if provided)
+      const today = new Date();
+      const tzOffset = today.getTimezoneOffset() * 60000;
+      const localISODate = (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('validUntil').value;
+
+      if (start && start < localISODate) {
+        document.getElementById('startDateError').innerText = "Start date cannot be earlier than today";
+        isValid = false;
+      }
+      if (end) {
+        if (start && end < start) {
+          document.getElementById('validUntilError').innerText = "End date cannot be earlier than start date";
+          isValid = false;
+        } else if (!start && end < localISODate) {
+          document.getElementById('validUntilError').innerText = "End date cannot be earlier than today";
+          isValid = false;
+        }
+      }
+
+      if (!isValid) e.preventDefault();
+    });
   </script>
+
+  <!-- ---------------------------
+       SCRIPT BLOCK #2 — CROPPER LOGIC (runs after original code)
+       --------------------------- -->
+  <script>
+    // Cropper logic — uses imageInput, imgUploadDropzone, showImagePreview defined above
+    let cropper = null;
+    const headerInput = document.getElementById("imageInput");
+    const cropperImage = document.getElementById("cropperImage");
+    const cropperModal = new bootstrap.Modal(document.getElementById("cropperModal"));
+
+    // When user selects a file, open cropper (immediately)
+    headerInput.addEventListener("change", function () {
+      if (headerInput.files && headerInput.files.length) {
+        openCropper(headerInput.files[0]);
+      }
+    });
+
+    // When user drops on dropzone, this handler already set in original script — but ensure if cropper should open
+    imgUploadDropzone.addEventListener("drop", function (e) {
+      // original drop already set showImagePreview — here we also open cropper
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+        const file = e.dataTransfer.files[0];
+        // ensure input.files already set by original drop handler
+        // open cropper for the dropped file
+        openCropper(file);
+      }
+    });
+
+    function openCropper(file) {
+      // validate image type quickly
+      if (!file.type || !file.type.startsWith('image/')) {
+        document.getElementById('imageError').innerText = 'Only image files are allowed';
+        return;
+      } else {
+        document.getElementById('imageError').innerText = '';
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        cropperImage.src = e.target.result;
+
+        // show modal
+        cropperModal.show();
+
+        // initialize cropper when modal shown
+        const onShown = function () {
+          if (cropper) {
+            try { cropper.destroy(); } catch (err) {}
+            cropper = null;
+          }
+          cropper = new Cropper(cropperImage, {
+            aspectRatio: 16 / 9,
+            viewMode: 1,
+            autoCropArea: 1
+          });
+          // remove listener so it doesn't stack
+          document.getElementById('cropperModal').removeEventListener('shown.bs.modal', onShown);
+        };
+        document.getElementById('cropperModal').addEventListener('shown.bs.modal', onShown);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Crop button -> replace file input with cropped blob and update preview
+    document.getElementById('cropBtn').addEventListener('click', async function () {
+      if (!cropper) {
+        cropperModal.hide();
+        return;
+      }
+      const canvas = cropper.getCroppedCanvas({
+        // If you want a fixed output size, define width/height here.
+        // width: 1280, height: 720
+      });
+
+      // toBlob can be async via Promise
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      if (!blob) {
+        cropperModal.hide();
+        try { cropper.destroy(); } catch (err) {}
+        cropper = null;
+        return;
+      }
+
+      // create file and set as input.files
+      const croppedFile = new File([blob], 'subcategory.jpg', { type: 'image/jpeg' });
+      const dt = new DataTransfer();
+      dt.items.add(croppedFile);
+      headerInput.files = dt.files;
+
+      // cleanup
+      try { cropper.destroy(); } catch (err) {}
+      cropper = null;
+      cropperModal.hide();
+
+      // update preview
+      showImagePreview();
+    });
+
+    // When modal hides without cropping, destroy cropper instance to free memory
+    document.getElementById('cropperModal').addEventListener('hidden.bs.modal', function () {
+      if (cropper) {
+        try { cropper.destroy(); } catch (err) {}
+        cropper = null;
+      }
+    });
+  </script>
+
 </body>
 </html>

@@ -12,80 +12,37 @@
     body { background:#f6f7fb; }
     .admin-page { min-height:100vh; }
     .content-area { padding:34px 28px; }
-
     .page-head { display:flex; justify-content:space-between; margin-bottom:18px; }
     .page-title { font-size:1.4rem; font-weight:600; }
     .breadcrumb-small { font-size:0.85rem; color:#777; }
-
     .search-wrap { position:relative; flex:1; max-width:560px; }
-    .search-wrap .form-control {
-      padding-left:40px; padding-right:40px;
-      height:42px; border-radius:10px; background:#fff;
-      font-size:0.85rem;
-    }
-    .search-icon {
-      position:absolute; left:12px; top:50%;
-      transform:translateY(-50%); color:#777; font-size:0.9rem;
-    }
-    .search-clear {
-      position:absolute; right:10px; top:50%;
-      transform:translateY(-50%); border:0; background:transparent;
-      color:#777; display:none; font-size:0.9rem;
-    }
-
-    .filter-btn {
-      height:42px; border-radius:10px; background:#fff;
-      border:1px solid #eee; padding:6px 12px; font-size:0.85rem;
-    }
-
-    .orders-card { background:#fff; border-radius:12px; padding:16px;
-      box-shadow:0 0 8px rgba(0,0,0,0.05); }
-
-    .orders-table thead th {
-      background:#000; color:#fff; padding:12px; font-size:0.82rem;
-    }
-    .orders-table tbody td {
-      padding:12px 10px; font-size:0.8rem;
-      vertical-align:middle;
-    }
-
-    .product-thumb {
-      width:45px; height:55px;
-      object-fit:cover; border-radius:6px;
-    }
-
-    .fw-semibold { font-size:0.82rem !important; }
-    .text-muted.small { font-size:0.7rem !important; }
-
-    .status-badge {
-      padding:4px 8px; border-radius:999px;
-      font-weight:600; font-size:0.7rem;
-    }
-
+    .search-wrap .form-control { padding-left:40px; padding-right:40px; height:42px; border-radius:10px; background:#fff; font-size:0.85rem; }
+    .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#777; font-size:0.9rem; }
+    .search-clear { position:absolute; right:10px; top:50%; transform:translateY(-50%); border:0; background:transparent; color:#777; display:none; font-size:0.9rem; }
+    .filter-btn { height:42px; border-radius:10px; background:#fff; border:1px solid #eee; padding:6px 12px; font-size:0.85rem; cursor:pointer; position:relative; }
+    .dropdown-menu { min-width:160px; }
+    .orders-card { background:#fff; border-radius:12px; padding:16px; box-shadow:0 0 8px rgba(0,0,0,0.05); }
+    .orders-table thead th { background:#000; color:#fff; padding:12px; font-size:0.82rem; }
+    .orders-table tbody td { padding:12px 10px; font-size:0.8rem; vertical-align:middle; }
+    .product-thumb { width:45px; height:55px; object-fit:cover; border-radius:6px; }
+    .status-badge { padding:4px 8px; border-radius:999px; font-weight:600; font-size:0.7rem; }
     .status-pending { background:#fff3e0; color:#ff9800; }
     .status-confirmed { background:#e8f4ff; color:#0b66ff; }
     .status-shipped { background:#eef9ff; color:#0288d1; }
     .status-out_for_delivery { background:#f3e9ff; color:#7b1fa2; }
     .status-delivered { background:#e7f9ee; color:#138000; }
     .status-cancelled { background:#ffecec; color:#e53935; }
-
-    .action-btn {
-      padding:5px 8px; border-radius:6px;
-      background:#fff; border:1px solid #eee;
-      font-size:0.75rem;
-    }
-
-    .orders-table tbody td:first-child a {
-      font-size:0.78rem;
-    }
+    .action-btn { padding:5px 8px; border-radius:6px; background:#fff; border:1px solid #eee; font-size:0.75rem; }
   </style>
 </head>
 
 <body>
 <div class="admin-page d-flex">
+
   <%- include('../partials/admin/sidebar') %>
 
   <div class="flex-grow-1">
+
     <%- include('../partials/admin/header') %>
 
     <main class="content-area">
@@ -113,9 +70,9 @@
             </button>
           </div>
 
-          <div class="filter-btn position-relative" id="filterWrapper">
+          <div id="filterWrapper" class="filter-btn">
             <i class="fa fa-filter me-2"></i> Filter
-            <div class="dropdown-menu p-2" id="filterMenu" style="min-width:160px;">
+            <div id="filterMenu" class="dropdown-menu p-2">
               <button class="dropdown-item" data-filter="">All</button>
               <button class="dropdown-item" data-filter="pending">Pending</button>
               <button class="dropdown-item" data-filter="confirmed">Confirmed</button>
@@ -147,16 +104,13 @@
 
           <tbody>
             <% if (!orders || orders.length === 0) { %>
-              <tr>
-                <td colspan="8" class="text-center text-muted py-5">No Orders Found</td>
-              </tr>
+              <tr><td colspan="8" class="text-center text-muted py-5">No Orders Found</td></tr>
             <% } else { orders.forEach(order => { %>
 
               <% 
                 const first = order.orderedItems[0];
                 const more = order.orderedItems.length - 1;
-                const dateObj = new Date(order.createdOn || order.createdAt);
-                const dateStr = dateObj.toLocaleDateString("en-GB", {
+                const dateStr = new Date(order.createdAt).toLocaleDateString("en-GB", {
                   day:"numeric", month:"short", year:"numeric"
                 });
               %>
@@ -169,23 +123,18 @@
                 </td>
 
                 <td>
-                  <div class="d-flex align-items-center gap-2 product-col">
+                  <div class="d-flex align-items-center gap-2">
                     <img src="<%= order.imageUrl %>" class="product-thumb">
-
                     <div>
                       <div class="fw-semibold"><%= first.productName %></div>
-                      <% if(more > 0) { %>
-                        <div class="text-muted small">+ <%= more %> more</div>
-                      <% } %>
+                      <% if(more > 0) { %><div class="text-muted small">+ <%= more %> more</div><% } %>
                     </div>
                   </div>
                 </td>
 
                 <td class="text-muted"><%= dateStr %></td>
 
-                <td>
-                  <div class="fw-semibold"><%= order.customerName %></div>
-                </td>
+                <td><div class="fw-semibold"><%= order.customerName %></div></td>
 
                 <td>₹<%= order.payableAmount %></td>
 
@@ -198,17 +147,13 @@
                 </td>
 
                 <td>
-                    <!-- VIEW ORDER DETAILS -->
-                    <a href="/admin/order/<%= order.orderId %>" class="action-btn me-2">
-                        <i class="fa fa-eye"></i>
-                    </a>
-
-                    <!-- UPDATE ORDER STATUS -->
-                    <button class="action-btn" onclick="changeStatus('<%= order.orderId %>')">
-                        <i class="fa fa-pen"></i>
-                    </button>
+                  <a href="/admin/order/<%= order.orderId %>" class="action-btn me-2">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <button class="action-btn" onclick="changeStatus('<%= order.orderId %>')">
+                    <i class="fa fa-pen"></i>
+                  </button>
                 </td>
-
               </tr>
 
             <% }) } %>
@@ -216,103 +161,93 @@
         </table>
 
         <div class="d-flex justify-content-between align-items-center mt-3">
+
           <div class="text-muted small">
             Showing <%= (currentPage-1)*limit+1 %>–
             <%= Math.min(currentPage*limit, totalOrders) %>
             of <%= totalOrders %>
           </div>
 
-          <div class="pagination-wrap d-flex align-items-center">
-
-            <% if(currentPage > 1){ %>
-              <a href="?page=<%= currentPage-1 %><%= search ? '&search='+search : '' %><%= status ? '&status='+status : '' %>" class="btn btn-light btn-sm">
-                <i class="fa fa-chevron-left"></i>
-              </a>
-            <% } %>
-
+          <ul class="pagination m-0">
             <% for(let p=1; p<=totalPages; p++){ %>
-              <% if(p === currentPage){ %>
-                <span class="btn btn-dark btn-sm"><%= p %></span>
-              <% } else { %>
-                <a href="?page=<%= p %><%= search ? '&search='+search : '' %><%= status ? '&status='+status: '' %>" class="btn btn-outline-dark btn-sm"><%= p %></a>
-              <% } %>
+              <li class="page-item <%= p === currentPage ? 'active' : '' %>">
+                <a href="javascript:void(0)" class="page-link" onclick="loadPage(<%= p %>)"><%= p %></a>
+              </li>
             <% } %>
+          </ul>
 
-            <% if(currentPage < totalPages){ %>
-              <a href="?page=<%= currentPage+1 %><%= search ? '&search='+search : '' %><%= status ? '&status='+status : '' %>" class="btn btn-light btn-sm">
-                <i class="fa fa-chevron-right"></i>
-              </a>
-            <% } %>
-
-          </div>
         </div>
+
       </div>
     </main>
+
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+<!-- SEARCH + FILTER + PAGINATION SCRIPT -->
 <script>
-  const searchInput=document.getElementById("searchInput");
-  const clearBtn=document.getElementById("clearSearch");
+document.addEventListener("DOMContentLoaded", () => {
 
-  function updateClearBtn(){
-    clearBtn.style.display=searchInput.value.trim() ? "block" : "none";
+  const searchInput = document.getElementById("searchInput");
+  const clearSearch = document.getElementById("clearSearch");
+  const filterMenu = document.getElementById("filterMenu");
+  const filterWrapper = document.getElementById("filterWrapper");
+
+  let currentStatus = "<%= status || '' %>";
+
+  function loadOrders(page = 1) {
+    let url = `/admin/orders?page=${page}`;
+
+    if (searchInput.value.trim())
+      url += `&search=${encodeURIComponent(searchInput.value.trim())}`;
+
+    if (currentStatus)
+      url += `&status=${encodeURIComponent(currentStatus)}`;
+
+    window.location.href = url;
   }
-  updateClearBtn();
 
-  searchInput.addEventListener("input",updateClearBtn);
+  window.loadPage = function (page) {
+    loadOrders(page);
+  };
 
-  searchInput.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){
-      const val=searchInput.value.trim();
-      const url=new URL(window.location.href);
-
-      if(val) url.searchParams.set("search",val);
-      else url.searchParams.delete("search");
-
-      url.searchParams.delete("page");
-      window.location.href=url.toString();
+  searchInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      loadOrders(1);
     }
   });
 
-  clearBtn.addEventListener("click",()=>{
-    const url=new URL(window.location.href);
-    url.searchParams.delete("search");
-    url.searchParams.delete("page");
-
-    searchInput.value="";
-    window.location.href=url.toString();
+  searchInput.addEventListener("input", () => {
+    clearSearch.style.display = searchInput.value.trim() ? "block" : "none";
   });
 
-  const filterMenu=document.getElementById("filterMenu");
-  const filterWrapper=document.getElementById("filterWrapper");
+  clearSearch.addEventListener("click", () => {
+    searchInput.value = "";
+    loadOrders(1);
+  });
 
-  filterWrapper.addEventListener("click",()=>{
+  filterWrapper.addEventListener("click", () => {
     filterMenu.classList.toggle("show");
   });
 
-  filterMenu.querySelectorAll(".dropdown-item").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const filter=btn.dataset.filter;
-      const url=new URL(window.location.href);
-
-      if(filter) url.searchParams.set("status",filter);
-      else url.searchParams.delete("status");
-
-      url.searchParams.delete("page");
-      window.location.href=url.toString();
+  filterMenu.querySelectorAll(".dropdown-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentStatus = btn.dataset.filter;
+      loadOrders(1);
     });
   });
 
-  document.addEventListener("click",e=>{
-    if(!filterWrapper.contains(e.target)){
+  document.addEventListener("click", e => {
+    if (!filterWrapper.contains(e.target))
       filterMenu.classList.remove("show");
-    }
   });
 
-  async function changeStatus(orderId) {
+});
+
+async function changeStatus(orderId) {
   const { value: status } = await Swal.fire({
     title: "Update Order Status",
     input: "select",
@@ -339,18 +274,12 @@
   const data = await res.json();
 
   if (data.success) {
-    Swal.fire("Success", "Order status updated", "success")
-      .then(() => location.reload());
+    Swal.fire("Success", "Order status updated", "success").then(() => location.reload());
   } else {
     Swal.fire("Error", data.msg || "Update failed", "error");
   }
 }
-
-
-
-
-
-
 </script>
+
 </body>
 </html>

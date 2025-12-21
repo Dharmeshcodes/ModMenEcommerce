@@ -160,15 +160,21 @@
               <i class="fas fa-filter"></i> Filters
             </button>
             <div class="filter-pop" id="filterPop">
-              <button class="btn<%= (!status || status==='all') ? ' active' : '' %>" onclick="window.location.href='?status=all'">
-                <i class="fas fa-list-ul me-1"></i> All
-              </button>
-              <button class="btn<%= (status==='active') ? ' active' : '' %>" onclick="window.location.href='?status=active'">
-                <i class="fas fa-check-circle me-1"></i> Active
-              </button>
-              <button class="btn<%= (status==='blocked') ? ' active' : '' %>" onclick="window.location.href='?status=blocked'">
-                <i class="fas fa-ban me-1"></i> Blocked
-              </button>
+             <button class="btn<%= (!status || status==='all') ? ' active' : '' %>"
+                    onclick="changeFilter('all')">
+              <i class="fas fa-list-ul me-1"></i> All
+            </button>
+
+            <button class="btn<%= (status==='active') ? ' active' : '' %>"
+                    onclick="changeFilter('active')">
+              <i class="fas fa-check-circle me-1"></i> Active
+            </button>
+
+            <button class="btn<%= (status==='blocked') ? ' active' : '' %>"
+                    onclick="changeFilter('blocked')">
+              <i class="fas fa-ban me-1"></i> Blocked
+            </button>
+
             </div>
           </div>
         </div>
@@ -255,86 +261,103 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    const searchInput = document.getElementById('customerSearchInput');
-    const searchActions = document.getElementById('searchActions');
-    const searchBtn = document.getElementById('searchBtn');
-    const clearBtn = document.getElementById('clearSearchBtn');
+ <script>
+const searchInput = document.getElementById('customerSearchInput');
+const searchActions = document.getElementById('searchActions');
+const searchBtn = document.getElementById('searchBtn');
+const clearBtn = document.getElementById('clearSearchBtn');
 
-    if(searchInput) {
-      searchInput.addEventListener('input', function() {
-        if(this.value.trim()) {
-          searchActions.classList.add('show');
-        } else {
-          searchActions.classList.remove('show');
-        }
-      });
+function buildUrl(params = {}) {
+  const url = new URL(window.location.origin + "/admin/customers");
 
-      searchInput.addEventListener('keypress', function(e) {
-        if(e.key === 'Enter' && this.value.trim()) {
-          performSearch();
-        }
-      });
+  if (searchInput.value.trim()) {
+    url.searchParams.set("search", searchInput.value.trim());
+  }
 
-      searchBtn.addEventListener('click', performSearch);
+  if ("<%= status %>" && "<%= status %>" !== "all") {
+    url.searchParams.set("status", "<%= status %>");
+  }
 
-      clearBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        searchActions.classList.remove('show');
-        window.location.href = '?<%= status ? "status=" + status : "" %>';
-      });
+  Object.keys(params).forEach(key => {
+    url.searchParams.set(key, params[key]);
+  });
 
-      if(searchInput.value.trim()) {
-        searchActions.classList.add('show');
-      }
+  return url.toString();
+}
+
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    searchActions.classList.toggle("show", searchInput.value.trim() !== "");
+  });
+
+  searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" && searchInput.value.trim()) {
+      window.location.href = buildUrl();
     }
+  });
 
-    function performSearch() {
-      const searchValue = searchInput.value.trim();
-      if(searchValue) {
-        window.location.href = `?search=${encodeURIComponent(searchValue)}<%= status ? "&status=" + status : "" %>`;
-      }
+  searchBtn.addEventListener("click", () => {
+    if (searchInput.value.trim()) {
+      window.location.href = buildUrl();
     }
+  });
 
-    const filterBtn = document.getElementById('filterToggleBtn');
-    const filterPop = document.getElementById('filterPop');
-    if(filterBtn && filterPop) {
-      filterBtn.addEventListener('click', function(e) {
-        filterPop.classList.toggle('show');
-        e.stopPropagation();
-      });
-      document.body.addEventListener('click', function () {
-        filterPop.classList.remove('show');
-      });
-      filterPop.addEventListener('click', function(e) { e.stopPropagation(); });
-    }
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    searchActions.classList.remove("show");
+    window.location.href = buildUrl({ search: "", page: 1 });
+  });
 
-    function toggleBlockButton(btn, userId, isBlockedInitial) {
-      btn.classList.toggle('active');
-      let willBlock = !isBlockedInitial;
-      let action = willBlock ? "block" : "unblock";
-      Swal.fire({
-        title: `Are you sure you want to ${action} this customer?`,
-        icon: willBlock ? "warning" : "success",
-        showCancelButton: true,
-        confirmButtonText: `Yes, ${action}`,
-        cancelButtonText: "Cancel"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(`/admin/${action}Customer?id=${userId}`)
-            .then(res => res.json())
-            .then(data => {
-              Swal.fire(
-                data.success ? "Success!" : "Error!",
-                data.message || "Updated",
-                data.success ? "success" : "error"
-              ).then(() => location.reload());
-            });
-        } else {
-          btn.classList.toggle('active');
-        }
-      });
+  if (searchInput.value.trim()) {
+    searchActions.classList.add("show");
+  }
+}
+
+const filterBtn = document.getElementById("filterToggleBtn");
+const filterPop = document.getElementById("filterPop");
+
+if (filterBtn && filterPop) {
+  filterBtn.addEventListener("click", (e) => {
+    filterPop.classList.toggle("show");
+    e.stopPropagation();
+  });
+
+  document.body.addEventListener("click", () => filterPop.classList.remove("show"));
+  filterPop.addEventListener("click", (e) => e.stopPropagation());
+}
+
+window.changeFilter = function(statusType) {
+  window.location.href = buildUrl({ status: statusType });
+};
+
+function toggleBlockButton(btn, userId, isBlockedInitial) {
+  btn.classList.toggle("active");
+  let willBlock = !isBlockedInitial;
+  let action = willBlock ? "block" : "unblock";
+
+  Swal.fire({
+    title: `Are you sure you want to ${action} this customer?`,
+    icon: willBlock ? "warning" : "success",
+    showCancelButton: true,
+    confirmButtonText: `Yes, ${action}`,
+    cancelButtonText: "Cancel"
+  }).then((r) => {
+    if (r.isConfirmed) {
+      fetch(`/admin/${action}Customer?id=${userId}`)
+        .then(res => res.json())
+        .then(data => {
+          Swal.fire(
+            data.success ? "Success!" : "Error!",
+            data.message,
+            data.success ? "success" : "error"
+          ).then(() => location.reload());
+        });
+    } else {
+      btn.classList.toggle("active");
     }
-  </script>
+  });
+}
+</script>
+
 </body>
 </html>

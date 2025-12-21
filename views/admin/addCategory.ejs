@@ -1,11 +1,14 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add Category</title>
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -30,199 +33,262 @@
     }
     .header-image-upload.dragover { border-color: #7b72ff; background: #f1f1fa; }
     #headerImage { display: none; }
-    .add-image-label { cursor: pointer; color: #7b72ff; font-weight: 500; }
     #image-placeholder { font-size: 1rem; color: #888; margin-bottom: 6px; }
     .img-preview { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 8px #e2e2e2; }
-    .flash-message { margin-bottom: 16px; padding: 14px 28px; border-radius: 7px; font-weight: 500; font-size: 1rem; animation: fade-in 0.5s; }
-    .message-success { background: #e1f7dd; color: #186b3b; border: 1px solid #7dde91; }
-    .message-error { background: #ffeaea; color: #c3000b; border: 1px solid #ffa3a3; }
-    @media (max-width:900px) { .category-card { padding: 32px 10px; } .content-wrapper { padding-left: 12px; } }
-    @media (max-width:600px) { .category-card { min-width: unset; } }
   </style>
 </head>
-<body>
-  <div class="layout-container">
-    <%- include('../partials/admin/sidebar') %>
-    <div class="main-content">
-      <%- include('../partials/admin/header') %>
-      <div class="content-wrapper">
-        <h2 class="form-title fw-bold mb-4">ADD A CATEGORY</h2>
-        
-        <% if (messages && (messages.success_msg || messages.error_msg)) { %>
-          <% if (messages.success_msg) { %>
-            <div class="flash-message message-success"><%= messages.success_msg %></div>
-          <% } %>
-          <% if (messages.error_msg) { %>
-            <div class="flash-message message-error"><%= messages.error_msg %></div>
-          <% } %>
-        <% } %>
-        
-        <form novalidate action="/admin/addCategory" method="POST" enctype="multipart/form-data" autocomplete="off" class="category-card">
-          <!-- Header Image Upload -->
-          <div id="imageUploadZone" class="header-image-upload" tabindex="0">
-            <div id="previewHolder"></div>
-            <span id="image-placeholder">Drag and drop an image, or click "Add Image"</span>
-            <input type="file" name="categoryImage" id="headerImage" accept="image/*"/>
-            <div class="text-danger small mt-1" id="imageError"></div>
-            <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="triggerImageBtn">Add Image</button>
-          </div>
-          <!-- Category Name -->
-          <div class="mb-3">
-            <label class="form-label">Category Name</label>
-            <input type="text" class="form-control" name="name" id="name" required placeholder="Type category name here..." autocomplete="off"/>
-            <div class="text-danger small" id="nameError"></div>
-          </div>
-          <!-- Description -->
-          <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" rows="4" name="description" id ="description" required placeholder="Type category description here..." autocomplete="off"></textarea>
-            <div class="text-danger small" id="descriptionError"></div>
 
+<body>
+<div class="layout-container">
+  <%- include('../partials/admin/sidebar') %>
+  <div class="main-content">
+    <%- include('../partials/admin/header') %>
+    <div class="content-wrapper">
+
+      <% const data = typeof formData !== 'undefined' ? formData : {}; %>
+
+      <h2 class="form-title fw-bold mb-4">ADD A CATEGORY</h2>
+
+      <% if (messages && messages.error_msg) { %>
+  <div class="alert alert-danger py-2 mb-3 d-flex align-items-center" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <div><%= messages.error_msg %></div>
+  </div>
+<% } %>
+
+<% if (messages && messages.success_msg) { %>
+  <div class="alert alert-success py-2 mb-3 d-flex align-items-center" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <div><%= messages.success_msg %></div>
+  </div>
+<% } %>
+
+
+      <form novalidate action="/admin/addCategory" method="POST" enctype="multipart/form-data" autocomplete="off" class="category-card">
+
+        <div id="imageUploadZone" class="header-image-upload" tabindex="0">
+          <div id="previewHolder"></div>
+          <span id="image-placeholder">Drag and drop an image, or click "Add Image"</span>
+          <input type="file" name="categoryImage" id="headerImage" accept="image/*"/>
+          <div class="text-danger small mt-1" id="imageError"></div>
+          <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="triggerImageBtn">Add Image</button>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Category Name</label>
+          <input type="text" class="form-control" name="name" id="name"
+                 value="<%= data.name || '' %>"/>
+          <div class="text-danger small" id="nameError"></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="4" name="description" id="description"><%= data.description || '' %></textarea>
+          <div class="text-danger small" id="descriptionError"></div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Category Offer (%)</label>
+            <input type="number" class="form-control" name="offer[offerPercentage]" id="offer[offerPercentage]"
+                   value="<%= data.offer ? data.offer.offerPercentage : '' %>"/>
+            <div class="text-danger small" id="offerPercentError"></div>
           </div>
-          <!-- Offer -->
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Category Offer (%)</label>
-              <input type="number" min="0" max="99" step="1" class="form-control" name="offer[offerPercentage]" id="offer[offerPercentage]" placeholder="%" autocomplete="off"/>
-              <div class="text-danger small" id="offerPercentError"></div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Max Redeemable</label>
-              <input type="number" min="0" class="form-control" name="offer[maxRedeem]" id="offer[maxRedeem]" placeholder="₹" autocomplete="off"/>
-              <div class="text-danger small" id="maxRedeemError"></div>
-            </div>
+          <div class="col-md-6">
+            <label class="form-label">Max Redeemable</label>
+            <input type="number" class="form-control" name="offer[maxRedeem]" id="offer[maxRedeem]"
+                   value="<%= data.offer ? data.offer.maxRedeem : '' %>"/>
+            <div class="text-danger small" id="maxRedeemError"></div>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Offer Start Date</label>
-              <input type="date" class="form-control" name="offer[startDate]" autocomplete="off"/>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Valid Until</label>
-              <input type="date" class="form-control" name="offer[validUntil]" autocomplete="off"/>
-            </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Offer Start Date</label>
+            <input type="date" class="form-control" id="startDate" name="offer[startDate]"
+                   value="<%= data.offer && data.offer.startDate ? data.offer.startDate : '' %>"/>
+            <div class="text-danger small" id="startDateError"></div>
           </div>
-          <!-- Listed / Unlisted -->
-          <div class="mb-3">
-            <label class="form-label fw-bold me-2">Should be</label>
-            <input type="radio" id="listed" name="isListed" value="true" checked/>
-            <label for="listed">Listed</label>
-            <input type="radio" id="unlisted" name="isListed" value="false"/>
-            <label for="unlisted">Unlisted</label>
+          <div class="col-md-6">
+            <label class="form-label">Valid Until</label>
+            <input type="date" class="form-control" id="validUntil" name="offer[validUntil]"
+                   value="<%= data.offer && data.offer.validUntil ? data.offer.validUntil : '' %>"/>
+            <div class="text-danger small" id="validUntilError"></div>
           </div>
-          <div class="d-flex gap-3 justify-content-end">
-            <button type="submit" class="btn btn-dark fw-semibold">Add Category</button>
-            <a href="/admin/category" class="btn btn-outline-secondary fw-semibold">Back</a>
-          </div>
-        </form>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Should be</label>
+          <input type="radio" id="listed" name="isListed" value="true"
+                 <%= !data.isListed || data.isListed === "true" ? 'checked' : '' %>/> Listed
+          <input type="radio" id="unlisted" name="isListed" value="false"
+                 <%= data.isListed === "false" ? 'checked' : '' %>/> Unlisted
+        </div>
+
+        <div class="d-flex gap-3 justify-content-end">
+          <button type="submit" class="btn btn-dark">Add Category</button>
+          <a href="/admin/category" class="btn btn-outline-secondary">Back</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- CROP MODAL -->
+<div class="modal fade" id="cropperModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Crop Image</h5></div>
+      <div class="modal-body">
+        <img id="cropperImage" style="width:100%; max-height:500px;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cropBtn" class="btn btn-primary">Crop</button>
       </div>
     </div>
   </div>
-  <script>
-    // Trigger file input when button clicked
-    document.getElementById('triggerImageBtn').onclick = function() {
-      document.getElementById('headerImage').click();
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<script>
+document.getElementById('triggerImageBtn').onclick = () => document.getElementById('headerImage').click();
+
+const dropZone = document.getElementById('imageUploadZone');
+
+dropZone.addEventListener('click', function(e) {
+  if (!e.target.closest('button')) document.getElementById('headerImage').click();
+});
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+
+document.getElementById('headerImage').addEventListener('change', showImagePreview);
+
+function showImagePreview() {
+  const previewHolder = document.getElementById('previewHolder');
+  previewHolder.innerHTML = '';
+  const input = document.getElementById('headerImage');
+
+  if (input.files && input.files.length) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'img-preview';
+      previewHolder.appendChild(img);
     };
-    // Click anywhere on dropzone except button triggers file input
-    document.getElementById('imageUploadZone').addEventListener('click', function(e) {
-      if (!e.target.closest('button')) document.getElementById('headerImage').click();
-    });
-    const dropZone = document.getElementById('imageUploadZone');
-    dropZone.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      dropZone.classList.add('dragover');
-    });
-    dropZone.addEventListener('dragleave', function(e) {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-    });
-    dropZone.addEventListener('drop', function(e) {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
-      document.getElementById('headerImage').files = e.dataTransfer.files;
-      showImagePreview();
-    });
-    document.getElementById('headerImage').addEventListener('change', showImagePreview);
-    function showImagePreview() {
-      const previewHolder = document.getElementById('previewHolder');
-      previewHolder.innerHTML = '';
-      const input = document.getElementById('headerImage');
-      if (input.files && input.files.length) {
-        Array.from(input.files).forEach(file => {
-          if (!file.type.startsWith('image/')) return;
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'img-preview';
-            previewHolder.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        });
-        document.getElementById('image-placeholder').style.display = 'none';
-      } else {
-        document.getElementById('image-placeholder').style.display = '';
-      }
-    }
+    reader.readAsDataURL(input.files[0]);
+    document.getElementById('image-placeholder').style.display = 'none';
+  }
+}
 
 document.querySelector("form").addEventListener("submit", function(e) {
-
   document.getElementById("nameError").innerText = "";
   document.getElementById("descriptionError").innerText = "";
   document.getElementById("offerPercentError").innerText = "";
   document.getElementById("maxRedeemError").innerText = "";
   document.getElementById("imageError").innerText = "";
+  document.getElementById("startDateError").innerText = "";
+  document.getElementById("validUntilError").innerText = "";
 
   let isValid = true;
 
-
-  const name = document.getElementById("name").value.trim();
-  if (name.length < 3) {
+  if (document.getElementById("name").value.trim().length < 3) {
     document.getElementById("nameError").innerText = "Category name must be at least 3 characters";
     isValid = false;
   }
 
-
-  const description = document.getElementById("description").value.trim();
-  if (!description) {
-    document.getElementById("descriptionError").innerText = "Category description is required";
+  if (!document.getElementById("description").value.trim()) {
+    document.getElementById("descriptionError").innerText = "Description required";
     isValid = false;
   }
 
-  const offerPercentage = document.getElementById("offer[offerPercentage]").value;
-  if (offerPercentage !== "" && (offerPercentage < 0 || offerPercentage > 99)) {
-    document.getElementById("offerPercentError").innerText = "Offer must be between 0 and 99";
-    isValid = false;
-  }
-
-
-  const maxRedeem = document.getElementById("offer[maxRedeem]").value;
-  if (maxRedeem !== "" && maxRedeem < 0) {
-    document.getElementById("maxRedeemError").innerText = "Max redeem cannot be negative";
-    isValid = false;
-  }
-
- 
-  const imageElement = document.getElementById("headerImage");
-  const files = imageElement.files;
-
-  if (files.length === 0) {
+  if (!document.getElementById("headerImage").files.length) {
     document.getElementById("imageError").innerText = "Please upload an image";
     isValid = false;
-  } else {
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    const file = files[0];
-
-    if (!allowedTypes.includes(file.type)) {
-      document.getElementById("imageError").innerText = "Only JPG, JPEG, PNG or WEBP files are allowed";
-      isValid = false;
-    }
   }
 
+  const today = new Date();
+  const tzOffset = today.getTimezoneOffset() * 60000;
+  const minDate = new Date(Date.now() - tzOffset).toISOString().split("T")[0];
+
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("validUntil").value;
+
+  if (start && start < minDate) {
+    document.getElementById("startDateError").innerText = "Start date cannot be earlier than today";
+    isValid = false;
+  }
+
+  if (start && end && end < start) {
+    document.getElementById("validUntilError").innerText = "End date cannot be earlier than start date";
+    isValid = false;
+  }
+
+  if (!start && end && end < minDate) {
+    document.getElementById("validUntilError").innerText = "End date cannot be earlier than today";
+    isValid = false;
+  }
 
   if (!isValid) e.preventDefault();
 });
-    
-  </script>
+</script>
+
+<script>
+let cropper;
+const headerInput = document.getElementById("headerImage");
+const cropperImage = document.getElementById("cropperImage");
+const cropperModal = new bootstrap.Modal(document.getElementById("cropperModal"));
+
+headerInput.addEventListener("change", () => {
+  if (headerInput.files.length) openCropper(headerInput.files[0]);
+});
+
+dropZone.addEventListener("drop", function (e) {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+
+  if (e.dataTransfer.files.length > 0) {
+    const file = e.dataTransfer.files[0];
+    headerInput.files = e.dataTransfer.files;
+    openCropper(file);
+  }
+});
+
+function openCropper(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    cropperImage.src = e.target.result;
+    cropperModal.show();
+
+    setTimeout(() => {
+      if (cropper) cropper.destroy();
+      cropper = new Cropper(cropperImage, {
+        aspectRatio: 16 / 9,
+        viewMode: 1,
+      });
+    }, 200);
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById("cropBtn").addEventListener("click", async () => {
+  const canvas = cropper.getCroppedCanvas();
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+
+  const croppedFile = new File([blob], "cropped.jpg", { type: "image/jpeg" });
+  const dt = new DataTransfer();
+  dt.items.add(croppedFile);
+  headerInput.files = dt.files;
+
+  cropper.destroy();
+  cropperModal.hide();
+  showImagePreview();
+});
+</script>
+
 </body>
 </html>

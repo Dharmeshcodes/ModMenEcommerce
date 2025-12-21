@@ -1,71 +1,64 @@
-const User = require('../../models/userSchema');
-const Address= require('../../models/adressSchema');
-const bcrypt = require('bcrypt');
-const validator = require('validator');
-const nodemailer = require('nodemailer');
-const env = require('dotenv').config();
-const { apiLogger, errorLogger } = require('../../config/logger');
+const User = require('../../models/userSchema'); 
+const Address = require('../../models/adressSchema');
+const HTTP_STATUS = require("../../constans/httpStatus");
+const { apiLogger, errorLogger } = require('../../config/logger')
 
-const getAddress=async (req, res) => {
+const getAddress = async (req, res) => {
   try {
-    const user= req.session.user;
-    let userData=null;
-     userData=await User.findById(user._id);
-   
+    const user = req.session.user;
+    let userData = null;
+    userData = await User.findById(user._id);
 
     const page = parseInt(req.query.page) || 1;    
     const limit = 4;                                
     const skip = (page - 1) * limit;
 
-    let addressDoc = await Address.findOne({userId:user._id });
+    let addressDoc = await Address.findOne({ userId: user._id });
 
     if (!addressDoc) {
       return res.render('user/address', {
         addresses: [],
         currentPage: page,
         totalPages: 0,
-        user:userData
+        user: userData
       });
     }
 
     const totalAddresses = addressDoc.address.length;
     const totalPages = Math.ceil(totalAddresses / limit);
-
     const paginatedAddresses = addressDoc.address.slice(skip, skip + limit);
 
     res.render('user/address', {
       addresses: paginatedAddresses,
       currentPage: page,
       totalPages: totalPages,
-      user:userData
+      user: userData
     });
 
   } catch (error) {
-    console.log('Address Pagination Error:', error);
-    res.status(500).send('Something went wrong');
+    errorLogger.error('Address Pagination Error', error); 
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send('Something went wrong'); 
   }
 };
 
-const getAddAddress=async (req, res, next) => {
+const getAddAddress = async (req, res, next) => {
   try {
-    let userData=null;
-    const user= req.session.user;
-    console.log("bug finding 1",req.session.user)
-    console.log("bug finding 2",user)
+    let userData = null;
+    const user = req.session.user;
+
     if (!user) {
       req.flash('error_msg', 'You need to be logged in');
       return res.redirect('/user/login');
     }
-     userData = await User.findById(user._id);
-     console.log("bugfinding3",user)
-  
+
+    userData = await User.findById(user._id);
     const userAddress = await Address.findOne({ userId: userData._id });
     const addresses = userAddress ? userAddress.address : [];
-    console.log("the user is",user)
+
     res.render('user/addAddress', {
       user: userData,
       addresses: addresses,
-      formData:req.body || null
+      formData: req.body || null
     });
   } catch (error) {
     next(error);
@@ -74,7 +67,6 @@ const getAddAddress=async (req, res, next) => {
 
 const postAddAddress = async (req, res, next) => {
   try {
-    
     const user = req.session.user;
     if (!user) {
       req.flash('error_msg', 'You need to be logged in');
@@ -84,7 +76,6 @@ const postAddAddress = async (req, res, next) => {
     const userData = await User.findById(user._id);
 
     const { fullName, houseNo, landMark, district, state, city, pincode, phone } = req.body;
-    
     let isDefault = req.body.isDefault === 'true';
 
     if (!fullName || !houseNo || !landMark || !district || !state || !city || !pincode) {
@@ -124,12 +115,11 @@ const postAddAddress = async (req, res, next) => {
     }
 
     if (req.xhr || req.headers["content-type"] === "application/json") {
-          return res.json({ success: true });
-        }
+      return res.json({ success: true });
+    }
 
-        // If normal form submit → redirect
-        req.flash('success_msg', 'Address added successfully');
-        return res.redirect('/user/address');
+    req.flash('success_msg', 'Address added successfully');
+    return res.redirect('/user/address');
 
   } catch (error) {
     next(error);
@@ -139,8 +129,8 @@ const postAddAddress = async (req, res, next) => {
 const getUpdateAddress = async (req, res, next) => {
   try {
     const user = req.session.user;
-    
     const { addressId } = req.params;
+
     const userData = await User.findById(user._id);
     const userAddress = await Address.findOne({ userId: user._id });
 
@@ -159,7 +149,7 @@ const getUpdateAddress = async (req, res, next) => {
       user: userData,
       address
     });
-    
+
   } catch (err) {
     next(err);
   }
@@ -230,24 +220,31 @@ const deleteAddress = async (req, res, next) => {
   try {
     const user = req.session.user;
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Unauthorized' });
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+        success: false,
+        message: 'Unauthorized'
+      });
     }
 
     const addressId = req.params.addressId;
     const userAddress = await Address.findOne({ userId: user._id });
 
     if (!userAddress) {
-      return res.status(404).json({ success: false, message: 'Address record not found' });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ 
+        success: false,
+        message: 'Address record not found'
+      });
     }
 
     const index = userAddress.address.findIndex(a => a._id.toString() === addressId);
-
     if (index === -1) {
-      return res.status(404).json({ success: false, message: 'Address not found' });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ 
+        success: false,
+        message: 'Address not found'
+      });
     }
 
     const wasDefault = userAddress.address[index].isDefault;
-
     userAddress.address.splice(index, 1);
 
     if (wasDefault && userAddress.address.length > 0) {
@@ -264,14 +261,13 @@ const deleteAddress = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  
 };
 
-module.exports={
-    getAddress,
-    getAddAddress,
-    postAddAddress,
-    getUpdateAddress,
-    updateAddress,
-    deleteAddress,
+module.exports = {
+  getAddress,
+  getAddAddress,
+  postAddAddress,
+  getUpdateAddress,
+  updateAddress,
+  deleteAddress,
 };

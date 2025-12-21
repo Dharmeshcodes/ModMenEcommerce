@@ -4,9 +4,14 @@ const Subcategory = require('../../models/subcategorySchema');
 const User = require('../../models/userSchema');
 const fs = require('fs');
 const path = require('path');
-const sharp = require('sharp');
+
 const mongoose = require('mongoose');
 const { calculateBestPrice } = require('../../utils/offerUtils');
+const { getSalePrice } = require('../../utils/offerUtils');
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
+
 
 const getProducts = async (req, res) => {
   const limit = 6;
@@ -71,13 +76,6 @@ const getProducts = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-      // let sum=0
-      // products.forEach(product=>{
-
-      //   sum=sum+product.varients.varientPrice
-      //   console.log(sum)
-
-      // })
 
     const categories = await Category.find({ isListed: true });
 
@@ -414,8 +412,8 @@ const updateProduct = async (req, res) => {
       }
     }
 
-    if (finalImages.length < 4) {
-      req.flash('error_msg', 'Minimum 4 images required');
+    if (finalImages.length < 1) {
+      req.flash('error_msg', 'Minimum 1 images required');
       return res.redirect(`/admin/updateProduct/${productId}`);
     }
 
@@ -478,11 +476,13 @@ const softDeleteProduct = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
-
- const addOffer = async (req, res) => {
+const addOffer = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
+    const id = req.params.id;
+    const offerPercentage = req.body.offerPercentage;
+    const maxRedeem = req.body.maxRedeem;
+    const startDate = req.body.startDate;
+    const validUntil = req.body.validUntil;
 
     const product = await Product.findById(id);
     if (!product) {
@@ -498,18 +498,43 @@ const softDeleteProduct = async (req, res) => {
     product.offer.startDate = new Date(startDate);
     product.offer.validUntil = new Date(validUntil);
 
+    const category = await Category.findById(product.categoryId);
+    let subcat = null;
+    if (product.subCategoryId) {
+      subcat = await Subcategory.findById(product.subCategoryId);
+    }
+
+    for (const variant of product.variants) {
+      const offerData = getSalePrice(
+        variant.variantPrice,
+        category ? category.offer : null,
+        subcat ? subcat.offer : null,
+        product.offer
+      );
+
+      variant.salePrice = offerData.salePrice;
+      product.displayOffer = offerData.bestOffer;
+      product.offerSource = offerData.offerSource;
+    }
+
     await product.save();
 
     res.json({ success: true, message: 'Offer added successfully', offer: product.offer });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
 const editOffer = async (req, res) => {
   try {
-    const { productId } = req.params;
-    const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
+    const productId = req.params.productId;
+
+    const offerPercentage = req.body.offerPercentage;
+    const maxRedeem = req.body.maxRedeem;
+    const startDate = req.body.startDate;
+    const validUntil = req.body.validUntil;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -525,9 +550,29 @@ const editOffer = async (req, res) => {
     product.offer.startDate = new Date(startDate);
     product.offer.validUntil = new Date(validUntil);
 
+    const category = await Category.findById(product.categoryId);
+    let subcat = null;
+    if (product.subCategoryId) {
+      subcat = await Subcategory.findById(product.subCategoryId);
+    }
+
+    for (const variant of product.variants) {
+      const offerData = getSalePrice(
+        variant.variantPrice,
+        category ? category.offer : null,
+        subcat ? subcat.offer : null,
+        product.offer
+      );
+
+      variant.salePrice = offerData.salePrice;
+      product.displayOffer = offerData.bestOffer;
+      product.offerSource = offerData.offerSource;
+    }
+
     await product.save();
 
     res.json({ success: true, message: 'Offer updated successfully', offer: product.offer });
+
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
@@ -535,7 +580,7 @@ const editOffer = async (req, res) => {
 
 const deleteOffer = async (req, res) => {
   try {
-    const { productId } = req.params;
+    const productId = req.params.productId;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -543,13 +588,64 @@ const deleteOffer = async (req, res) => {
     }
 
     product.offer = undefined;
+
+    const category = await Category.findById(product.categoryId);
+    let subcat = null;
+    if (product.subCategoryId) {
+      subcat = await Subcategory.findById(product.subCategoryId);
+    }
+
+    for (const variant of product.variants) {
+      const offerData = getSalePrice(
+        variant.variantPrice,
+        category ? category.offer : null,
+        subcat ? subcat.offer : null,
+        null
+      );
+
+      variant.salePrice = offerData.salePrice;
+      product.displayOffer = offerData.bestOffer;
+      product.offerSource = offerData.offerSource;
+    }
+
     await product.save();
 
     res.json({ success: true, message: 'Offer deleted successfully' });
+
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+const deleteProductImage = async (req, res) => {
+  try {
+    const { productId, index } = req.params;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    const idx = parseInt(index, 10);
+    if (isNaN(idx) || idx < 0 || idx >= product.images.length) {
+      return res.status(400).json({ success: false, message: "Invalid image index" });
+    }
+
+    product.images.splice(idx, 1);
+
+    if (product.images.length < 1) {
+      return res.status(400).json({ success: false, message: "At least one image required" });
+    }
+
+    await product.save();
+
+    res.json({ success: true, message: "Image deleted", images: product.images });
+
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
 
 module.exports = {
   getProductAddPage,
@@ -561,5 +657,6 @@ module.exports = {
   softDeleteProduct,
   addOffer,
   editOffer,
-  deleteOffer
+  deleteOffer,
+  deleteProductImage 
 };

@@ -8,6 +8,9 @@ const Category = require('../../models/categorySchema');
 const subCategory = require('../../models/subcategorySchema');
 const passport = require('../../config/passport');
 const { apiLogger, errorLogger } = require('../../config/logger');
+const Wallet = require('../../models/walletSchema');
+
+
 
 const loadHomepage = async (req, res) => {
   try {
@@ -64,11 +67,10 @@ const loadHomepage = async (req, res) => {
     return res.redirect('/user/Page-404');
   }
 };
-
 const salePage = async (req, res) => {
   try {
     const sessionUser = req.session.user || null;
-    const user = sessionUser? await User.findById(sessionUser._id).lean() : null;
+    const user = sessionUser ? await User.findById(sessionUser._id).lean() : null;
 
     const {
       category,
@@ -81,15 +83,12 @@ const salePage = async (req, res) => {
       search = ""
     } = req.query;
 
-    const pageSize = 16;
+    const pageSize = 12;
     const skip = (page - 1) * pageSize;
 
     const categories = await Category.find({ isListed: true, isDeleted: false }).lean();
 
-    let query = {
-      isDeleted: false,
-      isListed: true
-    };
+    let query = { isDeleted: false, isListed: true };
 
     if (category)
       query.categoryId = { $in: Array.isArray(category) ? category : [category] };
@@ -106,50 +105,49 @@ const salePage = async (req, res) => {
     if (fitType)
       query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
 
-    if (search && search.trim())
+    if (search.trim())
       query.name = { $regex: search.trim(), $options: "i" };
 
     const totalCount = await Product.countDocuments(query);
-
-    let productsQuery = Product.find(query)
-      .populate({
-        path: "categoryId",
-        match: { isListed: true, isDeleted: false },
-      })
-      .populate({
-        path: "subCategoryId",
-        match: { isListed: true, isDeleted: false },
-      })
-      .skip(skip)
-      .limit(pageSize)
-      .lean();
-
-    if (sortBy === "pricelowhigh")
-      productsQuery = productsQuery.sort({ "variants.salePrice": 1 });
-
-    else if (sortBy === "pricehighlow")
-      productsQuery = productsQuery.sort({ "variants.salePrice": -1 });
-
-    else if (sortBy === "newest")
-      productsQuery = productsQuery.sort({ createdAt: -1 });
-
-    else
-      productsQuery = productsQuery.sort({ _id: -1 });
-
-    let saleProducts = await productsQuery;
-
-    saleProducts = saleProducts.filter(
-      (p) => p.categoryId && p.subCategoryId
-    );
-
     const totalPages = Math.ceil(totalCount / pageSize);
 
+    let saleProducts = await Product.find(query)
+      .populate({ path: "categoryId", match: { isListed: true, isDeleted: false } })
+      .populate({ path: "subCategoryId", match: { isListed: true, isDeleted: false } })
+      .skip(skip)
+      .limit(pageSize)
+      .lean()
+      .sort({createdAt:-1});
+
+    saleProducts = saleProducts.filter(p => p.categoryId && p.subCategoryId);
+
+    if (sortBy === "pricelowhigh") {
+      saleProducts.sort((a, b) => a.variants[0].salePrice - b.variants[0].salePrice);
+    } else if (sortBy === "pricehighlow") {
+      saleProducts.sort((a, b) => b.variants[0].salePrice - a.variants[0].salePrice);
+    } else if (sortBy === "newest") {
+      saleProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else {
+      saleProducts.sort((a, b) => b._id - a._id);
+    }
+
     const params = [];
-    if (category) params.push(`category=${category}`);
-    if (subCategory) params.push(`subCategory=${subCategory}`);
-    if (size) params.push(`size=${size}`);
-    if (sleeveType) params.push(`sleeveType=${sleeveType}`);
-    if (fitType) params.push(`fitType=${fitType}`);
+
+    if (category)
+      (Array.isArray(category) ? category : [category]).forEach(c => params.push(`category=${c}`));
+
+    if (subCategory)
+      (Array.isArray(subCategory) ? subCategory : [subCategory]).forEach(s => params.push(`subCategory=${s}`));
+
+    if (size)
+      (Array.isArray(size) ? size : [size]).forEach(sz => params.push(`size=${sz}`));
+
+    if (sleeveType)
+      (Array.isArray(sleeveType) ? sleeveType : [sleeveType]).forEach(s => params.push(`sleeveType=${s}`));
+
+    if (fitType)
+      (Array.isArray(fitType) ? fitType : [fitType]).forEach(f => params.push(`fitType=${f}`));
+
     if (sortBy) params.push(`sortBy=${sortBy}`);
     if (search) params.push(`search=${encodeURIComponent(search)}`);
 
@@ -178,8 +176,6 @@ const salePage = async (req, res) => {
 };
 
 
-/////////////////////////////////////////////////////
-
 const PageNotFound = async (req, res) => {
   try {
     res.status(404).render('user/Page-404');
@@ -204,6 +200,7 @@ const loadSignup = async (req, res) => {
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
 
 async function sendVerificationEmail(email, otp) {
   try {
@@ -230,81 +227,159 @@ async function sendVerificationEmail(email, otp) {
   }
 }
 
+const REFERRER_CREDIT = 100;
+const NEW_USER_CREDIT = 50;
+
 const signup = async (req, res) => {
   try {
-    const { fullName, mobile, email, password, confirmPassword } = req.body;
+    const { fullName, mobile, email, password, confirmPassword, referralCode } = req.body;
+
     const errors = [];
-    if (validator.isEmpty(fullName)) errors.push('Full name is required');
-    if (!validator.isEmail(email)) errors.push('A valid email is required');
+    if (validator.isEmpty(fullName)) errors.push("Full name is required");
+    if (!validator.isEmail(email)) errors.push("A valid email is required");
     if (!validator.isStrongPassword(password, {
       minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
     })) {
-      errors.push('Password must be at least 8 characters and include uppercase, lowercase, number, and symbol');
+      errors.push("Password must be strong");
     }
-    if (password !== confirmPassword) errors.push('Passwords do not match');
+    if (password !== confirmPassword) errors.push("Passwords do not match");
+
     if (errors.length > 0) {
-      return res.render('user/signup', {
+      return res.render("user/signup", {
         error: errors,
-        formData: { fullName, email, mobile }
+        formData: { fullName, email, mobile, referralCode }
       });
     }
+
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.render('user/signup', {
-        error: ['Email is already in use'],
-        formData: { fullName, email, mobile }
+      return res.render("user/signup", {
+        error: ["Email is already in use"],
+        formData: { fullName, email, mobile, referralCode }
       });
     }
+
+    let referredByUser = null;
+    if (referralCode && referralCode.trim()) {
+      referredByUser = await User.findOne({ referralCode: referralCode.trim() });
+
+      console.log("the refered by user is",referredByUser)
+
+      if (!referredByUser) {
+        console.log("the if condition works")
+        return res.render("user/signup", {
+          error: ["Invalid referral code"],
+          formData: { fullName, email, mobile, referralCode }
+        });
+      }
+    }
+
     const otp = generateOtp();
     const emailSent = await sendVerificationEmail(email, otp);
-    if (!emailSent) return res.json('email-error');
+    if (!emailSent) return res.json("email-error");
+
     req.session.userOtp = otp;
-    req.session.userData = { fullName, phone: mobile, email, password };
-    res.render('user/verify-otp', { email });
-    apiLogger.info('the otp is : %o', otp);
-  }
-  catch (error) {
-    errorLogger.error('Signup error: %o', error);
-    res.status(500).send('Server Error');
+    console.log("the otp send to your mail is",otp)
+    req.session.userData = {
+      fullName,
+      phone: mobile,
+      email,
+      password,
+      referredBy: referredByUser ? referredByUser._id.toString() : null
+    };
+    console.log("in signup the seiion detais are",req.session.userData)
+    console.log("in signup the userotp in session is",req.session.userOtp)
+
+    req.session.save(() => {
+  res.render("user/verify-otp", { email });
+});
+
+
+  } catch (error) {
+    res.status(500).send("Server Error");
   }
 };
 
+
+
 async function securePassword(password) {
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
-    return passwordHash;
+    return await bcrypt.hash(password, 10);
   } catch (error) {
-    errorLogger.error('Password hash error: %o', error);
     return null;
   }
 }
 
+function generateReferralCode() {
+  return Math.random().toString(36).substring(2, 10).toUpperCase();
+}
 const verifyOtp = async (req, res) => {
   try {
     const { otp } = req.body;
+    console.log("the req.session.otp is",req.session.userOtp)
+    console.log("the otp from req.body is",req.body.otp)
 
-    if (otp !== req.session.userOtp) {
+    if (!req.session.userOtp || otp.toString() !== req.session.userOtp.toString()) {
+      console.log("if condition works ")
       return res.status(400).json({
         success: false,
         message: "Invalid OTP, please try again"
       });
     }
 
-    const user = req.session.userData;
-    const passwordHash = await securePassword(user.password);
+    const data = req.session.userData;
+    const passwordHash = await securePassword(data.password);
 
-    const saveUserData = new User({
-      fullName: user.fullName,
-      email: user.email,
-      mobile: user.phone,
-      password: passwordHash
+    const newUser = new User({
+      fullName: data.fullName,
+      email: data.email,
+      mobile: data.phone,
+      password: passwordHash,
+      referralCode: generateReferralCode(),
+      referredBy: data.referredBy || null
     });
 
-    const newUser = await saveUserData.save();
+    const savedUser = await newUser.save();
+
+    if (data.referredBy) {
+      let referrerWallet = await Wallet.findOne({ userId: data.referredBy });
+      if (!referrerWallet) {
+        referrerWallet = new Wallet({ userId: data.referredBy, balance: 0, transactions: [] });
+      }
+
+      referrerWallet.balance += REFERRER_CREDIT;
+      referrerWallet.transactions.push({
+        type: "credit",
+        amount: REFERRER_CREDIT,
+        description: "Referral reward credited (referrer)",
+        method: "admin"
+      });
+
+      const refUser = await User.findById(data.referredBy);
+      refUser.referralsCount = (refUser.referralsCount || 0) + 1;
+
+      await referrerWallet.save();
+      await refUser.save();
+
+      let newUserWallet = await Wallet.findOne({ userId: savedUser._id });
+      if (!newUserWallet) {
+        newUserWallet = new Wallet({ userId: savedUser._id, balance: 0, transactions: [] });
+      }
+
+      newUserWallet.balance += NEW_USER_CREDIT;
+      newUserWallet.transactions.push({
+        type: "credit",
+        amount: NEW_USER_CREDIT,
+        description: "Referral bonus credited (new user)",
+        method: "admin"
+      });
+
+      await newUserWallet.save();
+    }
 
     req.session.user = {
-      _id: newUser._id,
-      name: newUser.fullName
+      _id: savedUser._id,
+      name: savedUser.fullName
     };
 
     delete req.session.userOtp;
@@ -323,7 +398,6 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-
 const resendOtp = async (req, res) => {
   try {
     const { email } = req.session.userData;
@@ -332,16 +406,15 @@ const resendOtp = async (req, res) => {
     }
     const otp = generateOtp();
     req.session.userOtp = otp;
+     console.log("the otp Resend to your mail is",otp)
     const emailSent = await sendVerificationEmail(email, otp);
     if (emailSent) {
-      apiLogger.info('resend otp: %o', otp);
-      res.status(200).json({ success: true, message: 'otp resend successfully' });
+      return res.status(200).json({ success: true, message: 'otp resend successfully' });
     } else {
-      res.status(500).json({ success: false, message: 'failed to resend otp, please try again' });
+      return res.status(500).json({ success: false, message: 'failed to resend otp, please try again' });
     }
   } catch (error) {
-    errorLogger.error('error sending otp: %o', error);
-    res.status(500).json({ success: false, message: 'internal server error' });
+    return res.status(500).json({ success: false, message: 'internal server error' });
   }
 };
 
@@ -438,6 +511,47 @@ const logout = async (req, res) => {
     return res.redirect('/pageNotFound');
   }
 };
+const getReferralCodePage = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.user._id).lean();
+
+    if (!user) {
+      return res.redirect("/user/login");
+    }
+
+    return res.render("user/referral-code", { user });
+  } catch (error) {
+    return res.status(500).send("Server Error");
+  }
+};
+
+const createReferralCode = async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.redirect("/user/login");
+    }
+
+    const user = await User.findById(req.session.user._id);
+    if (!user) {
+      return res.redirect("/user/login");
+    }
+
+    if (!user.referralCode) {
+      user.referralCode = Math.random()
+        .toString(36)
+        .substring(2, 10)
+        .toUpperCase();
+
+      await user.save();
+    }
+
+    return res.redirect("/user/referral-code");
+  } catch (error) {
+    console.log(error);
+    return res.redirect("/500");
+  }
+};
+
 
 module.exports = {
   loadHomepage,
@@ -452,5 +566,7 @@ module.exports = {
   salePage,
   googleAuth,
   googleAuthCallback,
+  getReferralCodePage,
+  createReferralCode
 
 };

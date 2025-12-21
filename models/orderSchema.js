@@ -3,9 +3,15 @@ const { v4: uuidv4 } = require("uuid");
 
 const orderSchema = new mongoose.Schema(
   {
+    // orderId: {
+    //   // type: String,
+    //   // default: () => uuidv4(),
+    //   // unique: true
+    // },
     orderId: {
       type: String,
-      default: () => uuidv4(),
+      default: () =>
+        "MM" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 1000),
       unique: true
     },
 
@@ -27,7 +33,12 @@ const orderSchema = new mongoose.Schema(
           type: String,
           required: true
         },
-
+        category: { 
+          type: String 
+        },
+        subCategory: {
+           type: String 
+          },
         size: {
           type: String,
           required: true
@@ -114,14 +125,17 @@ const orderSchema = new mongoose.Schema(
     },
 
     address: {
-      type: String,     // saved as snapshot string
+      type: String,    
       required: true
     },
 
-    appliedCoupon: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Coupon",
+   appliedCoupon: {
+      type: String,
       default: null
+    },
+    couponDiscount: {
+      type: Number,
+      default: 0
     },
 
     paymentMethod: {
@@ -129,11 +143,33 @@ const orderSchema = new mongoose.Schema(
       enum: ["cod", "wallet", "razorpay"],
       default: "cod"
     },
+    paymentSessionId: {
+      type: String,
+      default: null
+    },
 
     paymentStatus: {
       type: String,
-      enum: ["pending", "completed", "failed", "refunded"],
+      enum: [
+        "pending",
+        "failed",
+        "completed",
+        "captured_but_failed",
+        "refunded"
+      ],
       default: "pending"
+    },
+    razorpayOrderId: {
+      type: String,
+      default: null
+    },
+    razorpayPaymentId: {
+      type: String,
+      default: null
+    },
+    razorpaySignature: {
+      type: String,
+      default: null
     },
 
     status: {

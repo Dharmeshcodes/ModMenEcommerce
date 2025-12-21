@@ -177,6 +177,17 @@
       transition: background 0.15s;
       margin-right: 0;
     }
+    .wishlist-heart {
+  font-size: 1.9rem;
+  cursor: pointer;
+  color: black;
+  transition: color 0.2s ease;
+}
+
+.wishlist-heart.active {
+  color: red;
+}
+
     .cart-btn:hover { background: #333; color: #fff;}
     .wishlist-btn {
       background: #fff;
@@ -507,9 +518,14 @@
         <% } %>
 
       <button class="cart-btn" style="padding:12px 90px;border-radius:30px;font-weight:700;font-size:1.15em;background:#111;color:#fff;border:none;">Add to Cart</button>
-      <a href="/user/wishlist" class="wishlist-btn" title="Wishlist">
-  <i class="far fa-heart"></i>
-</a>
+        <i class="fas fa-heart wishlist-heart 
+   <%= (user && Array.isArray(user.wishlist) && user.wishlist.some(id => id.toString() === product._id.toString())) ? 'active' : '' %>"
+   data-id="<%= product._id %>"
+   onclick="toggleWishlist(this)"
+   style="font-size:1.9rem;cursor:pointer;margin-left:10px;">
+</i>
+
+
 
     </div>
   </div>
@@ -537,54 +553,97 @@
      Note : The actual colour of the product may vary slightly due to photographic lighting sources or your device.
    </div>
  </div>
+<!-- RATING & REVIEWS TAB -->
+<div id="tab-reviews" class="tab-pane">
 
- <!-- RATING & REVIEWS TAB -->
- <div id="tab-reviews" class="tab-pane">
-   <div class="review-controls-row">
-     <div class="reviews-heading">All Reviews</div>
-     <div class="d-flex align-items-center">
-       <select class="review-sort-select"><option>Latest</option><option>Highest Rated</option><option>Lowest Rated</option></select>
-       <button class="write-review-btn">Write a Review</button>
-     </div>
-   </div>
-   <div class="reviews-grid">
-     <% dummyReviews.forEach(function(review) { %>
-       <div class="review-card">
-         <div class="review-author"><%= review.author %> <span class="verify-badge"><i class="fa-solid fa-circle-check"></i></span></div>
-         <div class="review-rating">
-           <% for(var s=1; s<=5; s++) { %>
-             <% if(s <= review.rating) { %>
-               <i class="fas fa-star"></i>
-             <% } else { %>
-               <i class="far fa-star"></i>
-             <% } %>
-           <% } %>
-         </div>
-         <div class="review-content"><%= review.content %></div>
-         <div class="review-date">Posted on <%= review.date %></div>
-       </div>
-     <% }) %>
-   </div>
-   <div class="pagination-row">
-     <button class="pagination-circle active">1</button>
-     <button class="pagination-circle">2</button>
-     <button class="pagination-circle">3</button>
-     <span class="dots">...</span>
-     <button class="pagination-circle">5</button>
-   </div>
-   <div class="write-review-section">
-     <label>Write a Review</label>
-     <div class="write-review-stars" id="star-rating">
-       <i class="far fa-star" data-star="1"></i>
-       <i class="far fa-star" data-star="2"></i>
-       <i class="far fa-star" data-star="3"></i>
-       <i class="far fa-star" data-star="4"></i>
-       <i class="far fa-star" data-star="5"></i>
-     </div>
-     <textarea class="form-control mb-3" rows="3" placeholder="Share what you like or dislike about the product..."></textarea>
-     <button>Submit Review</button>
-   </div>
- </div>
+  <div class="review-controls-row">
+    <div class="reviews-heading">All Reviews</div>
+    <div class="d-flex align-items-center">
+      <button class="write-review-btn" onclick="scrollToWriteReview()">Write a Review</button>
+    </div>
+  </div>
+
+  <div class="reviews-grid">
+
+    <% if (!reviews || reviews.length === 0) { %>
+
+      <div class="w-100 text-center py-5"
+           style="grid-column:1/-1;background:#fafafa;border-radius:14px;">
+        <p style="font-size:1.1rem;color:#666;margin-bottom:14px;">
+          No reviews yet for this product
+        </p>
+        <button class="write-review-btn" onclick="scrollToWriteReview()">
+          Be the first to write a review
+        </button>
+      </div>
+
+    <% } else { %>
+
+      <% reviews.forEach(function(review) { %>
+        <div class="review-card">
+
+          <div class="review-author">
+            <%= review.userId && review.userId.name ? review.userId.name : 'Verified User' %>
+            <span class="verify-badge">
+              <i class="fa-solid fa-circle-check"></i>
+            </span>
+          </div>
+
+          <div class="review-rating">
+            <% for (let s = 1; s <= 5; s++) { %>
+              <i class="<%= s <= review.rating ? 'fas fa-star' : 'far fa-star' %>"></i>
+            <% } %>
+          </div>
+
+          <div class="review-content">
+            <%= review.comment || 'No comment provided.' %>
+          </div>
+
+          <div class="review-date">
+            Posted on <%= new Date(review.createdAt).toLocaleDateString('en-IN') %>
+          </div>
+
+          <% if (user && review.userId && review.userId._id.toString() === user._id.toString()) { %>
+            <button
+              class="btn btn-sm text-danger p-0 mt-2"
+              style="font-weight:600;"
+              onclick="deleteReview('<%= review._id %>')">
+              Delete
+            </button>
+          <% } %>
+
+        </div>
+      <% }) %>
+
+    <% } %>
+
+  </div>
+
+  <!-- WRITE REVIEW -->
+  <div class="write-review-section">
+    <label>Write a Review</label>
+
+    <div class="write-review-stars">
+      <i class="far fa-star" data-star="1"></i>
+      <i class="far fa-star" data-star="2"></i>
+      <i class="far fa-star" data-star="3"></i>
+      <i class="far fa-star" data-star="4"></i>
+      <i class="far fa-star" data-star="5"></i>
+    </div>
+
+    <input type="hidden" id="selectedRating" value="0">
+
+    <textarea
+      id="reviewComment"
+      class="form-control mb-3"
+      rows="3"
+      placeholder="Share what you like or dislike about the product..."></textarea>
+
+    <button type="button" onclick="submitReview()">Submit Review</button>
+  </div>
+
+</div>
+
 
  <!-- YOU MAY ALSO LIKE -->
  <div class="you-may-like-row">
@@ -764,6 +823,132 @@
     }
   });
 
+
+async function toggleWishlist(el) {
+  const productId = el.dataset.id;
+  if (!productId) return;
+
+  try {
+    const res = await fetch('/user/wishlist/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId })
+    });
+
+    const data = await res.json();
+
+    if (!data || !data.success) {
+      Swal.fire({ icon: 'warning', title: data?.message || 'Operation failed', showConfirmButton: false, timer: 1200 });
+      return;
+    }
+
+    if (data.action === 'added') {
+      el.classList.add('active');
+      Swal.fire({ icon: 'success', title: 'Added to wishlist', showConfirmButton: false, timer: 900 });
+    } else {
+      el.classList.remove('active');
+      Swal.fire({ icon: 'info', title: 'Removed from wishlist', showConfirmButton: false, timer: 900 });
+    }
+  } catch (err) {
+    console.error('Wishlist toggle error', err);
+    Swal.fire({ icon: 'error', title: 'Server error', showConfirmButton: false, timer: 1400 });
+  }
+}
+
+
+//// review
+  let selectedRating = 0;
+
+  function scrollToWriteReview() {
+    document.querySelector('.write-review-section')
+      ?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function highlightStars(count) {
+    document.querySelectorAll('.write-review-stars i').forEach((el, i) => {
+      el.classList.toggle('fas', i < count);
+      el.classList.toggle('far', i >= count);
+    });
+  }
+
+  document.querySelectorAll('.write-review-stars i').forEach(star => {
+    star.addEventListener('mouseenter', () => {
+      highlightStars(star.dataset.star);
+    });
+
+    star.addEventListener('click', () => {
+      selectedRating = Number(star.dataset.star);
+      document.getElementById('selectedRating').value = selectedRating;
+      highlightStars(selectedRating);
+    });
+  });
+
+  document.querySelector('.write-review-stars').addEventListener('mouseleave', () => {
+    highlightStars(selectedRating);
+  });
+
+  async function submitReview() {
+    const rating = Number(document.getElementById('selectedRating').value);
+    const comment = document.getElementById('reviewComment').value.trim();
+    const productId = "<%= product._id %>";
+
+    if (!rating) {
+      Swal.fire({ icon: 'warning', title: 'Please select a rating' });
+      return;
+    }
+
+    try {
+      const res = await fetch('/user/review/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, rating, comment })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        Swal.fire({ icon: 'warning', title: data.message });
+        return;
+      }
+
+      Swal.fire({ icon: 'success', title: 'Review added successfully' })
+        .then(() => location.reload());
+
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Something went wrong' });
+    }
+  }
+async function deleteReview(reviewId) {
+  const confirm = await Swal.fire({
+    title: 'Delete review?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete',
+    cancelButtonText: 'Cancel'
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  try {
+    const res = await fetch(`/user/review/${reviewId}`, {
+      method: 'DELETE'
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      Swal.fire({ icon: 'error', title: data.message });
+      return;
+    }
+
+    Swal.fire({ icon: 'success', title: 'Review deleted' })
+      .then(() => location.reload());
+
+  } catch (err) {
+    Swal.fire({ icon: 'error', title: 'Something went wrong' });
+  }
+}
 
 </script>
 </body>

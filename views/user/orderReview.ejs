@@ -10,176 +10,149 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body {
-      background:#f8f8f8;
-      font-family:'Bitter', serif;
-    }
-    .main-box {
-      background:#fff;
-      border-radius:20px;
-      padding:28px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.06);
-    }
-    .summary-card {
-      background:#fff;
-      border-radius:16px;
-      padding:20px;
-      border:1px solid #eee;
-    }
-    .product-row {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 0;
-      border-bottom:1px dashed #ddd;
-    }
-    .product-row img {
-      width:70px;
-      height:70px;
-      object-fit:cover;
-      border-radius:8px;
-    }
-    .total-box {
-      background:#f2f6ff;
-      padding:18px;
-      border-radius:12px;
-      border:1px solid #d9e6ff;
-    }
-    .place-btn {
-      background:#000;
-      padding:12px;
-      border:none;
-      color:#fff;
-      width:100%;
-      border-radius:10px;
-      font-weight:600;
-    }
-    .cancel-btn {
-      width:100%;
-      padding:12px;
-      border-radius:10px;
-      border:1px solid #000;
-      background:#fff;
-    }
+    body { background:#f8f8f8; font-family:'Bitter', serif; }
+    .main-box { background:#fff;border-radius:20px;padding:28px;box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .summary-card { background:#fff;border-radius:16px;padding:20px;border:1px solid #eee; }
+    .product-row { display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px dashed #ddd; }
+    .product-row img { width:70px;height:70px;object-fit:cover;border-radius:8px; }
+    .total-box { background:#f2f6ff;padding:18px;border-radius:12px;border:1px solid #d9e6ff; }
+    .place-btn { background:#000;padding:12px;border:none;color:#fff;width:100%;border-radius:10px;font-weight:600; }
+    .cancel-btn { width:100%;padding:12px;border-radius:10px;border:1px solid #000;background:#fff; }
   </style>
-
 </head>
+
 <body>
 
-  <%- include('../partials/user/header') %>
+<%- include('../partials/user/header') %>
 
-  <div class="container my-4">
+<div class="container my-4">
+  <div class="main-box">
 
-    <div class="main-box">
+    <h4 class="fw-bold mb-4 text-center">Review Your Order</h4>
 
-      <h4 class="fw-bold mb-4 text-center">Review Your Order</h4>
+    <div class="row g-4">
 
-      <div class="row g-4">
+      <!-- Address -->
+      <div class="col-lg-6">
+        <div class="summary-card">
+          <h5 class="fw-bold mb-3">Delivery Address</h5>
 
-        <div class="col-lg-6">
-          <div class="summary-card">
+          <p class="fw-semibold mb-1"><%= address.fullName %></p>
+          <p class="small mb-1"><%= address.houseNo %>, <%= address.city %></p>
+          <p class="small mb-1"><%= address.district %>, <%= address.state %> - <%= address.pincode %></p>
+          <p class="small text-muted">Phone: <%= address.phone %></p>
 
-            <h5 class="fw-bold mb-3">Delivery Address</h5>
+          <hr class="my-4">
 
-            <p class="mb-1 fw-semibold"><%= address.fullName %></p>
-            <p class="mb-1 small"><%= address.houseNo %>, <%= address.city %></p>
-            <p class="mb-1 small"><%= address.district %>, <%= address.state %> - <%= address.pincode %></p>
-            <p class="small text-muted">Phone: <%= address.phone %></p>
+          <h5 class="fw-bold mb-3">Payment Method</h5>
 
-            <hr class="my-4">
+          <p class="fw-semibold">
+            <% if (paymentMethod === "razorpay") { %>
+              Online Payment (Razorpay)
+            <% } else if (paymentMethod === "wallet") { %>
+              Wallet Payment
+            <% } else { %>
+              Cash on Delivery
+            <% } %>
+          </p>
 
-            <h5 class="fw-bold mb-3">Payment Method</h5>
-            <p class="mb-0 fw-semibold">Cash on Delivery</p>
-
-          </div>
         </div>
+      </div>
 
-        <div class="col-lg-6">
-          <div class="summary-card">
+      <!-- Items -->
+      <div class="col-lg-6">
+        <div class="summary-card">
+          <h5 class="fw-bold mb-3">Order Items • <%= items.length %> products</h5>
 
-            <h5 class="fw-bold mb-3">Order Items • <%= items.length %> products</h5>
+          <% items.forEach(item => { %>
+            <div class="product-row">
+              <img src="<%= item.productId.images?.[0]?.url || '/placeholder.png' %>">
 
-            <% items.forEach(item => { %>
-              <div class="product-row">
-                <img src="<%= item.productId.images?.[0]?.url || '/placeholder.png' %>">
-
-                <div style="flex:1;">
-                  <div class="fw-semibold"><%= item.productId.name %></div>
-                  <div class="small text-muted">Size: <%= item.size %> | Color: <%= item.color %></div>
-                  <div class="small text-muted">Qty: <%= item.quantity %></div>
-                </div>
-
-                <div class="text-end">
-                  <div class="text-muted text-decoration-line-through">₹<%= item.variantPrice %></div>
-                  <div class="fw-bold">₹<%= item.salePrice * item.quantity %></div>
-                </div>
+              <div style="flex:1;">
+                <div class="fw-semibold"><%= item.productId.name %></div>
+                <div class="small text-muted">Size: <%= item.size %> | Color: <%= item.color %></div>
+                <div class="small text-muted">Qty: <%= item.quantity %></div>
               </div>
-            <% }) %>
 
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-lg-12">
-          <div class="total-box">
-
-            <div class="d-flex justify-content-between mb-2">
-              <span>Subtotal</span>
-              <span>₹<%= subtotal.toFixed(2) %></span>
+              <div class="text-end">
+                <div class="text-muted text-decoration-line-through">₹<%= item.variantPrice %></div>
+                <div class="fw-bold">₹<%= item.salePrice * item.quantity %></div>
+              </div>
             </div>
+          <% }) %>
 
-            <div class="d-flex justify-content-between mb-2">
-              <span>CGST (9%)</span>
-              <span>₹<%= cgst.toFixed(2) %></span>
-            </div>
-
-            <div class="d-flex justify-content-between mb-2">
-              <span>SGST (9%)</span>
-              <span>₹<%= sgst.toFixed(2) %></span>
-            </div>
-
-            <div class="d-flex justify-content-between mb-2">
-              <span>Shipping Charge</span>
-              <span><%= shippingCharge > 0 ? "₹" + shippingCharge : "Free" %></span>
-            </div>
-
-            <div class="d-flex justify-content-between mb-2 text-success fw-bold">
-              <span>Applicable Discount</span>
-              <span>- ₹<%= discount.toFixed(2) %></span>
-            </div>
-
-            <hr>
-
-            <div class="d-flex justify-content-between fs-5 fw-bold">
-              <span>Total Payable</span>
-              <span>₹<%= finalTotal.toFixed(2) %></span>
-            </div>
-
-          </div>
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-lg-6">
-          <form action="/user/confirmOrder" method="POST">
-            <input type="hidden" name="addressId" value="<%= address._id %>">
-            <button type="submit" class="place-btn">Confirm Order</button>
-          </form>
-        </div>
+    </div>
 
-        <div class="col-lg-6">
-          <a href="/user/checkoutPayment?addressId=<%= address._id %>" class="cancel-btn text-center d-block">
-            Cancel
-          </a>
+    <!-- Totals -->
+    <div class="row mt-4">
+      <div class="col-lg-12">
+        <div class="total-box">
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <span>₹<%= subtotal.toFixed(2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>CGST (9%)</span>
+            <span>₹<%= cgst.toFixed(2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>SGST (9%)</span>
+            <span>₹<%= sgst.toFixed(2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping Charge</span>
+            <span><%= shippingCharge > 0 ? "₹" + shippingCharge : "Free" %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 text-primary fw-bold">
+            <span>Offer Discount</span>
+            <span>- ₹<%= discount.toFixed(2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 text-success fw-bold">
+            <span>Coupon Discount</span>
+            <span>- ₹<%= couponDiscount.toFixed(2) %></span>
+          </div>
+
+          <hr>
+
+          <div class="d-flex justify-content-between fs-5 fw-bold">
+            <span>Total Payable</span>
+            <span>₹<%= payableTotal.toFixed(2) %></span>
+          </div>
+
         </div>
       </div>
     </div>
 
-  </div>
+    <!-- Buttons -->
+    <div class="row mt-4">
+      <div class="col-lg-6">
+        <form action="/user/confirmOrder" method="POST">
+          <input type="hidden" name="addressId" value="<%= address._id %>">
+          <input type="hidden" name="paymentMethod" value="<%= paymentMethod %>">
+          <button class="place-btn" type="submit">Confirm Order</button>
+        </form>
+      </div>
 
-  <%- include('../partials/user/footer') %>
+      <div class="col-lg-6">
+        <a href="/user/checkoutPayment?addressId=<%= address._id %>" class="cancel-btn text-center d-block">
+          Cancel
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('../partials/user/footer') %>
 
 </body>
 </html>

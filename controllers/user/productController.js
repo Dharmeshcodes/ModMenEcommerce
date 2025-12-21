@@ -1,95 +1,72 @@
-const Product=require('../../models/productSchema');
-const Category=require('../../models/categorySchema');
-const subCategory=require('../../models/subcategorySchema');
+const Product = require('../../models/productSchema');
+const Category = require('../../models/categorySchema');
+const subCategory = require('../../models/subcategorySchema');
 const User = require('../../models/userSchema');
+const Review = require('../../models/reviewSchema');
+
+const HTTP_STATUS = require("../../constans/httpStatus"); 
+const { apiLogger, errorLogger } = require("../../config/logger");
 
 const productDetails = async (req, res) => {
   try {
-    
-      const user= req.session.user || null;
-        let userDetails = null;
-        if (user && user._id) {
-          userDetails = await User.findById(user._id).lean();
-        }
+    const user = req.session.user || null;
+    let userDetails = null;
+
+    if (user && user._id) {
+      userDetails = await User.findById(user._id).lean();
+    }
 
     const id = req.params.id;
+
     const product = await Product.findById(id)
-  .populate({
-    path: 'categoryId',
-    match: { isDeleted: false, isListed: true }
-  })
-  .populate({
-    path: 'subCategoryId',
-    match: { isDeleted: false, isListed: true }
-  })
-  .lean();
+      .populate({
+        path: 'categoryId',
+        match: { isDeleted: false, isListed: true }
+      })
+      .populate({
+        path: 'subCategoryId',
+        match: { isDeleted: false, isListed: true }
+      })
+      .lean();
 
-if (!product || product.isDeleted || !product.isListed || !product.categoryId || !product.subCategoryId) {
-  return res.redirect('/user/sale');
-}
+    if (
+      !product ||
+      product.isDeleted ||
+      !product.isListed ||
+      !product.categoryId ||
+      !product.subCategoryId
+    ) {
+      return res.redirect('/user/sale');
+    }
 
-    const variant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
-  
+    const variant =
+      product.variants && product.variants.length > 0
+        ? product.variants[0]
+        : null;
+
     const alsoLikeProducts = await Product.find({
-  categoryId: product.categoryId,
-  _id: { $ne: id },
-  isDeleted: false,
-  isListed: true
-}).limit(4).lean();
-//console.log("also like product",alsoLikeProducts)
+      categoryId: product.categoryId,
+      _id: { $ne: id },
+      isDeleted: false,
+      isListed: true
+    }).limit(4).lean();
 
-    // dummy  change after 8 th week  or 9th week
+    const reviews = await Review.find({ productId: id })
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 })
+      .lean();
 
-    const dummyReviews = [
-      {
-        author: 'Samantha B.',
-        rating: 5,
-        content: 'Absolutely love it! This keeps me snug in cold weather. And the shade is really nice.',
-        date: 'August 23, 2025',
-      },
-      {
-        author: 'Alex M.',
-        rating: 4,
-        content: 'Nice shirt but runs a bit small for me.',
-        date: 'August 21, 2025',
-      },
-      {
-        author: 'Dillon K.',
-        rating: 5,
-        content: 'Perfect fit, great for work or the weekend!',
-        date: 'August 18, 2025',
-      },
-      {
-        author: 'Olivia W.',
-        rating: 4,
-        content: 'Good fabric and colour, but sleeves slightly long.',
-        date: 'August 6, 2025',
-      },
-      {
-        author: 'Liam N.',
-        rating: 5,
-        content: 'Excellent quality. The price was worth it.',
-        date: 'August 3, 2025',
-      },
-      {
-        author: 'Ana S.',
-        rating: 4,
-        content: 'Lovely shirt for work meetings. Recommended!',
-        date: 'August 2, 2025',
-      }
-    ];
-    
-    res.render('user/product-detail', {
+    return res.render('user/product-detail', {
       product,
       alsoLikeProducts,
-      dummyReviews,
-      user:userDetails,
+      reviews,
+      user: userDetails,
       variant
     });
 
   } catch (error) {
-    console.error('Error in product detail page:', error);
-    res.status(500).send('there is an error in product detail page');
+    errorLogger.error("Product Details Page Error", error); 
+    return res.redirect("/user/Page-404"); 
   }
 };
 

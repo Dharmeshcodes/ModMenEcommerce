@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const { apiLogger, errorLogger } = require('./config/logger');
 
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -78,6 +79,8 @@ app.use((err, req, res, next) => {
     }
   });
 });
+
+
 
 connectDB()
   .then(() => {

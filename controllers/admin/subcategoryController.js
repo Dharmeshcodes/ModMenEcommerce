@@ -1,5 +1,10 @@
 const Subcategory = require('../../models/subcategorySchema');
 const Category = require('../../models/categorySchema');
+const { getSalePrice } = require('../../utils/offerUtils');
+const Product=require("../../models/productSchema")
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
 
 async function getSubcategory(req, res) {
   try {
@@ -12,7 +17,7 @@ async function getSubcategory(req, res) {
       : { isDeleted: false };
 
     const total = await Subcategory.countDocuments(filter);
-    
+
     const totalPages = Math.ceil(total / limit);
     const currentPage = Math.min(page, totalPages || 1);
 
@@ -30,8 +35,10 @@ async function getSubcategory(req, res) {
       totalPages,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error while fetching subcaategory list');
+    errorLogger.error('Error fetching subcategory list', { error: err });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(MESSAGES.COMMON.SOMETHING_WENT_WRONG);
   }
 }
 
@@ -44,9 +51,13 @@ async function getAddSubcategoryPage(req, res) {
       formData: {},
     });
   } catch (err) {
-    res.status(500).send('Server Error');
+    errorLogger.error('Error loading add subcategory page', { error: err });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(MESSAGES.COMMON.SOMETHING_WENT_WRONG);
   }
 }
+
 
 async function addSubcategory(req, res) {
   const { name, categoryId, isListed, offer: offerData = {} } = req.body;
@@ -106,7 +117,7 @@ async function addSubcategory(req, res) {
     req.flash('success_msg', 'Subcategory added successfully.');
     res.redirect('/admin/subcategory');
   } catch (err) {
-    console.error(err);
+     errorLogger.error('Error adding subcategory', { error: err });
     req.flash('error_msg', 'Failed to add subcategory.');
     const categories = await Category.find().lean();
     res.render('admin/addSubcategory', { categories, messages: req.flash(), formData });
@@ -119,7 +130,7 @@ async function getEditSubcategoryPage(req, res) {
     const categories = await Category.find().lean();
 
     if (!subcategory) {
-      req.flash('error_msg', 'Subcategory not found');
+      req.flash('error_msg', MESSAGES.COMMON.NOT_FOUND);
       return res.redirect('/admin/subcategory');
     }
 
@@ -130,6 +141,7 @@ async function getEditSubcategoryPage(req, res) {
       formData: subcategory,
     });
   } catch (err) {
+     errorLogger.error('Error loading edit subcategory page', { error: err })
     req.flash('error_msg', 'Error loading subcategory');
     res.redirect('/admin/subcategory');
   }
@@ -183,8 +195,8 @@ async function editSubcategory(req, res) {
     req.flash('success_msg', 'Subcategory updated successfully');
     res.redirect('/admin/subcategory');
   } catch (err) {
-    console.error(err);
-    req.flash('error_msg', 'Failed to update subcategory');
+    errorLogger.error('Error updating subcategory', { error: err });
+    req.flash('error_msg', MESSAGES.COMMON.SOMETHING_WENT_WRONG);
     res.redirect(`/admin/editSubcategory/${req.params.id}`);
   }
 }
@@ -193,7 +205,7 @@ async function toggleListStatus(req, res) {
   try {
     const subcat = await Subcategory.findById(req.params.id);
     if (!subcat) {
-      return res.status(404).json({ success: false, error: 'Subcategory not found' });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ success: false, error: 'Subcategory not found' });
     }
 
     subcat.isListed = !subcat.isListed;
@@ -201,34 +213,46 @@ async function toggleListStatus(req, res) {
 
     res.json({ success: true, isListed: subcat.isListed, message: `Subcategory is now ${subcat.isListed ? 'listed' : 'unlisted'}` });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: 'Server error' });
+    errorLogger.error('Error toggling subcategory list status', { error: err });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: MESSAGES.COMMON.SOMETHING_WENT_WRONG })
   }
 }
-
 async function editOffer(req, res) {
   try {
     const subcategoryId = req.params.id;
+
     const { offerPercentage, maxRedeem, startDate, validUntil } = req.body;
 
     if (!offerPercentage || isNaN(offerPercentage) || offerPercentage < 1 || offerPercentage > 100) {
-      req.flash('error_msg', 'Offer percentage must be between 1 and 100.');
-      return res.redirect('/admin/subcategory');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: 'Offer percentage must be between 1 and 100.'
+      });
     }
+
     const maxR = parseInt(maxRedeem, 10);
     if (isNaN(maxR) || maxR < 0) {
-      req.flash('error_msg', 'Max redeem must be 0 or a positive number.');
-      return res.redirect('/admin/subcategory');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: 'Max redeem must be 0 or a positive number.'
+      });
     }
+
     if (!startDate || !validUntil || new Date(startDate) > new Date(validUntil)) {
-      req.flash('error_msg', 'Invalid start date or valid until date.');
-      return res.redirect('/admin/subcategory');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: 'Invalid start date or valid until date.'
+      });
     }
 
     const subcat = await Subcategory.findById(subcategoryId);
     if (!subcat) {
-      req.flash('error_msg', 'Subcategory not found.');
-      return res.redirect('/admin/subcategory');
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        success: false,
+        message: 'Subcategory not found.'
+      });
     }
 
     subcat.offer = {
@@ -240,14 +264,54 @@ async function editOffer(req, res) {
 
     await subcat.save();
 
-    req.flash('success_msg', 'Offer updated successfully.');
-    res.redirect('/admin/subcategory');
+    const products = await Product.find({ subCategoryId: subcategoryId });
+
+    for (const product of products) {
+      const category = await Category.findById(product.categoryId);
+
+      if (!Array.isArray(product.variants)) continue;
+
+      let bestOffer = 0;
+      let offerSource = null;
+
+      for (const variant of product.variants) {
+        const offerData = getSalePrice(
+          variant.variantPrice,
+          category ? category.offer : null,
+          subcat.offer,
+          product.offer
+        );
+
+        variant.salePrice = offerData.salePrice;
+
+        if (offerData.bestOffer > bestOffer) {
+          bestOffer = offerData.bestOffer;
+          offerSource = offerData.offerSource;
+        }
+      }
+
+      product.displayOffer = bestOffer;
+      product.offerSource = offerSource;
+
+      await product.save();
+    }
+
+    return res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: 'Offer updated successfully'
+    });
+
   } catch (error) {
-    console.error(error);
-    req.flash('error_msg', 'Server error.');
-    res.redirect('/admin/subcategory');
+    console.log("catch block hit");
+    errorLogger.error('Error updating subcategory offer', { error });
+
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: MESSAGES.COMMON.SOMETHING_WENT_WRONG
+    });
   }
 }
+
 
 async function softDeleteSubcategory(req, res) {
   try {
@@ -261,10 +325,74 @@ async function softDeleteSubcategory(req, res) {
 
     return res.json({ success: true, message: 'Subcategory deleted successfully.' });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: 'Server error occurred when deleting.' });
+    errorLogger.error('Error soft deleting subcategory', { error });
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: MESSAGES.COMMON.SOMETHING_WENT_WRONG });
   }
 }
+async function deleteSubcategoryOffer(req, res) {
+  try {
+    const subcategoryId = req.params.id;
+
+    const subcat = await Subcategory.findById(subcategoryId);
+    if (!subcat) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        success: false,
+        message: 'Subcategory not found'
+      });
+    }
+
+    subcat.offer = undefined;
+    await subcat.save();
+
+    const products = await Product.find({ subCategoryId: subcategoryId });
+
+    for (const product of products) {
+      const category = await Category.findById(product.categoryId);
+
+      if (!Array.isArray(product.variants)) continue;
+
+      let bestOffer = 0;
+      let offerSource = null;
+
+      for (const variant of product.variants) {
+        const offerData = getSalePrice(
+          variant.variantPrice,
+          category ? category.offer : null,
+          null,                 // subcategory offer removed
+          product.offer
+        );
+
+        variant.salePrice = offerData.salePrice;
+
+        if (offerData.bestOffer > bestOffer) {
+          bestOffer = offerData.bestOffer;
+          offerSource = offerData.offerSource;
+        }
+      }
+
+      product.displayOffer = bestOffer;
+      product.offerSource = offerSource;
+
+      await product.save();
+    }
+
+    return res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: 'Subcategory offer removed successfully'
+    });
+
+  } catch (error) {
+    errorLogger.error('Error deleting subcategory offer', { error });
+
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: MESSAGES.COMMON.SOMETHING_WENT_WRONG
+    });
+  }
+}
+
 
 module.exports = {
   getSubcategory,
@@ -275,4 +403,5 @@ module.exports = {
   toggleListStatus,
   softDeleteSubcategory,
   editOffer,
+  deleteSubcategoryOffer
 };

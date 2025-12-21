@@ -1,6 +1,10 @@
 
 const User = require('../../models/userSchema');
-const mongoose = require('mongoose');
+const HTTP_STATUS = require("../../constans/httpStatus");
+const MESSAGES = require("../../constans/messages");
+const { apiLogger, errorLogger } = require("../../config/logger");
+const Order=require("../../models/orderSchema")
+const Wallet=require("../../models/walletSchema")
 
 const customerInfo = async (req, res) => {
   try {
@@ -53,14 +57,64 @@ const customerInfo = async (req, res) => {
   }
 };
 
-const customerDetails= async (req,res)=>{
-  const customerId=req.params.id;
-  
-  const customer= await User.findById(customerId);
-  console.log('customer is :',customer);
+const customerDetails = async (req, res) => {
+  try {
+    const userId = req.params.id;
 
-  res.render('admin/customerDetails',{customer});
+    const customer = await User.findById(userId).lean();
+    if (!customer) {
+      return res.redirect('/admin/customers');
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+    const skip = (page - 1) * limit;
+    const status = req.query.status || 'all';
+
+    const orderQuery = { userId };
+
+    if (status !== 'all') {
+      orderQuery.status = status;
+    }
+
+    const totalTransactions = await Order.countDocuments(orderQuery);
+
+    const orders = await Order.find(orderQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    orders.forEach(order => {
+      const items = order.orderedItems || [];
+      order.firstProductName = items[0]?.productName || 'N/A';
+      order.extraProductsCount = items.length > 1 ? items.length - 1 : 0;
+    });
+
+    const totalOrders = await Order.countDocuments({ userId });
+
+    const wallet = await Wallet.findOne({ userId }).lean();
+    const walletBalance = wallet ? wallet.balance : 0;
+
+    const totalPages = Math.ceil(totalTransactions / limit);
+
+    res.render('admin/customerDetails', {
+      customer,
+      orders,
+      totalOrders,
+      walletBalance,
+      currentPage: page,
+      totalPages,
+      totalTransactions,
+      status
+    });
+
+  } catch (error) {
+    errorLogger.error('Error loading customer details', { error });
+    res.redirect('/admin/customers');
+  }
 };
+
 
 const customerBlocked = async (req, res) => {
   try {

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coupons | Admin</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body { background:#f8f8f8; }
+
+    .outer-box {
+      background:#fff;
+      border-radius:20px;
+      padding:25px;
+      border:1px solid #eee;
+      box-shadow:0 4px 18px rgba(0,0,0,0.05);
+    }
+
+    table tr { border-bottom: 1px solid #eee; }
+    table thead tr { background:#000; color:#fff; }
+
+    /* Search pill */
+    .search-pill {
+      width: 280px;
+      border-radius: 50px;
+      background: #eef5ff;
+      border: 1px solid #d6e4ff;
+      padding-left: 38px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7a99;
+    }
+    .cancel-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7a99;
+      cursor: pointer;
+      display: none;
+    }
+    .filter-btn {
+      border-radius: 50px;
+      background: #eef5ff;
+      border: 1px solid #d6e4ff;
+      padding: 8px 20px;
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      width: 90px;
+      height: 36px;
+      background: #ff0000;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:0.3s;
+      font-size:10px;
+      color:#fff;
+      font-weight:bold;
+    }
+
+    .toggle-switch .toggle-ball {
+      position:absolute;
+      width:20px;
+      height:20px;
+      background:white;
+      border-radius:50%;
+      left:2px;
+      transition:0.3s;
+      box-shadow:0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .toggle-active {
+      background: #e0e0e0 !important;
+      color:#000 !important;
+    }
+
+    .toggle-active .toggle-ball {
+      left:56px;
+    }
+
+    /* Pagination */
+    .pagination a {
+      margin: 0 5px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      border:1px solid #ccc;
+      color:#000;
+    }
+    .active-page {
+      background:#000;
+      color:#fff;
+    }
+
+    .add-coupon-btn {
+      background:#000;
+      color:#fff;
+      padding:10px 30px;
+      border:none;
+      border-radius:10px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <%- include("../partials/admin/header") %>
+
+  <div class="d-flex">
+    <%- include("../partials/admin/sidebar") %>
+
+    <div class="container-fluid p-4">
+
+      <h4 class="fw-bold">Coupons</h4>
+
+      <!-- Breadcrumb -->
+      <div class="text-muted small mb-3">
+        <a href="/admin/dashboard" class="text-secondary text-decoration-none">Dashboard</a> >
+        <span class="fw-semibold">Coupons</span>
+      </div>
+
+      <!-- Search + Filter -->
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
+
+        <div class="position-relative">
+          <i class="fa fa-search search-icon"></i>
+
+          <input type="text" id="searchInput" class="form-control search-pill"
+            placeholder="Search coupon code..." value="<%= search %>">
+
+          <i class="fa fa-times cancel-icon" id="clearSearch"></i>
+        </div>
+
+        <div class="dropdown">
+          <button class="filter-btn dropdown-toggle" data-bs-toggle="dropdown">
+            Filters: <span class="fw-semibold">
+              <%= filter === "active" ? "Active" : filter === "inactive" ? "Inactive" : "All" %>
+            </span>
+          </button>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item filter-btn-item" data-type="all">All</a></li>
+            <li><a class="dropdown-item filter-btn-item" data-type="active">Active</a></li>
+            <li><a class="dropdown-item filter-btn-item" data-type="inactive">Inactive</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Coupon Table -->
+      <div class="outer-box">
+
+        <h5 class="fw-bold mb-3">Available coupons</h5>
+
+        <div class="table-responsive">
+          <table class="table text-center">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Min Purchase</th>
+                <th>Type</th>
+                <th>Discount</th>
+                <th>Max Discount</th>
+                <th>Status</th>
+                <th>Expiry</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (coupons.length === 0) { %>
+              <tr><td colspan="8" class="py-4">No coupons found</td></tr>
+              <% } %>
+
+              <% coupons.forEach(c => { %>
+              <tr>
+                <td><%= c.code %></td>
+                <td>₹<%= c.minimumOrderAmount %></td>
+
+                <td><%= c.type %></td>
+
+                <td>
+                  <%= c.type === "percentage" ? c.discountValue + "%" : "₹" + c.discountValue %>
+                </td>
+
+                <td>
+                  <%= c.maxDiscountAmount ? "₹" + c.maxDiscountAmount : "-" %>
+                </td>
+
+                <td>
+                  <div class="toggle-switch <%= c.status ? 'toggle-active':'' %>" data-id="<%= c._id %>">
+                    <span class="status-text"><%= c.status ? "ACTIVE" : "INACTIVE" %></span>
+                    <div class="toggle-ball"></div>
+                  </div>
+                </td>
+
+                <td><%= new Date(c.expiryDate).toLocaleDateString("en-GB") %></td>
+
+                <td>
+                  <a href="/admin/edit-coupon/<%= c._id %>" class="text-dark me-3">
+                    <i class="fa fa-pen"></i>
+                  </a>
+                  <a href="#" class="text-danger deleteCoupon" data-id="<%= c._id %>">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+        <div class="pagination text-center mt-4">
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/admin/coupon-list?page=<%= i %>&search=<%= search %>&filter=<%= filter %>"
+              class="<%= i === currentPage ? 'active-page' : '' %>">
+              <%= i %>
+            </a>
+          <% } %>
+        </div>
+        <% } %>
+
+        <div class="text-center mt-4">
+          <a href="/admin/add-coupon" class="add-coupon-btn">Add Coupon</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+const clearSearch = document.getElementById("clearSearch");
+
+function buildUrl(params) {
+  const q = searchInput.value.trim();
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (q) urlParams.set("search", q);
+  else urlParams.delete("search");
+
+  if (params.filter) urlParams.set("filter", params.filter);
+
+  return "/admin/coupon-list?" + urlParams.toString();
+}
+
+function updateClear() {
+  clearSearch.style.display = searchInput.value.trim() ? "block" : "none";
+}
+
+updateClear();
+
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    window.location.href = buildUrl({});
+  }
+});
+
+clearSearch.onclick = () => {
+  searchInput.value = "";
+  updateClear();
+  window.location.href = buildUrl({});
+};
+
+document.querySelectorAll(".filter-btn-item").forEach(btn => {
+  btn.onclick = () => {
+    const filterType = btn.dataset.type;
+    window.location.href = buildUrl({ filter: filterType });
+  };
+});
+
+
+    /* DELETE */
+    document.querySelectorAll(".deleteCoupon").forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.id;
+
+        const result = await Swal.fire({
+          icon: "warning",
+          title: "Delete Coupon?",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Delete"
+        });
+
+        if (result.isConfirmed) {
+          const res = await fetch(`/admin/delete-coupon/${id}`, { method: "DELETE" });
+          const json = await res.json();
+
+          if (json.success) window.location.reload();
+        }
+      };
+    });
+
+
+    /* TOGGLE ACTIVE/INACTIVE */
+    document.querySelectorAll(".toggle-switch").forEach(toggle => {
+      toggle.onclick = async () => {
+        const id = toggle.dataset.id;
+
+        const res = await fetch(`/admin/couponToggle/${id}`, {
+          method: "PATCH"
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          toggle.classList.toggle("toggle-active");
+
+          const label = toggle.querySelector(".status-text");
+          label.textContent = toggle.classList.contains("toggle-active") ? "ACTIVE" : "INACTIVE";
+        }
+      };
+    });
+  </script>
+
+</body>
+</html>

@@ -11,185 +11,370 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body { background: #f8f8f8; color: #111; }
+    body { background:#f8f8f8; color:#111; }
     .main-box { background:#fff; border-radius:18px; padding:28px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
-    .payment-card { background:#fff; border-radius:14px; padding:22px; border:1px solid #eee; }
-    .method-item { display:flex; align-items:center; gap:12px; padding:14px; border-radius:10px; margin-bottom:12px; background:#fafafa; border:1px solid #f0f0f0; }
-    .method-item.disabled { opacity:0.6; cursor:not-allowed; }
-    .method-label { font-weight:600; font-size:15px; }
-    .summary-card { background:#fff; border-radius:14px; padding:22px; border:1px solid #eee; }
+    .payment-card, .summary-card { background:#fff; border-radius:14px; padding:22px; border:1px solid #eee; }
+    .method-item { display:flex; align-items:center; gap:12px; padding:14px; border-radius:10px; margin-bottom:12px; background:#fafafa; border:1px solid #f0f0f0; cursor:pointer; }
     .product-row { display:flex; gap:12px; align-items:center; padding:12px 0; border-bottom:1px dashed #eee; }
     .product-row img { width:64px; height:64px; object-fit:cover; border-radius:8px; }
     .place-order-btn { background:#000; color:#fff; border-radius:8px; padding:12px 18px; border:none; font-weight:600; width:100%; }
     .section-title { font-weight:700; font-size:18px; margin-bottom:12px; }
     .small-muted { color:#6c757d; font-size:13px; }
   </style>
-
 </head>
+
 <body>
 
-  <%- include('../partials/user/header') %>
+<%- include('../partials/user/header') %>
 
-  <% 
-    const inStockItems = cartItems.filter(i => i.productId.stock > 0);
-    const hasOOS = cartItems.some(i => i.productId.stock === 0);
-  %>
+<%
+  const couponData = appliedCoupon || null;
+  const items = Array.isArray(cartItems) ? cartItems.filter(i => (i.productId && i.productId.stock > 0)) : [];
+  const safeSubtotal = typeof subtotal === 'number' ? subtotal : 0;
+  const safeTax = typeof tax === 'number' ? tax : 0;
+  const safeCgst = typeof cgst === 'number' ? cgst : (safeTax/2);
+  const safeSgst = typeof sgst === 'number' ? sgst : (safeTax/2);
+  const safeShipping = typeof shippingCharge === 'number' ? shippingCharge : 0;
+  const safePayable = typeof payableTotal === 'number' ? payableTotal : +(safeSubtotal + safeTax + safeShipping).toFixed(2);
+%>
 
-  <div class="container my-4">
-    <div class="main-box">
+<div class="container my-4">
+  <div class="main-box">
+    <div class="row gx-4 gy-4">
 
-      <div class="row gx-4 gy-4">
+      <div class="col-lg-6">
+        <div class="payment-card">
+          <div class="section-title">Payment Methods</div>
 
-        <!-- PAYMENT METHODS -->
-        <div class="col-lg-6">
-          <div class="payment-card">
+          <form id="paymentForm">
+            <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
 
-            <div class="section-title">Payment Methods</div>
-            <p class="small-muted">This week only <b>Cash on Delivery</b> is available.</p>
-
-            <form id="paymentForm">
-              <input type="hidden" name="addressId" value="<%= address ? address._id : '' %>">
-              <input type="hidden" name="paymentMethod" value="COD">
-
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Debit / Credit Card</div>
-              </label>
-
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Bank Transfer</div>
-              </label>
-
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">UPI Method</div>
-              </label>
-
-              <label class="method-item" id="codMethod">
-                <input type="radio" name="method" value="COD" checked>
-                <div>
-                  <div class="method-label">Cash on Delivery</div>
-                  <div class="small-muted">Pay after receiving your order</div>
-                </div>
-              </label>
-
-              <label class="method-item disabled">
-                <input type="radio" disabled>
-                <div class="method-label">Wallet</div>
-              </label>
-
-            </form>
-          </div>
-        </div>
-
-        <!-- ORDER SUMMARY -->
-        <div class="col-lg-6">
-          <div class="summary-card">
-
-            <div class="d-flex justify-content-between mb-3">
+            <label class="method-item">
+              <input type="radio" name="method" value="razorpay" id="razorpayOption" checked>
               <div>
-                <div class="section-title mb-0">Order Details</div>
-
-                <div class="small-muted">
-                  <b><%= address.fullName %></b>
-                </div>
-
-                <div class="small-muted">
-                  <%= address.houseNo %>, <%= address.city %>, <%= address.state %> - <%= address.pincode %>
-                </div>
+                <div class="method-label">Online Payment (Razorpay)</div>
+                <div class="small-muted">Secure UPI/Card payment</div>
               </div>
+            </label>
 
-              <div class="text-end small-muted">
-                Items: <%= inStockItems.length %>
+            <label class="method-item">
+              <input type="radio" name="method" value="cod" id="codOption">
+              <div>
+                <div class="method-label">Cash on Delivery</div>
+                <div class="small-muted">Pay after delivery</div>
+                <p id="codError" class="small-muted" style="color:red; display:none;"></p>
+              </div>
+            </label>
+            
+
+            <label class="method-item">
+              <input type="radio" name="method" value="wallet" id="walletOption">
+              <div>
+                <div class="method-label">Wallet Payment</div>
+                <div class="small-muted">Use your wallet balance</div>
+                <p id="walletError" class="small-muted" style="color:red; display:none;"></p>
+              </div>
+            </label>
+            
+
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="summary-card">
+
+          <div class="d-flex justify-content-between mb-3">
+            <div>
+              <div class="section-title mb-0">Order Details</div>
+              <div class="small-muted"><b><%= address ? address.fullName : '' %></b></div>
+              <div class="small-muted">
+                <%= address ? `${address.houseNo}, ${address.city}, ${address.state} - ${address.pincode}` : '' %>
               </div>
             </div>
+            <div class="text-end small-muted">Items: <%= items.length %></div>
+          </div>
 
-            <% inStockItems.forEach(item => { %>
-              <div class="product-row">
-                <img src="<%= (item.productId.images?.[0]?.url) || item.mainImage || '/placeholder.png' %>">
-
-                <div style="flex:1;">
-                  <div style="font-weight:700;"><%= item.productId.name %></div>
-                  <div class="small-muted">Qty: <%= item.quantity %></div>
-                </div>
-
-                <div class="text-end">
-                  <div class="small-muted text-decoration-line-through">₹<%= item.variantPrice %></div>
-                  <div style="font-weight:700;">₹<%= item.salePrice * item.quantity %></div>
-                </div>
+          <% items.forEach(item => { %>
+            <div class="product-row">
+              <img src="<%= item.productId && item.productId.images && item.productId.images[0] ? item.productId.images[0].url || item.productId.images[0] : (item.mainImage || '/placeholder.png') %>">
+              <div style="flex:1;">
+                <div style="font-weight:700;"><%= item.productId ? item.productId.name : '' %></div>
+                <div class="small-muted">Qty: <%= item.quantity %></div>
               </div>
-            <% }) %>
+              <div class="text-end">
+                <div class="small-muted text-decoration-line-through">₹<%= (item.variantPrice || 0).toFixed(2) %></div>
+                <div style="font-weight:700;">₹<%= ((item.salePrice || 0) * item.quantity).toFixed(2) %></div>
+              </div>
+            </div>
+          <% }) %>
+
+          <div class="mt-3">
+            <div class="d-flex justify-content-between">
+              <span class="small-muted">Subtotal</span>
+              <span>₹<%= safeSubtotal.toFixed(2) %></span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span class="small-muted">CGST (9%)</span>
+              <span>₹<%= safeCgst.toFixed(2) %></span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span class="small-muted">SGST (9%)</span>
+              <span>₹<%= safeSgst.toFixed(2) %></span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span class="small-muted">Delivery Charge</span>
+              <span><%= safeShipping > 0 ? "₹" + safeShipping : "Free" %></span>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <input id="couponCode" class="form-control" style="max-width:160px;"
+                placeholder="Coupon Code"
+                value="<%= couponData ? couponData.code : '' %>"
+                <%= couponData ? 'disabled' : '' %> >
+
+              <button id="applyBtn" class="btn btn-dark ms-2" type="button" onclick="toggleCoupon()">
+                <%= couponData ? 'Remove Coupon' : 'Apply' %>
+              </button>
+
+              <button id="showCouponsBtn" class="btn btn-outline-secondary ms-2" type="button">
+                ViewCoupons
+              </button>
+            </div>
+
+            <div id="couponMessage" class="small-muted">
+              <% if (couponData) { %>Coupon <%= couponData.code %> applied.<% } %>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <span class="small-muted">Discount</span>
+              <span id="discountAmount">-₹<%= couponData ? couponData.discount : 0 %></span>
+            </div>
+
+            <input type="hidden" id="originalSubtotal" value="<%= safeSubtotal %>">
+            <input type="hidden" id="originalTax" value="<%= safeTax %>">
+            <input type="hidden" id="originalShipping" value="<%= safeShipping %>">
+
+            <hr>
+
+            <div class="d-flex justify-content-between">
+              <span class="section-title mb-0">Total</span>
+              <span id="totalAmount" style="font-size:20px;font-weight:700;">
+                ₹<%= (typeof payableTotal === 'number' ? payableTotal : safePayable).toFixed(2) %>
+              </span>
+            </div>
+
+            <input type="hidden" id="totalPayable" value="<%= (typeof payableTotal === 'number' ? payableTotal : safePayable).toFixed(2) %>">
+            <input type="hidden" id="walletBalance" value="<%= walletBalance %>">
+
+            <input type="hidden" id="totalToPay" value="<%= safePayable %>">
 
             <div class="mt-3">
-
-              <div class="d-flex justify-content-between">
-                <div class="small-muted">Subtotal</div>
-                <div>₹<%= grandTotal %></div>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <div class="small-muted">GST (18%)</div>
-                <div>₹<%= tax.toFixed(0) %></div>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <div class="small-muted">Delivery Charge</div>
-                <div><%= shippingCharge > 0 ? "₹" + shippingCharge : "Free" %></div>
-              </div>
-
-              <hr>
-
-              <div class="d-flex justify-content-between">
-                <div class="section-title mb-0">Total</div>
-                <div style="font-size:20px; font-weight:700;">₹<%= payableTotal.toFixed(0) %></div>
-              </div>
-
-              <div class="mt-3">
-                <button id="placeOrderBtn" class="place-order-btn" type="button">Proceed</button>
-              </div>
-
+              <button id="placeOrderBtn" class="place-order-btn" type="button">Proceed</button>
             </div>
 
           </div>
-        </div>
 
+        </div>
       </div>
 
     </div>
   </div>
+</div>
 
-  <%- include('../partials/user/footer') %>
+<div class="modal fade" id="couponsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Available Coupons</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="couponsModalBody">Loading...</div>
+    </div>
+  </div>
+</div>
 
-  <!-- FIXED SCRIPT -->
-  <script>
-  
-document.addEventListener("DOMContentLoaded", () => {
+<%- include('../partials/user/footer') %>
 
-  const placeBtn = document.getElementById("placeOrderBtn");
-  const form = document.getElementById("paymentForm");
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  placeBtn.addEventListener("click", () => {
+<script>
+  async function toggleCoupon() {
+    const message = document.getElementById("couponMessage");
+    const codeInput = document.getElementById("couponCode");
+    const applyBtn = document.getElementById("applyBtn");
+    const discountEl = document.getElementById("discountAmount");
+    const totalEl = document.getElementById("totalAmount");
+    const totalPayableInput = document.getElementById("totalPayable");
 
-    const addressId = form.addressId.value;
+    const originalSubtotal = parseFloat(document.getElementById("originalSubtotal").value || 0);
+    const originalTax = parseFloat(document.getElementById("originalTax").value || 0);
+    const originalShipping = parseFloat(document.getElementById("originalShipping").value || 0);
+    const originalPayable = +(originalSubtotal + originalTax + originalShipping).toFixed(2);
 
-    if (!addressId) {
-      Swal.fire({
-        icon: "warning",
-        title: "Address Missing",
-        text: "Please select a delivery address first.",
+    if (applyBtn.innerText === "Apply") {
+      const code = codeInput.value.trim();
+      if (!code) { message.innerText = "Enter a coupon code"; return; }
+
+      try {
+        const res = await fetch("/user/apply-coupon", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          applyBtn.innerText = "Remove Coupon";
+          codeInput.disabled = true;
+          discountEl.innerText = `-₹${data.discount}`;
+          totalEl.innerText = `₹${Number(data.newTotal).toFixed(2)}`;
+          totalPayableInput.value = Number(data.newTotal).toFixed(2);
+          validatePaymentMethods()
+          message.innerText = `Coupon ${code} applied`;
+        } else {
+          message.innerText = data.message || "Failed to apply coupon";
+        }
+      } catch (e) {
+        message.innerText = "Server error";
+      }
+    } else {
+      await fetch("/user/cancel-coupon", { method: "POST" });
+      applyBtn.innerText = "Apply";
+      codeInput.disabled = false;
+      codeInput.value = "";
+      discountEl.innerText = "-₹0";
+      totalEl.innerText = `₹${originalPayable.toFixed(2)}`;
+      totalPayableInput.value = originalPayable.toFixed(2);
+      validatePaymentMethods()
+      message.innerText = "";
+    }
+  }
+
+document.getElementById("showCouponsBtn").addEventListener("click", async () => {
+  const modalBody = document.getElementById("couponsModalBody");
+  modalBody.innerHTML = "Loading...";
+
+  try {
+    const res = await fetch("/user/available-coupons");
+    const data = await res.json();
+
+    if (data.success && data.coupons.length > 0) {
+      modalBody.innerHTML = "";
+
+      data.coupons.forEach(c => {
+        modalBody.innerHTML += `
+          <div class="border p-2 rounded mb-3 coupon-select" 
+               data-code="${c.code}"
+               style="cursor:pointer;">
+            <b>${c.code}</b> — ${
+              c.type === "percentage"
+                ? c.discountValue + "% OFF"
+                : "₹" + c.discountValue
+            }
+            <br>Minimum Order: ₹${c.minimumOrderAmount}
+            <br>Expires: ${new Date(c.expiryDate).toLocaleDateString()}
+            <br><small class="text-muted">${c.description || ""}</small>
+          </div>
+        `;
       });
-      return;
+
+      document.querySelectorAll(".coupon-select").forEach(box => {
+        box.addEventListener("click", () => {
+          const selectedCode = box.dataset.code;
+          document.getElementById("couponCode").value = selectedCode;
+          const modal = bootstrap.Modal.getInstance(document.getElementById("couponsModal"));
+          modal.hide();
+          document.getElementById("couponMessage").innerText = `Selected coupon: ${selectedCode}`;
+        });
+      });
+
+    } else {
+      modalBody.innerHTML = "No coupons available";
     }
 
-    window.location.href = "/user/order-review?addressId=" + addressId;
+  } catch (err) {
+    modalBody.innerHTML = "Failed to load coupons.";
+  }
 
-  });
-
+  new bootstrap.Modal(document.getElementById("couponsModal")).show();
 });
 
+document.getElementById("placeOrderBtn").addEventListener("click", () => {
+  const form = document.getElementById("paymentForm");
+  const addressId = form.addressId ? form.addressId.value : "";
+  if (!addressId) {
+    Swal.fire("Select Address", "Please select a delivery address.", "warning");
+    return;
+  }
+  const methodEl = document.querySelector("input[name='method']:checked");
+  const method = methodEl ? methodEl.value : "razorpay";
 
-  </script>
+  window.location.href = `/user/order-review?addressId=${addressId}&paymentMethod=${method}`;
+});
+</script>
+
+<!-- Payment Validation Script -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("payable:", document.getElementById("totalPayable").value);
+console.log("wallet:", document.getElementById("walletBalance").value);
+
+
+  const razorpayRadio = document.getElementById("razorpayOption");
+  const codRadio = document.getElementById("codOption");
+  const walletRadio = document.getElementById("walletOption");
+
+  const codError = document.getElementById("codError");
+  const walletError = document.getElementById("walletError");
+
+  window.validatePaymentMethods = function () {
+    const payable = Number(document.getElementById("totalPayable").value || 0);
+    const wallet = Number(document.getElementById("walletBalance").value || 0);
+
+    // COD validation
+    if (payable > 1000) {
+      codRadio.disabled = true;
+      codError.style.display = "block";
+      codError.innerText = "COD not available for orders above ₹1000.";
+
+      if (codRadio.checked) {
+        codRadio.checked = false;
+        razorpayRadio.checked = true;
+      }
+    } else {
+      codRadio.disabled = false;
+      codError.style.display = "none";
+    }
+
+    // Wallet validation
+    if (wallet < payable) {
+      walletRadio.disabled = true;
+      walletError.style.display = "block";
+      walletError.innerText = "Wallet balance is lower than the payable amount.";
+
+      if (walletRadio.checked) {
+        walletRadio.checked = false;
+        razorpayRadio.checked = true;
+      }
+    } else {
+      walletRadio.disabled = false;
+      walletError.style.display = "none";
+    }
+  };
+
+  // Initial validation
+  validatePaymentMethods();
+});
+</script>
+
+
+
 
 </body>
 </html>

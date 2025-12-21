@@ -6,6 +6,8 @@ const categoryController=require('../controllers/admin/categoryController');
 const subcategoryController=require('../controllers/admin/subcategoryController');
 const orderController=require("../controllers/admin/orderController")
 const productController=require('../controllers/admin/productController');
+const couponController=require("../controllers/admin/couponController");
+const dashboardController=require("../controllers/admin/dashboardontroller")
 const {
   uploadProductImages,
   uploadCategoryImages,
@@ -19,7 +21,7 @@ const {userAuth, adminAuth} =require('../middlewares/auth');
 
 router.get('/login',adminController.loadAdminLogin);
 router.post('/login',adminController.adminLogin);
-router.get('/dashboard', adminAuth , adminController.loadAdminDashboard);
+
 router.get('/logout',adminController.logout);
 
 //customer
@@ -51,6 +53,8 @@ router.post('/editSubcategory/:id', adminAuth, uploadSubcategoryImages.single('s
 router.patch('/subcategory/toggleList/:id', adminAuth, subcategoryController.toggleListStatus);
 router.post('/subcategory/offer/:id', adminAuth, subcategoryController.editOffer);
 router.patch('/subcategory/delete/:id', adminAuth, subcategoryController.softDeleteSubcategory);
+router.delete('/subcategory/offer/:id',adminAuth,subcategoryController.deleteSubcategoryOffer);
+
 
 //produc
 
@@ -59,6 +63,8 @@ router.get('/addProducts', adminAuth, productController.getProductAddPage);
 router.post('/addProducts',adminAuth,uploadProductImages.array('images', 4),productController.addProducts);
 router.get('/updateProduct/:id',adminAuth, productController.getUpdateProductPage);
 router.patch('/updateProduct/:id',adminAuth,uploadProductImages.array('images', 4),productController.updateProduct);
+router.delete('/product/:productId/image/:index', adminAuth, productController.deleteProductImage);
+
 
 // router.patch("/product/toggleList/:id",adminAuth,productController.toggleListStatus)
 router.patch('/product/toggleList/:id', adminAuth,productController.toggleListStatus);
@@ -76,6 +82,22 @@ router.post('/order/:orderId/editStatus', adminAuth, orderController.updateOrder
 router.post("/order/:orderId/item/:itemId/editStatus", adminAuth, orderController.updateOrderItemStatus);
 router.post("/order/:orderId/item/:itemId/return-decision",adminAuth, orderController.returnItemDecision);
 router.post("/order/:orderId/return-decision",adminAuth, orderController.returnFullOrderDecision);
+
+router.get("/add-coupon",adminAuth,couponController.loadAddCouponPage)
+router.get("/coupon-list",adminAuth,couponController.loadCouponPage)
+router.post("/add-coupon",adminAuth,couponController.addCoupon)
+router.get("/edit-coupon/:id",adminAuth,couponController.loadEditCouponPage)
+router.patch("/edit-coupon/:id", adminAuth, couponController.updateCoupon);
+router.delete("/delete-coupon/:id", adminAuth, couponController.deleteCoupon);
+router.patch("/couponToggle/:id", adminAuth, couponController.toggleCouponStatus);
+
+//salesreport 
+router.get("/sales-report", adminAuth,adminController.getSalesReport)
+router.get("/sales-report/export/pdf", adminAuth, adminController.exportSalesPDF)
+router.get("/sales-report/export/excel", adminAuth, adminController.exportSalesExcel )
+
+router.get('/dashboard', adminAuth ,dashboardController.loadAdminDashboard);
+
 
 
 

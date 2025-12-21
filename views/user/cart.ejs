@@ -8,6 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
 <style>
 body{margin-top:20px;}
@@ -57,7 +58,6 @@ body{margin-top:20px;}
 .price-strike{text-decoration:line-through;font-size:14px;opacity:.7;}
 .save-text{color:#00b300;font-weight:600;font-size:15px;}
 
-/* Disable qty buttons when out of stock */
 .disabled-btn {
     pointer-events: none;
     opacity: 0.4;
@@ -87,7 +87,6 @@ body{margin-top:20px;}
                 <% if(items && items.length > 0){ %>
                 <% items.forEach(item => { %>
 
-                <!-- MAIN CART ITEM BOX -->
                 <div class="cart-item-box shadow-sm"
                      data-product="<%= item.productId._id %>"
                      data-size="<%= item.size %>"
@@ -124,7 +123,8 @@ body{margin-top:20px;}
 
                             <div class="qty-control mb-2 ms-auto">
 
-                                <div class="qty-left decrease-btn <%= item.productId.stock === 0 ? 'disabled-btn' : '' %>">
+                                <!-- UPDATED: disable decrease when qty = 1 -->
+                                <div class="qty-left decrease-btn <%= item.quantity === 1 ? 'disabled-btn' : '' %>">
                                     <i class="fa-solid fa-minus"></i>
                                 </div>
 
@@ -184,7 +184,7 @@ body{margin-top:20px;}
 
     <div class="text-center mt-5 mb-4">
         <a href="/user/checkout-address" class="btn btn-dark px-5 py-2 mb-3 w-50" id="checkoutBtn">Proceed to checkout</a><br>
-        <a href="/shop" class="btn btn-outline-dark px-5 py-2 w-50">Continue Shopping</a>
+        <a href="/user/sale" class="btn btn-outline-dark px-5 py-2 w-50">Continue Shopping</a>
     </div>
 
 </div>
@@ -193,11 +193,19 @@ body{margin-top:20px;}
 
 <script>
 
-//////////////////// UPDATE TOTALS ////////////////////
 function updateTotals(t){
     document.getElementById("grandTotal").innerText = "₹" + t.grandTotal.toFixed(2);
     document.getElementById("shippingCharge").innerText = "₹" + t.shippingCharge.toFixed(2);
     document.getElementById("payableTotal").innerText = "₹" + t.payableTotal.toFixed(2);
+}
+
+function updateQtyButtons(box, qty) {
+    const decBtn = box.querySelector(".decrease-btn");
+    if (qty <= 1) {
+        decBtn.classList.add("disabled-btn");
+    } else {
+        decBtn.classList.remove("disabled-btn");
+    }
 }
 
 //////////////////// INCREASE ////////////////////
@@ -218,6 +226,7 @@ document.querySelectorAll(".increase-btn").forEach(btn => {
 
         if(data.success){
             box.querySelector(".item-qty").innerText = data.itemQuantity;
+            updateQtyButtons(box, data.itemQuantity);
             updateTotals(data.updatedTotal);
         } else {
             Swal.fire("Error", data.message, "error");
@@ -246,6 +255,7 @@ document.querySelectorAll(".decrease-btn").forEach(btn => {
                 box.remove();
             } else {
                 box.querySelector(".item-qty").innerText = data.itemQuantity;
+                updateQtyButtons(box, data.itemQuantity);
             }
             updateTotals(data.updatedTotal);
         } else {
@@ -317,10 +327,8 @@ document.getElementById("emptyCartBtn").addEventListener("click", async () => {
     }
 });
 
-
 </script>
 
-<!-- GET CART PAGE ERROR SWAL -->
 <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
 <script>
 Swal.fire({

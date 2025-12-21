@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Admin - Sales Report | ModMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body { background:#f6f7fb; }
+    .admin-page { min-height:100vh; }
+    .content-area { padding:34px 28px; }
+
+    .page-head { display:flex; justify-content:space-between; margin-bottom:18px; }
+    .page-title { font-size:1.4rem; font-weight:600; }
+    .breadcrumb-small { font-size:0.85rem; color:#777; }
+
+    .filter-row select,
+    .filter-row input {
+      height:40px; border-radius:10px; font-size:0.85rem;
+    }
+
+    .card-box {
+      background:#fff; padding:16px;
+      border-radius:12px; border:1px solid #eee;
+    }
+
+    .summary-card {
+      background:#fff; border-radius:10px;
+      padding:18px 22px; border:1px solid #e3e3e3;
+      min-width:180px;
+    }
+
+    .sales-table thead th {
+      background:#000; color:#fff;
+      font-size:0.82rem; padding:12px;
+    }
+
+    .sales-table tbody td {
+      padding:12px 10px; font-size:0.8rem; vertical-align:middle;
+    }
+
+    .pagination-box { margin-top:20px; }
+
+    .export-buttons a {
+      min-width:160px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="admin-page d-flex">
+
+  <%- include('../partials/admin/sidebar') %>
+
+  <div class="flex-grow-1">
+
+    <%- include('../partials/admin/header') %>
+
+    <main class="content-area">
+
+      <!-- PAGE HEADER -->
+      <div class="page-head">
+        <div>
+          <div class="breadcrumb-small">
+            <a href="/admin/dashboard" class="text-decoration-none text-muted">Dashboard</a>
+            > Sales Report
+          </div>
+          <div class="page-title">Sales Report</div>
+        </div>
+      </div>
+
+      <!-- FILTER FORM -->
+      <form class="filter-row d-flex flex-wrap gap-3 mb-3" method="get">
+        <select name="type" class="form-select" style="width:160px;">
+          <option value="">Sort by date</option>
+          <option value="day"   <%= type==="day" ? "selected" : "" %>>Today</option>
+          <option value="week"  <%= type==="week" ? "selected" : "" %>>This Week</option>
+          <option value="month" <%= type==="month" ? "selected" : "" %>>This Month</option>
+          <option value="year"  <%= type==="year" ? "selected" : "" %>>This Year</option>
+          <option value="custom" <%= type==="custom" ? "selected" : "" %>>Custom</option>
+        </select>
+
+        <input type="date" name="from" value="<%= from || '' %>" class="form-control" style="width:160px;">
+        <input type="date" name="to" value="<%= to || '' %>" class="form-control" style="width:160px;">
+
+        <input type="text" name="search" placeholder="Search buyer name..."
+               value="<%= search || '' %>" class="form-control" style="width:200px;">
+
+        <button class="btn btn-dark">Apply</button>
+        <a href="/admin/sales-report" class="btn btn-secondary">Reset</a>
+      </form>
+
+      <!-- SUMMARY CARDS -->
+      <div class="d-flex gap-3 flex-wrap mb-3">
+        <div class="summary-card">
+          <strong>Total Sales:</strong><br>
+          <%= totalSales %>
+        </div>
+
+        <div class="summary-card">
+          <strong>Total Revenue:</strong><br>
+          ₹ <%= totalRevenue %>
+        </div>
+
+        <div class="summary-card">
+          <strong>Product Discount:</strong><br>
+          ₹ <%= totalProductDiscount %>
+        </div>
+
+        <div class="summary-card">
+          <strong>Coupon Discount:</strong><br>
+          ₹ <%= totalCouponDiscount %>
+        </div>
+      </div>
+
+      <!-- SALES TABLE -->
+      <div class="card-box mt-3">
+        <table class="table sales-table">
+          <thead>
+            <tr>
+              <th>Buyer</th>
+              <th>Product</th>
+              <th>orderDate</th>
+              <th>Product ID</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Discount</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+          <% if (!salesData || salesData.length === 0) { %>
+            <tr>
+              <td colspan="8" class="text-center text-muted py-4">
+                No sales found for selected filters.
+              </td>
+            </tr>
+          <% } else { %>
+            <% salesData.forEach(row => { %>
+              <tr>
+                <td><%= row.buyer %></td>
+                <td><%= row.productName %></td>
+                <td><%= row.orderDate %></td>
+
+                <td>#<%= row.productId %></td>
+                <td><%= row.quantity %></td>
+                <td>₹ <%= row.price %></td>
+                <td><%= row.category %></td>
+                <td>₹ <%= row.discount %></td>
+                <td>₹ <%= row.total %></td>
+              </tr>
+            <% }) %>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination-box d-flex justify-content-center mt-4">
+        <nav>
+          <ul class="pagination pagination-sm">
+            <% for (let p = 1; p <= totalPages; p++) { %>
+              <li class="page-item <%= p === currentPage ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= p %>&<%= filterQuery %>"><%= p %></a>
+              </li>
+            <% } %>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- EXPORT BUTTONS -->
+      <div class="export-buttons d-flex justify-content-end mt-3 gap-2">
+        <a href="/admin/sales-report/export/pdf?<%= filterQuery %>" class="btn btn-dark">
+          Download PDF
+        </a>
+
+        <a href="/admin/sales-report/export/excel?<%= filterQuery %>" class="btn btn-dark">
+          Get Excel Sheet
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

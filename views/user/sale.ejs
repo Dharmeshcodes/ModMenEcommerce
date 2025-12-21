@@ -200,6 +200,21 @@
       border-color: #101010;
       font-weight: 600;
     }
+    .wishlist-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
+  color: #ccc;
+  cursor: pointer;
+  z-index: 10;
+  transition: color .2s ease;
+}
+
+.wishlist-heart.active {
+  color: red;
+}
+
     @media (max-width: 991.98px) {
       .product-image-wrapper {
         height: 210px;
@@ -261,172 +276,278 @@
   <section class="container">
     <div class="row">
       <!-- Filter Sidebar -->
-      <div class="col-lg-3 mb-4">
-        <form action="/user/sale" method="get" id="filterForm">
-          <div id="filter-sidebar">
-            <div class="filter-title mb-3 text-center" style="font-size:1.13em; color:#272b30; letter-spacing:0.04em;">Filter</div>
-            <!-- Category Filter -->
-            <div class="mb-4">
-              <div class="filter-title">Category</div>
-              <% categories.forEach(function(category) { %>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" name="category" value="<%= category._id %>" <%= selectedCategories && selectedCategories.includes(category._id.toString()) ? "checked" : "" %>>
-                  <label class="form-check-label"><%= category.name %></label>
-                </div>
-              <% }) %>
-            </div>
-            <!-- Size Filter -->
-            <div class="mb-4">
-              <div class="filter-title">Size</div>
-              <% ['S','M','L','XL','XXL'].forEach(function(size) { %>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" name="size" value="<%= size %>" <%= selectedSizes && selectedSizes.includes(size) ? "checked" : "" %>>
-                  <label class="form-check-label"><%= size %></label>
-                </div>
-              <% }) %>
-            </div>
-            <!-- Sleeve Type Filter -->
-            <div class="mb-4">
-              <div class="filter-title">Sleeve</div>
-              <% ['Full Sleeve', 'Half Sleeve', 'Sleeveless'].forEach(function(sleeve) { %>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" name="sleeveType" value="<%= sleeve %>" <%= selectedSleeves && selectedSleeves.includes(sleeve) ? "checked" : "" %>>
-                  <label class="form-check-label"><%= sleeve %></label>
-                </div>
-              <% }) %>
-            </div>
-            <!-- Fit Type Filter -->
-            <div>
-              <div class="filter-title">Fit</div>
-              <% ['Regular Fit', 'Slim Fit', 'Relaxed Fit'].forEach(function(fit) { %>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" name="fitType" value="<%= fit %>" <%= selectedFits && selectedFits.includes(fit) ? "checked" : "" %>>
-                  <label class="form-check-label"><%= fit %></label>
-                </div>
-              <% }) %>
-            </div>
-            <button type="submit" class="apply-btn w-100 mt-3">Apply</button>
-          </div>
-        </form>
-      </div>
-      <!-- Product Listing & Sortbar -->
-      <div class="col-lg-9">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
-  <div class="d-flex align-items-center gap-3">
+     <!-- Filter Sidebar -->
+<div class="col-lg-3 mb-4">
+  <div id="filter-sidebar">
+    <div class="filter-title mb-3 text-center" style="font-size:1.13em; color:#272b30; letter-spacing:0.04em;">
+      Filter
+    </div>
 
-    <span class="fw-semibold fs-5">Sale Shirts</span>
+    <!-- Category -->
+    <div class="mb-4">
+      <div class="filter-title">Category</div>
+      <% categories.forEach(category => { %>
+        <div class="form-check form-check-sm">
+          <input class="form-check-input"
+                 type="checkbox"
+                 name="category"
+                 value="<%= category._id %>"
+                 <%= selectedCategories?.includes(category._id.toString()) ? 'checked' : '' %>>
+          <label class="form-check-label"><%= category.name %></label>
+        </div>
+      <% }) %>
+    </div>
 
-    <!-- 🔍 Search Bar -->
-    <form action="/user/sale" method="get" class="sale-search-box" id="saleSearchForm">
-      <i class="fas fa-search search-icon"></i>
+    <!-- Size -->
+    <div class="mb-4">
+      <div class="filter-title">Size</div>
+      <% ['S','M','L','XL','XXL'].forEach(size => { %>
+        <div class="form-check form-check-sm">
+          <input class="form-check-input"
+                 type="checkbox"
+                 name="size"
+                 value="<%= size %>"
+                 <%= selectedSizes?.includes(size) ? 'checked' : '' %>>
+          <label class="form-check-label"><%= size %></label>
+        </div>
+      <% }) %>
+    </div>
 
-      <input 
-        type="text"
-        name="search"
-        class="sale-search-input"
-        placeholder="Search shirts..."
-        value="<%= search || '' %>"
-        id="saleSearchInput"
-      >
+    <!-- Sleeve -->
+    <div class="mb-4">
+      <div class="filter-title">Sleeve</div>
+      <% ['Full Sleeve', 'Half Sleeve', 'Sleeveless'].forEach(sleeve => { %>
+        <div class="form-check form-check-sm">
+          <input class="form-check-input"
+                 type="checkbox"
+                 name="sleeveType"
+                 value="<%= sleeve %>"
+                 <%= selectedSleeves?.includes(sleeve) ? 'checked' : '' %>>
+          <label class="form-check-label"><%= sleeve %></label>
+        </div>
+      <% }) %>
+    </div>
 
-      <i class="fas fa-times close-icon" id="searchClear"></i>
-    </form>
+    <!-- Fit -->
+    <div>
+      <div class="filter-title">Fit</div>
+      <% ['Regular Fit', 'Slim Fit', 'Relaxed Fit'].forEach(fit => { %>
+        <div class="form-check form-check-sm">
+          <input class="form-check-input"
+                 type="checkbox"
+                 name="fitType"
+                 value="<%= fit %>"
+                 <%= selectedFits?.includes(fit) ? 'checked' : '' %>>
+          <label class="form-check-label"><%= fit %></label>
+        </div>
+      <% }) %>
+    </div>
 
+    <button type="button" class="apply-btn w-100 mt-3" id="applyFilters">Apply</button>
   </div>
+</div>
 
-          <!-- SORT BUTTONS INLINE, ALL FILTERS PRESERVED -->
-          <div class="sortbar-btns">
-            <% 
-              function sortBtnHref(opt) {
-                let params = [];
-                if (selectedCategories && selectedCategories.length) { selectedCategories.forEach(cat => params.push(`category=${encodeURIComponent(cat)}`)); }
-                if (selectedSizes && selectedSizes.length) { selectedSizes.forEach(size => params.push(`size=${encodeURIComponent(size)}`)); }
-                if (selectedSleeves && selectedSleeves.length) { selectedSleeves.forEach(sleeve => params.push(`sleeveType=${encodeURIComponent(sleeve)}`)); }
-                if (selectedFits && selectedFits.length) { selectedFits.forEach(fit => params.push(`fitType=${encodeURIComponent(fit)}`)); }
-                params.push(`sortBy=${opt}`);
-                return `/user/sale${params.length ? '?' + params.join('&') : ''}`;
-              }
-            %>
-            <a href="<%= sortBtnHref('popularity') %>"
-               class="sort-btn <%= sortBy === 'popularity' ? 'active' : '' %>">Popularity</a>
-            <a href="<%= sortBtnHref('newest') %>"
-               class="sort-btn <%= sortBy === 'newest' ? 'active' : '' %>">Newest</a>
-            <a href="<%= sortBtnHref('pricelowhigh') %>"
-               class="sort-btn <%= sortBy === 'pricelowhigh' ? 'active' : '' %>">Low to High</a>
-            <a href="<%= sortBtnHref('pricehighlow') %>"
-               class="sort-btn <%= sortBy === 'pricehighlow' ? 'active' : '' %>">High to Low</a>
-          </div>
-        </div>
-       <!-- Product Grid -->
-        <div class="row g-4">
-          <% saleProducts.forEach(function(product) { %>
-            <div class="col-6 col-md-3">
-              <div class="product-card">
-                <div class="product-image-wrapper">
-                  <img src="<%= product.images && product.images[0] ? product.images[0].url : '/user/images/no-image.png' %>" alt="<%= product.name %>">
-                  <% if (product.displayOffer && product.displayOffer > 0) { %>
-                    <div class="offer-badge"><%= product.displayOffer %>% OFF</div>
-                  <% } %>
-                </div>
-                <div class="p-3 text-center">
-                  <div class="product-title">
-                    <a href="/user/product/<%= product._id %>" class="text-decoration-none text-dark"><%= product.name %></a>
-                  </div>
-                  <div class="product-price">
-                    $<%= product.variants && product.variants[0] ? product.variants[0].salePrice.toFixed(2) : product.price %>
-                    <% if (product.variants && product.variants[0] && product.variants[0].variantPrice > product.variants[0].salePrice) { %>
-                      <span class="sale-strike">$<%= product.variants[0].variantPrice.toFixed(2) %></span>
-                    <% } %>
-                  </div>
-                  <!-- Fixed 4 star rating for every product -->
-                  <div class="star-rating mb-1">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <% }); %>
-        </div>
 
-        <!-- Pagination -->
-        <nav class="mt-4">
-          <ul class="pagination">
-            <% for (let i = 1; i <= totalPages; i++) { %>
-              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                <a class="page-link" href="/user/sale?page=<%= i %><%= typeof paginationQuery !== 'undefined' ? paginationQuery : '' %>"><%= i %></a>
-              </li>
-            <% } %>
-          </ul>
-        </nav>
+<!-- Right Section -->
+<div class="col-lg-9">
+
+  <!-- Search + Sort -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+
+    <div class="d-flex align-items-center gap-3">
+      <span class="fw-semibold fs-5">Sale Shirts</span>
+
+      <!-- Search -->
+      <div class="sale-search-box">
+        <i class="fas fa-search search-icon"></i>
+
+        <input type="text"
+               id="saleSearchInput"
+               class="sale-search-input"
+               placeholder="Search shirts..."
+               value="<%= search || '' %>">
+
+        <i class="fas fa-times close-icon" id="searchClear"></i>
       </div>
     </div>
+
+    <!-- Sort Buttons -->
+    <div class="sortbar-btns">
+      <button class="sort-btn <%= sortBy === 'popularity' ? 'active' : '' %>" onclick="applySort('popularity')">Popularity</button>
+      <button class="sort-btn <%= sortBy === 'newest' ? 'active' : '' %>" onclick="applySort('newest')">Newest</button>
+      <button class="sort-btn <%= sortBy === 'pricelowhigh' ? 'active' : '' %>" onclick="applySort('pricelowhigh')">Low to High</button>
+      <button class="sort-btn <%= sortBy === 'pricehighlow' ? 'active' : '' %>" onclick="applySort('pricehighlow')">High to Low</button>
+    </div>
+  </div>
+
+
+  <!-- Product Grid -->
+  <div class="row g-4">
+    <% saleProducts.forEach(product => { %>
+      <div class="col-6 col-md-3">
+        <div class="product-card">
+          <div class="product-image-wrapper">
+
+            <i class="fas fa-heart wishlist-heart <%= (user && Array.isArray(user.wishlist) && user.wishlist.some(id => id.toString() === product._id.toString())) ? 'active' : '' %>"
+   data-id="<%= product._id %>"
+   onclick="toggleWishlist(this)"></i>
+
+
+
+
+            <img src="<%= product.images?.[0]?.url || '/user/images/no-image.png' %>">
+
+            <% if (product.displayOffer > 0) { %>
+              <div class="offer-badge"><%= product.displayOffer %>% OFF</div>
+            <% } %>
+
+          </div>
+
+          <div class="p-3 text-center">
+            <div class="product-title">
+              <a href="/user/product/<%= product._id %>" class="text-decoration-none text-dark">
+                <%= product.name %>
+              </a>
+            </div>
+
+            <div class="product-price">
+              ₹<%= product.variants?.[0]?.salePrice.toFixed(2) %>
+              <% if (product.variants?.[0]?.variantPrice > product.variants[0].salePrice) { %>
+                <span class="sale-strike">₹<%= product.variants[0].variantPrice.toFixed(2) %></span>
+              <% } %>
+            </div>
+
+            <div class="star-rating mb-1">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+
+  <!-- Pagination -->
+  <nav class="mt-4">
+    <ul class="pagination">
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+          <a class="page-link" href="javascript:void(0)" onclick="goToPage(<%= i %>)"><%= i %></a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+
+</div>
+
   </section>
   <!-- Footer Include -->
   <%- include('../partials/user/footer.ejs') %>
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+/* SEARCH INPUTS */
 const searchInput = document.getElementById("saleSearchInput");
 const closeIcon = document.getElementById("searchClear");
-const searchForm = document.getElementById("saleSearchForm");
 const searchIcon = document.querySelector(".search-icon");
+const applyFiltersBtn = document.getElementById("applyFilters");
+
+function buildSaleUrl(extraParams = {}) {
+  const params = new URLSearchParams();
+  const searchVal = searchInput.value.trim();
+  if (searchVal) params.append("search", searchVal);
+
+  document.querySelectorAll("input[name='category']:checked")
+    .forEach(cb => params.append("category", cb.value));
+
+  document.querySelectorAll("input[name='size']:checked")
+    .forEach(cb => params.append("size", cb.value));
+
+  document.querySelectorAll("input[name='sleeveType']:checked")
+    .forEach(cb => params.append("sleeveType", cb.value));
+
+  document.querySelectorAll("input[name='fitType']:checked")
+    .forEach(cb => params.append("fitType", cb.value));
+
+  Object.keys(extraParams).forEach(key => {
+    params.set(key, extraParams[key]);
+  });
+
+  return "/user/sale?" + params.toString();
+}
 
 searchInput.addEventListener("input", () => {
   closeIcon.style.display = searchInput.value.trim() ? "block" : "none";
 });
 
-closeIcon.addEventListener("click", () => {
-  searchInput.value = "";
-  closeIcon.style.display = "none";
-  searchForm.submit();
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    window.location.href = buildSaleUrl();
+  }
 });
 
 searchIcon.addEventListener("click", () => {
-  searchForm.submit();
+  window.location.href = buildSaleUrl();
 });
+
+closeIcon.addEventListener("click", () => {
+  searchInput.value = "";
+  closeIcon.style.display = "none";
+  window.location.href = buildSaleUrl();
+});
+
+/* FILTER APPLY */
+if (applyFiltersBtn) {
+  applyFiltersBtn.addEventListener("click", () => {
+    window.location.href = buildSaleUrl();
+  });
+}
+
+/* SORT */
+function applySort(option) {
+  window.location.href = buildSaleUrl({ sortBy: option });
+}
+
+/* PAGINATION */
+function goToPage(page) {
+  window.location.href = buildSaleUrl({ page });
+}
+
+/* WISHLIST */
+    async function toggleWishlist(el) {
+  const productId = el.dataset.id;
+  if (!productId) return;
+
+  try {
+    const res = await fetch('/user/wishlist/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId })
+    });
+
+    const data = await res.json();
+
+    if (!data || !data.success) {
+      Swal.fire({ icon: 'warning', title: data?.message || 'Operation failed', showConfirmButton: false, timer: 1200 });
+      return;
+    }
+
+    if (data.action === 'added') {
+      el.classList.add('active');
+      Swal.fire({ icon: 'success', title: 'Added to wishlist', showConfirmButton: false, timer: 900 });
+    } else {
+      el.classList.remove('active');
+      Swal.fire({ icon: 'info', title: 'Removed from wishlist', showConfirmButton: false, timer: 900 });
+    }
+  } catch (err) {
+    console.error('Wishlist toggle error', err);
+    Swal.fire({ icon: 'error', title: 'Server error', showConfirmButton: false, timer: 1400 });
+  }
+}
 </script>
 
 </body>

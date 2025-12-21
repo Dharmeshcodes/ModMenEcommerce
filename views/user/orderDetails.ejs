@@ -7,6 +7,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
   <style>
     :root{
@@ -152,7 +153,7 @@
                 <% const disableItemCancel = ["shipped","out_for_delivery","delivered","returned","return_requested","failed"].includes(item.status); %>
           <button 
     class="btn btn-danger cancelBtn"
-    data-order-id="<%= order._id %>"
+    data-order-id="<%= order.orderId %>"
     data-item-id="<%= item.itemId %>">
     Cancel
 </button>
@@ -256,7 +257,41 @@
 
             <div class="fw-bold mt-2">Payable Amount: ₹<%= order.payableAmount %></div>
             <div class="mt-2">Payment Method: <%= order.paymentMethod %></div>
-          </div>
+            <div class="fw-bold mt-2">Payable Amount: ₹<%= order.payableAmount %></div>
+              <!-- Payment Status -->
+<!-- Payment Status -->  
+<!-- Payment Status -->  
+<div class="mt-2 d-flex align-items-center">
+  <span class="fw-semibold me-2">Payment Status:</span>
+
+  <% if (order.paymentStatus === 'completed') { %>
+      <span class="badge bg-success">Success</span>
+
+  <% } else if (order.paymentStatus === 'pending') { %>
+      <span class="badge bg-warning text-dark">Pending</span>
+
+  <% } else if (order.paymentStatus === 'failed') { %>
+      <span class="badge bg-danger">Failed</span>
+
+  <% } else if (order.paymentStatus === 'refunded') { %>
+      <span class="badge bg-primary">Refunded</span>
+  <% } %>
+</div>
+
+<!-- Retry Payment Button (Uses fetch + SweetAlert) -->
+<% if (order.paymentStatus === 'failed') { %>
+  <div class="mt-3">
+    <button 
+      class="btn btn-primary px-4 py-2 rounded-pill"
+      id="retryPaymentBtn"
+      data-order-id="<%= order.orderId %>">
+      Retry Payment
+    </button>
+  </div>
+<% } %>
+
+ 
+
 
           <div class="section-title mt-3">Delivery Address</div>
           <div class="info-box" style="padding:12px; border-radius:8px;"> <%= order.address %> </div>
@@ -275,6 +310,37 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+
+     const pageError = "<%= error || '' %>";
+
+  if (pageError === "OUT_OF_STOCK_AFTER_PAYMENT") {
+    Swal.fire({
+      icon: "warning",
+      title: "Order Failed After Payment",
+      text: "Payment was successful, but the item went out of stock. Your refund will be processed shortly.",
+      confirmButtonText: "OK"
+    });
+  }
+
+  if (pageError === "OUT_OF_STOCK_BEFORE_PAYMENT") {
+    Swal.fire({
+      icon: "error",
+      title: "Item Out of Stock",
+      text: "One or more items went out of stock before payment. Please try again later.",
+      confirmButtonText: "OK"
+    });
+  }
+  if (pageError === "PAYMENT_ALREADY_COMPLETED") {
+  Swal.fire({
+    icon: "info",
+    title: "Payment Already Completed",
+    text: "This order has already been paid successfully.",
+    confirmButtonText: "OK"
+  });
+}
+
+
+
     const statuses = ["pending","confirmed","shipped","out_for_delivery","delivered","cancelled","return_requested","returned","failed"];
     function computeProgressPercent(index){ if(index <= 0) return 0; const steps = statuses.length - 1; return Math.round((index / steps) * 100); }
 
@@ -394,53 +460,53 @@ document.querySelectorAll('.cancelBtn').forEach(btn => {
         location.reload();
     });
 });
-//single return 
 document.querySelectorAll('.return-item-btn').forEach(btn => {
-    btn.addEventListener('click', async function () {
+  btn.addEventListener('click', async function () {
 
-        const orderId = this.dataset.order;
-        const itemId  = this.dataset.item;
+    const orderId = this.dataset.order;
+    const itemId  = this.dataset.item;
 
-        const { value: reason } = await Swal.fire({
-            title: "Return Item",
-            input: "text",
-            inputLabel: "Enter reason for return",
-            inputPlaceholder: "e.g. Wrong size, damaged product, etc.",
-            showCancelButton: true,
-            confirmButtonText: "Submit",
-            cancelButtonText: "Close",
-            inputValidator: (value) => {
-                if (!value) return "Return reason is required!";
-            }
-        });
-
-        if (!reason) return;
-
-        const response = await fetch(`/user/order/${orderId}/return-item/${itemId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reason })
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok || !data.success) {
-            return Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: data.message || "Something went wrong!"
-            });
-        }
-
-        await Swal.fire({
-            icon: "success",
-            title: "Return Requested",
-            text: "Your return request has been submitted."
-        });
-
-        location.reload();
+    const { value: reason } = await Swal.fire({
+      title: "Return Item",
+      input: "text",
+      inputLabel: "Enter reason for return",
+      inputPlaceholder: "e.g. Wrong size, damaged product, etc.",
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+      cancelButtonText: "Close",
+      inputValidator: (value) => {
+        if (!value) return "Return reason is required!";
+      }
     });
+
+    if (!reason) return;
+
+    const response = await fetch(`/user/order/${orderId}/return-item/${itemId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.success) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Action Not Allowed",
+        text: data.message || "Item cannot be returned."
+      });
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "Return Requested",
+      text: data.message || "Your return request has been submitted."
+    });
+
+    location.reload();
+  });
 });
+
 
 document.querySelectorAll('.return-order-btn').forEach(btn => {
   btn.addEventListener('click', async function () {
@@ -486,6 +552,34 @@ document.querySelectorAll('.return-order-btn').forEach(btn => {
     location.reload();
   });
 });
+
+// Retry Payment Handler
+document.getElementById("retryPaymentBtn")?.addEventListener("click", async () => {
+  const orderId = document.getElementById("retryPaymentBtn").dataset.orderId;
+
+  const res = await fetch(`/user/retry-payment/${orderId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+
+  const data = await res.json();
+
+  // Retry Not Allowed
+  if (!data.success) {
+    return Swal.fire({
+      icon: "error",
+      title: "Retry Not Allowed",
+      text: data.message || "Retry option is not available for this order."
+    });
+  }
+
+  // Redirect to payment page
+  window.location.href = data.redirectURL;
+});
+
+
+
+
 
 
 
