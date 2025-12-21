@@ -13471,3 +13471,116 @@
 {"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:09:23"}
 {"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:09:26"}
 {"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:09:26"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:12:21"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:12:21"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-20 22:12:49"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-20 22:12:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:33"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:33"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:41"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:41"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:51"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:51"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:20:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:20:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:21:03"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:21:03"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:21:17"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:21:17"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:22:45"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:22:45"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:22:52"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:22:52"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:24:55"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:24:55"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:24:58"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:24:58"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:25:01"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:25:01"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:25:07"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:25:07"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:25:15"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:25:15"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:25:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:25:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:27:22"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:27:22"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:27:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:27:28"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:27:37"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:27:37"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:27:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:27:50"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:35:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:35:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:35:50"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:35:50"}
+{"level":"info","message":"Request: GET /user/order/home - Body: undefined","timestamp":"2025-12-20 22:50:36"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 22:50:53"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 22:50:53"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:19:30"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:19:30"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:20:13"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:20:13"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:20:28"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:20:28"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:20:35"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:20:35"}
+{"level":"info","message":"Request: GET /user/user/contact - Body: undefined","timestamp":"2025-12-20 23:20:52"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-20 23:22:34"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-20 23:22:36"}
+{"level":"info","message":"Request: GET /user/contact - Body: undefined","timestamp":"2025-12-20 23:22:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-20 23:22:40"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-20 23:34:32"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:35:57"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:35:57"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:36:06"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:36:06"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:36:19"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:36:19"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:36:23"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:36:23"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-20 23:37:32"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-20 23:37:32"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-20 23:37:48"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-20 23:37:48"}
+{"level":"info","message":"Request: GET /images/about-model.jpg - Body: undefined","timestamp":"2025-12-20 23:37:48"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:02:08"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:02:09"}
+{"level":"info","message":"Request: GET /public/user/images/about/1.png - Body: undefined","timestamp":"2025-12-21 00:02:09"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:03:09"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:03:09"}
+{"level":"info","message":"Request: GET /public/user/images/about/1.png - Body: undefined","timestamp":"2025-12-21 00:03:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-21 00:03:47"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 00:03:47"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:03:59"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:03:59"}
+{"level":"info","message":"Request: GET /public/user/images/about/1.png - Body: undefined","timestamp":"2025-12-21 00:04:00"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:05:07"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:05:08"}
+{"level":"info","message":"Request: GET / - Body: undefined","timestamp":"2025-12-21 00:05:12"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:05:40"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:05:40"}
+{"level":"info","message":"Request: GET /user/user/home - Body: undefined","timestamp":"2025-12-21 00:05:42"}
+{"level":"info","message":"Request: GET /user/about - Body: undefined","timestamp":"2025-12-21 00:05:53"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:05:53"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-21 00:05:55"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-21 00:05:56"}
+{"level":"info","message":"Request: GET /user/logout - Body: undefined","timestamp":"2025-12-21 00:05:59"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-12-21 00:05:59"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-21 08:06:46"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:06:46"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-21 08:07:05"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-12-21 08:07:09"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-21 08:14:42"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:14:42"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-12-21 08:16:59"}
+{"level":"info","message":"Request: GET / - Body: undefined","timestamp":"2025-12-21 08:17:04"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-21 08:17:43"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:17:43"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-21 08:18:16"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:18:16"}

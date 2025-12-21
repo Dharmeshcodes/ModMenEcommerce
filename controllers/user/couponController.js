@@ -2,6 +2,9 @@ const Coupon = require("../../models/couponSchema");
 const Cart = require("../../models/cartSchema");
 const User = require("../../models/userSchema");
 
+const HTTP_STATUS = require("../../constans/httpStatus");
+const { apiLogger, errorLogger } = require("../../config/logger")
+
 const loadUserCoupons = async (req, res) => {
   try {
     const userId = req.session.user._id;
@@ -24,11 +27,10 @@ const loadUserCoupons = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
-    return res.redirect("/500");
+    errorLogger.error("Load User Coupons Error", error)
+    return res.redirect("/user/Page-404")
   }
 };
-
 
 async function computeTotals(userId) {
   const cart = await Cart.findOne({ userId }).populate("items.productId");
@@ -49,30 +51,30 @@ const applyCoupon = async (req, res) => {
     const { code } = req.body;
 
     const coupon = await Coupon.findOne({ code: code.trim() });
-    if (!coupon) return res.status(404).json({ message: "Invalid Coupon" });
+    if (!coupon)
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Invalid Coupon" });
 
-    if (!coupon.status) return res.status(400).json({ message: "Coupon is inactive" });
+    if (!coupon.status)
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Coupon is inactive" }); 
 
     if (new Date() > coupon.expiryDate)
-      return res.status(400).json({ message: "Coupon expired" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Coupon expired" });
 
     if (new Date() < coupon.startDate)
-      return res.status(400).json({ message: "Coupon not active yet" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Coupon not active yet" });
 
     const entry = coupon.usedUsers.find(u => u.userId.toString() === userId.toString());
     const userUsedCount = entry ? entry.count : 0;
 
     if (userUsedCount >= coupon.usagePerUser)
-      return res.status(400).json({ message: "You already used this coupon" });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "You already used this coupon" }); 
 
     const { subtotal, tax } = await computeTotals(userId);
 
-   
     const couponBaseAmount = subtotal + tax;
 
-    
     if (couponBaseAmount < coupon.minimumOrderAmount) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ 
         message: `Minimum order amount of ₹${coupon.minimumOrderAmount} required`
       });
     }
@@ -88,7 +90,6 @@ const applyCoupon = async (req, res) => {
       discount = coupon.discountValue;
     }
 
-   
     const finalTotal = subtotal + tax - discount;
 
     req.session.appliedCoupon = {
@@ -106,17 +107,17 @@ const applyCoupon = async (req, res) => {
     });
 
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server error" });
+    errorLogger.error("Apply Coupon Error", err); 
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ 
+      message: "Server error"
+    });
   }
 };
-
 
 const cancelCoupon = async (req, res) => {
   delete req.session.appliedCoupon;
   return res.json({ success: true });
 };
-
 
 const availableCoupons = async (req, res) => {
   try {
@@ -125,21 +126,19 @@ const availableCoupons = async (req, res) => {
       expiryDate: { $gte: new Date() }
     }).select("name code description type discountValue minimumOrderAmount expiryDate");
 
-
     return res.json({
       success: true,
       coupons
     });
 
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
+    errorLogger.error("Available Coupons Error", err); 
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ 
       success: false,
       message: "Failed to load coupons"
     });
   }
 };
-
 
 module.exports = {
   applyCoupon,

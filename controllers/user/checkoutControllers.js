@@ -1,12 +1,11 @@
 const Product = require("../../models/productSchema");
-const Category = require("../../models/categorySchema");
-const SubCategory = require("../../models/subcategorySchema");
 const User = require("../../models/userSchema");
 const Cart = require("../../models/cartSchema");
 const Address = require("../../models/adressSchema");
 const Wallet = require("../../models/walletSchema");
 
-
+const HTTP_STATUS = require("../../constans/httpStatus")
+const { apiLogger, errorLogger } = require("../../config/logger")
 
 const getCheckoutPage = async (req, res) => {
   try {
@@ -124,10 +123,11 @@ const getCheckoutPage = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
-    return res.redirect("/user/Page404");
+    errorLogger.error("Checkout Page Error", error); 
+    return res.redirect("/user/Page-404"); 
   }
 };
+
 const loadPaymentPage = async (req, res) => {
   try {
     const user = req.session.user;
@@ -161,7 +161,6 @@ const loadPaymentPage = async (req, res) => {
       if (!variant) continue;
 
       const stock = variant.variantQuantity;
-
       if (stock <= 0) continue;
 
       if (item.quantity > stock) item.quantity = stock;
@@ -174,12 +173,10 @@ const loadPaymentPage = async (req, res) => {
     cart.items = validItems;
     await cart.save();
 
-    const inStockItems = validItems;
-
-    if (inStockItems.length === 0) return res.redirect("/user/cart");
+    if (validItems.length === 0) return res.redirect("/user/cart");
 
     let subtotal = 0;
-    inStockItems.forEach(i => {
+    validItems.forEach(i => {
       subtotal += i.salePrice * i.quantity;
     });
 
@@ -194,10 +191,7 @@ const loadPaymentPage = async (req, res) => {
     const addresses = addressDoc ? addressDoc.address : [];
 
     const address = addresses.find(a => a._id.toString() === addressId);
-
-    if (!address) {
-      return res.redirect("/user/checkout-address");
-    }
+    if (!address) return res.redirect("/user/checkout-address");
 
     let shippingCharge = 50;
     if (address.state) {
@@ -208,19 +202,18 @@ const loadPaymentPage = async (req, res) => {
     let payableTotal = subtotal + tax + shippingCharge;
 
     let appliedCoupon = req.session.appliedCoupon;
-
     if (appliedCoupon) {
       payableTotal -= appliedCoupon.discount;
       if (payableTotal < 0) payableTotal = 0;
     }
-    const walletDoc = await Wallet.findOne({ userId });
-const walletBalance = walletDoc ? walletDoc.balance : 0;
 
+    const walletDoc = await Wallet.findOne({ userId });
+    const walletBalance = walletDoc ? walletDoc.balance : 0;
 
     return res.render("user/checkoutPayment", {
       user: userData,
       address,
-      cartItems: inStockItems,
+      cartItems: validItems,
       subtotal,
       tax,
       cgst,
@@ -232,8 +225,8 @@ const walletBalance = walletDoc ? walletDoc.balance : 0;
     });
 
   } catch (err) {
-    console.log(err);
-    return res.redirect("/500");
+    errorLogger.error("Load Payment Page Error", err); 
+    return res.redirect("/user/Page-404"); 
   }
 };
 
@@ -293,7 +286,6 @@ const loadOrderReviewPage = async (req, res) => {
       }
 
       const stock = variant.variantQuantity;
-
       if (stock <= 0) continue;
 
       if (item.quantity > stock) {
@@ -310,9 +302,7 @@ const loadOrderReviewPage = async (req, res) => {
     cart.items = validItems;
     await cart.save();
 
-    if (validItems.length === 0) {
-      return res.redirect("/user/cart");
-    }
+    if (validItems.length === 0) return res.redirect("/user/cart");
 
     let subtotal = 0;
     let discount = 0;
@@ -358,13 +348,13 @@ const loadOrderReviewPage = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
-    return res.redirect("/500");
+    errorLogger.error("Order Review Page Error", error); 
+    return res.redirect("/user/Page-404");
   }
 };
 
 module.exports = {
   getCheckoutPage,
   loadPaymentPage,
- loadOrderReviewPage
+  loadOrderReviewPage
 };

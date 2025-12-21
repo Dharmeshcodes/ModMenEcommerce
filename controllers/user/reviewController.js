@@ -3,6 +3,9 @@ const Product = require("../../models/productSchema");
 const Order = require("../../models/orderSchema");
 const mongoose = require("mongoose");
 
+const HTTP_STATUS = require("../../constans/httpStatus"); 
+const { apiLogger, errorLogger } = require("../../config/logger"); 
+
 const addReview = async (req, res) => {
   try {
     const userId = req.session.user?._id;
@@ -52,11 +55,15 @@ const addReview = async (req, res) => {
     const avgRating = stats[0]?.avg || 0;
     await Product.findByIdAndUpdate(productObjectId, { averageRating: avgRating });
 
+    apiLogger.info("Review added successfully for product %s", productId);
+
     return res.json({ success: true, message: "Review added" });
 
   } catch (err) {
-    console.log("addReview error:", err);
-    return res.json({ success: false, message: "Something went wrong" });
+    errorLogger.error("addReview error: %o", err); 
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR) 
+      .json({ success: false, message: "Something went wrong" });
   }
 };
 
@@ -90,11 +97,15 @@ const deleteReview = async (req, res) => {
     const avgRating = stats[0]?.avg || 0;
     await Product.findByIdAndUpdate(productId, { averageRating: avgRating });
 
+    apiLogger.info("Review deleted successfully: %s", reviewId);
+
     return res.json({ success: true, message: "Review deleted" });
 
   } catch (err) {
-    console.log("deleteReview error:", err);
-    return res.json({ success: false, message: "Something went wrong" });
+    errorLogger.error("deleteReview error: %o", err); 
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR) 
+      .json({ success: false, message: "Something went wrong" });
   }
 };
 

@@ -415,10 +415,44 @@ const uploadProfileImage=async (req,res)=>{
     });
   }
   catch(error){
-    onsole.error('Error updating profile image:', error);
+    console.error('Error updating profile image:', error);
     res.status(500).json({ message: 'Server error' });
   }
 }
+const loadContactPage = async (req, res) => {
+  try {
+    const userId = req.session.user?._id || null;
+    let userData = null;
+
+    if (userId) {
+      userData = await User.findById(userId);
+    }
+
+    return res.render("user/contact", {
+      user: userData
+    });
+  } catch (error) {
+    console.log("Contact page error:", error);
+    return res.redirect("/user/Page-404");
+  }
+};
+
+const loadAboutPage = async (req, res) => {
+  try {
+    const user = req.session.user || null;
+    let userData = null;
+
+    if (user && user._id) {
+      userData = await User.findById(user._id);
+    }
+
+    return res.render("user/about", {
+      user: userData
+    });
+  } catch (error) {
+    return res.redirect("/user/Page-404");
+  }
+};
 
 module.exports = {
   getForgotPasswordPage,
@@ -437,5 +471,7 @@ module.exports = {
   resendEmailOtp,
   getchangePassword,
   changePassword,
-  uploadProfileImage
+  uploadProfileImage,
+  loadContactPage,
+  loadAboutPage
 };

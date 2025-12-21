@@ -4,6 +4,9 @@ const subCategory = require('../../models/subcategorySchema');
 const User = require('../../models/userSchema');
 const Review = require('../../models/reviewSchema');
 
+const HTTP_STATUS = require("../../constans/httpStatus"); 
+const { apiLogger, errorLogger } = require("../../config/logger");
+
 const productDetails = async (req, res) => {
   try {
     const user = req.session.user || null;
@@ -26,11 +29,20 @@ const productDetails = async (req, res) => {
       })
       .lean();
 
-    if (!product || product.isDeleted || !product.isListed || !product.categoryId || !product.subCategoryId) {
+    if (
+      !product ||
+      product.isDeleted ||
+      !product.isListed ||
+      !product.categoryId ||
+      !product.subCategoryId
+    ) {
       return res.redirect('/user/sale');
     }
 
-    const variant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
+    const variant =
+      product.variants && product.variants.length > 0
+        ? product.variants[0]
+        : null;
 
     const alsoLikeProducts = await Product.find({
       categoryId: product.categoryId,
@@ -44,7 +56,7 @@ const productDetails = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    res.render('user/product-detail', {
+    return res.render('user/product-detail', {
       product,
       alsoLikeProducts,
       reviews,
@@ -53,8 +65,8 @@ const productDetails = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error in product detail page:', error);
-    res.status(500).send('there is an error in product detail page');
+    errorLogger.error("Product Details Page Error", error); 
+    return res.redirect("/user/Page-404"); 
   }
 };
 

@@ -57,8 +57,9 @@ router.patch('/verify-email-otp', userAuth, profileController.verifyEmailOtp);
 router.get('/resend-email-otp',userAuth,profileController.resendEmailOtp);
 router.get('/change-password',userAuth,profileController.getchangePassword);
 router.post('/change-password', userAuth,profileController.changePassword)
-router.post('/profile-image',userAuth,uploadUserImages.single('profileImage'),profileController.uploadProfileImage
-);
+router.post('/profile-image',userAuth,uploadUserImages.single('profileImage'),profileController.uploadProfileImage);
+router.get("/contact",userAuth,profileController.loadContactPage)
+router.get("/about", userAuth,profileController.loadAboutPage)
 
 router.get('/address',userAuth,addressController.getAddress);
 router.get('/addAddress',userAuth,addressController.getAddAddress);
