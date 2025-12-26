@@ -13584,3 +13584,31 @@
 {"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:17:43"}
 {"level":"info","message":"Connection to database established","timestamp":"2025-12-21 08:18:16"}
 {"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-21 08:18:16"}
+{"level":"info","message":"Connection to database established","timestamp":"2025-12-26 13:04:04"}
+{"level":"info","message":"Server listening on port 7711","timestamp":"2025-12-26 13:04:04"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-26 13:04:45"}
+{"level":"info","message":"Request: GET / - Body: undefined","timestamp":"2025-12-26 13:04:51"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-26 13:04:51"}
+{"level":"info","message":"Request: GET /favicon.ico - Body: undefined","timestamp":"2025-12-26 13:04:53"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-12-26 13:05:16"}
+{"level":"info","message":"Request: GET /admin/login - Body: undefined","timestamp":"2025-12-26 13:06:16"}
+{"level":"info","message":"Request: POST /admin/login - Body: { email: 'dharmeshthse@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-12-26 13:06:27"}
+{"level":"info","message":"Admin login attempt: { email: 'dharmeshthse@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-12-26 13:06:27"}
+{"level":"info","message":"Request: GET /admin/dashboard - Body: undefined","timestamp":"2025-12-26 13:06:27"}
+{"level":"info","message":"Request: GET /admin/adminProducts - Body: undefined","timestamp":"2025-12-26 13:06:34"}
+{"level":"info","message":"Request: GET /admin/sales-report - Body: undefined","timestamp":"2025-12-26 13:06:36"}
+{"level":"info","message":"Admin sales report accessed","query":{},"timestamp":"2025-12-26 13:06:36"}
+{"level":"info","message":"Request: GET /admin/sales-report/export/pdf? - Body: undefined","timestamp":"2025-12-26 13:06:39"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-26 13:16:47"}
+{"level":"info","message":"Request: GET /user/login - Body: undefined","timestamp":"2025-12-26 13:16:53"}
+{"level":"info","message":"Request: POST /user/login - Body: { email: 'rohit@gmail.com', password: 'Dharmu77@' }","timestamp":"2025-12-26 13:17:04"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-26 13:17:04"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-26 13:17:07"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-26 13:17:19"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-26 13:17:20"}
+{"level":"info","message":"Request: POST /user/addToCart - Body: {\n  productId: '693c4d861786956dd8ee1e57',\n  size: 'S',\n  color: 'Air blue',\n  quantity: 1\n}","timestamp":"2025-12-26 13:17:23"}
+{"level":"info","message":"Request: POST /user/review/add - Body: { productId: '693c4d861786956dd8ee1e57', rating: 4, comment: 'hfhb' }","timestamp":"2025-12-26 13:17:43"}
+{"level":"info","message":"Request: GET /user/home - Body: undefined","timestamp":"2025-12-26 13:17:57"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-26 13:17:59"}
+{"level":"info","message":"Request: GET /user/product/693c4d861786956dd8ee1e57 - Body: undefined","timestamp":"2025-12-26 13:18:02"}
+{"level":"info","message":"Request: GET /images/default-avatar.png - Body: undefined","timestamp":"2025-12-26 13:18:03"}
