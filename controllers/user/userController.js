@@ -551,6 +551,15 @@ const createReferralCode = async (req, res) => {
     return res.redirect("/500");
   }
 };
+const loadRootHome = async (req, res) => {
+  try {
+    return res.redirect("/user/home");
+  } catch (error) {
+    console.error(error);
+    return res.redirect("/pageerror");
+  }
+};
+
 
 
 module.exports = {
@@ -567,6 +576,7 @@ module.exports = {
   googleAuth,
   googleAuthCallback,
   getReferralCodePage,
-  createReferralCode
+  createReferralCode,
+  loadRootHome
 
 };

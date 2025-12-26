@@ -10,6 +10,8 @@ const passport = require('./config/passport');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const { apiLogger, errorLogger } = require('./config/logger');
+const userController=require("./controllers/user/userController.js")
+
 
 
 const app = express();
@@ -67,6 +69,9 @@ app.use((req, res, next) => {
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.get("/", userController.loadRootHome);
+
 
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
