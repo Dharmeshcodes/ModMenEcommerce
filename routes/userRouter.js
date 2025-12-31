@@ -21,7 +21,7 @@ const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
 router.get('/home', checkBlockedUser,userController.loadHomepage);
 router.get('/sale', userAuth, checkBlockedUser, userController.salePage);
-router.get('/product/:id', userAuth, checkBlockedUser, productController.productDetails);
+router.get('/product/:id',checkBlockedUser, productController.productDetails);
 
 // Route: /signup
 router.get('/signup', userController.loadSignup);
