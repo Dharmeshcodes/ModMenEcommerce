@@ -6,7 +6,14 @@ const Cart = require("../../models/cartSchema");
 
 const addToCart = async (req, res) => {
   try {
+
+    
+
     const userId = req.session.user._id;
+    if(!userId){
+      res.render("user/login").json({success:false,message:"please login"})
+    }
+
     const { productId, size, color, quantity = 1 } = req.body;
 
     if (!productId || !color || !size) {
