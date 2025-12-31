@@ -21,6 +21,7 @@ const {userAuth, adminAuth} =require('../middlewares/auth');
 
 router.get('/login',adminController.loadAdminLogin);
 router.post('/login',adminController.adminLogin);
+router.get("/account", adminAuth, adminController.loadAdminAccount)
 
 router.get('/logout',adminController.logout);
 

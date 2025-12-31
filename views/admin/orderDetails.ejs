@@ -108,6 +108,12 @@
                     </tr>
                   </thead>
                   <tbody>
+                    
+                    
+                  <%const totalItemsCount = items.length%>
+
+   
+
                     <% items.forEach(it => { %>
                       <tr>
                         <td>
@@ -128,31 +134,32 @@
                                 </div>
                               <% } %>
 
-                              <% if (it.status === "return_requested") { %>
-                                <div class="mt-2 p-2 border rounded bg-light" style="max-width:320px;">
-                                  <div style="font-size:0.85rem; font-weight:600;">Return Reason:</div>
-                                  <div style="font-size:0.85rem;" class="text-muted"><%= it.returnReason %></div>
-                                  <div class="mt-2 d-flex gap-2">
-                                    <button class="btn btn-sm btn-success"
+                              <% if (it.status === "return_requested" && totalItemsCount > 1) { %>
+  <div class="mt-2 p-2 border rounded bg-light" style="max-width:320px;">
+    <div style="font-size:0.85rem; font-weight:600;">Return Reason:</div>
+    <div style="font-size:0.85rem;" class="text-muted"><%= it.returnReason %></div>
+
+    <div class="mt-2 d-flex gap-2">
+      <button class="btn btn-sm btn-success"
         onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'accept_nostock')">
-  Accept (No Stock)
-</button>
+        Accept (No Stock)
+      </button>
 
-<button class="btn btn-sm btn-primary"
+      <button class="btn btn-sm btn-primary"
         onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'accept_addstock')">
-  Accept (Add Stock)
-</button>
+        Accept (Add Stock)
+      </button>
 
-<button class="btn btn-sm btn-danger"
+      <button class="btn btn-sm btn-danger"
         onclick="handleItemReturnDecision('<%= order.orderId %>', '<%= it.itemId %>', 'reject')">
-  Reject
-</button>
+        Reject
+      </button>
+    </div>
+  </div>
+<% } %>
 
                                     
-                                    
-                                  </div>
-                                </div>
-                              <% } %>
+                              
 
                             </div>
                           </div>

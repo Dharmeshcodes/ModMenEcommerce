@@ -70,6 +70,34 @@ const logout = async (req, res) => {
   }
 };
 
+const loadAdminAccount = async (req, res) => {
+  try {
+    const adminId = req.session.admin;
+
+    if (!adminId) {
+      return res.redirect("/admin/login");
+    }
+
+    const admin = await User.findOne({
+      _id: adminId,
+      role: "admin"
+    }).select("fullName email mobile profileImage");
+
+    if (!admin) {
+      return res.redirect("/admin/login");
+    }
+
+    res.render("admin/account", {
+      user: admin
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Something went wrong");
+  }
+};
+
+
 const buildDateFilter = (type, from, to) => {
   if (type === "day") {
     return {
@@ -103,7 +131,6 @@ const buildDateFilter = (type, from, to) => {
       $lte: dayjs(to).endOf("day").toDate()
     };
   }
-
   return {};
 };
 
@@ -449,5 +476,6 @@ module.exports = {
   getSalesReport,
   exportSalesExcel,
   exportSalesPDF,
+  loadAdminAccount
 
 };

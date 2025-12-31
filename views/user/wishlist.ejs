@@ -108,8 +108,7 @@
 
 <div class="container-fluid">
     <div class="row flex-nowrap justify-content-start">
-        
-        <!-- Sidebar -->
+
         <div class="col-lg-3 col-md-4 sidebar-group">
             <div class="sidebar-profile-capsule d-flex align-items-center">
                 <img src="<%= user.profileImage || '/images/default-avatar.png' %>" class="profile-img">
@@ -121,7 +120,7 @@
                     <a href="/user/profile" class="list-group-item"><i class="bi bi-person me-3"></i> My Profile</a>
                     <a href="/user/address" class="list-group-item"><i class="bi bi-geo-alt me-3"></i> My Address</a>
                     <a href="/user/order" class="list-group-item"><i class="bi bi-bag-check me-3"></i> My Order</a>
-                    <a href="/user/wishlist" class="list-group-item ">
+                    <a href="/user/wishlist" class="list-group-item">
                         <i class="bi bi-heart me-3"></i> My Wishlist (<%= wishlist.length %>)
                     </a>
                     <a href="/user/wallet" class="list-group-item"><i class="bi bi-wallet2 me-3"></i> My Wallet</a>
@@ -133,9 +132,8 @@
             </div>
         </div>
 
-        <!-- Main Wishlist Section -->
         <div class="col-lg-9 col-md-8 main-content-section">
-            
+
             <div class="main-content-fullname">Hi, <%= user.fullName %></div>
 
             <div class="wishlist-box">
@@ -143,27 +141,26 @@
                 <div class="wishlist-header">
                     <div class="wishlist-title">Wishlist (<%= wishlist.length %>)</div>
 
-                    
-                        <button type="button" class="btn-empty-wishlist" onclick="emptyWishlist('<%= user._id %>')">Empty my Wishlist</button>
-                    
+                    <% if (wishlist.length > 0) { %>
+                        <button type="button" class="btn-empty-wishlist"
+                                onclick="emptyWishlist('<%= user._id %>')">
+                            Empty my Wishlist
+                        </button>
+                    <% } %>
                 </div>
 
                 <div class="wishlist-scroll">
                     <div class="wishlist-grid">
 
                         <% if (wishlist.length > 0) { %>
+
                             <% wishlist.forEach(p => { %>
-
                                 <div class="wish-card" id="wish_<%= p._id %>">
-
                                     <img src="<%= p.images[0].url %>" alt="<%= p.name %>">
-
                                     <div class="product-title"><%= p.name %></div>
-
                                     <div class="price">
                                         ₹<%= p.variants[0].salePrice.toLocaleString('en-IN') %>
                                     </div>
-
                                     <div class="discount">
                                         <%= p.offer && p.offer.productOffer ? p.offer.productOffer + '% off' : '' %>
                                     </div>
@@ -181,22 +178,18 @@
                                         onclick="removeFromWishlist('<%= p._id %>')">
                                         Remove from wishlist
                                     </button>
-
                                 </div>
-
                             <% }) %>
 
                         <% } else { %>
 
-                            <% for(let i=0;i<4;i++){ %>
-                                <div class="wish-card">
-                                    <img src="/images/product-placeholder.png">
-                                    <div class="product-title">No items</div>
-                                    <div class="price">—</div>
-                                    <button class="btn-add-cart" disabled>Add To Cart</button>
-                                    <button class="btn-remove" disabled>Remove</button>
-                                </div>
-                            <% } %>
+                            <div class="d-flex flex-column justify-content-center align-items-center w-100"
+                                 style="grid-column:1/-1; min-height:320px;">
+                                <i class="fa-regular fa-heart fa-3x text-muted mb-3"></i>
+                                <h5 class="fw-semibold">Your wishlist is empty</h5>
+                                <p class="text-muted mb-3">Save items you like to see them here later.</p>
+                                <a href="/" class="btn btn-dark px-4">Continue Shopping</a>
+                            </div>
 
                         <% } %>
 
@@ -204,7 +197,6 @@
                 </div>
 
             </div>
-
         </div>
     </div>
 </div>
@@ -214,85 +206,40 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-/* -----------------------------------------
-   ADD TO CART FROM WISHLIST
------------------------------------------ */
-
 async function addToCartFromWishlist(productId, size, color) {
-    try {
-        const res = await fetch('/user/addToCart', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ productId, size, color, quantity: 1 })
-        });
-
-        const data = await res.json();
-
-        if (!data.success) {
-            return Swal.fire({ icon: "error", title: "Failed", text: data.message });
-        }
-
-        Swal.fire({ icon: "success", title: "Added to Cart", text: "Product moved to cart!" })
-            .then(() => location.reload());
-
-    } catch (err) {
-        Swal.fire({ icon: "error", title: "Server Error", text: "Try again later." });
+    const res = await fetch('/user/addToCart', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, size, color, quantity: 1 })
+    });
+    const data = await res.json();
+    if (!data.success) {
+        return Swal.fire({ icon: "error", title: "Failed", text: data.message });
     }
+    Swal.fire({ icon: "success", title: "Added to Cart" }).then(() => location.reload());
 }
-
 
 async function removeFromWishlist(productId) {
-    try {
-        const res = await fetch(`/user/wishlist/remove?productId=${productId}`, {
-            method: "GET"
-        });
-
-        const data = await res.json();
-
-        if (!data.success) {
-            return Swal.fire({ icon: "error", title: "Failed", text: data.message });
-        }
-
-        Swal.fire({ icon: "success", title: "Removed", text: "Product removed!" });
-
-        // remove card from UI
-        const card = document.getElementById(`wish_${productId}`);
-        if (card) card.remove();
-
-        // update wishlist counter
-        const title = document.querySelector(".wishlist-title");
-        if (title) {
-            const count = parseInt(title.innerText.match(/\d+/)[0]);
-            title.innerText = `Wishlist (${count - 1})`;
-        }
-
-    } catch (err) {
-        Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
+    const res = await fetch(`/user/wishlist/remove?productId=${productId}`);
+    const data = await res.json();
+    if (!data.success) {
+        return Swal.fire({ icon: "error", title: "Failed", text: data.message });
     }
+    location.reload();
 }
+
 async function emptyWishlist(userId){
-    try{
-        const response=await fetch(`/user/wishlist/emptyWishlist/${userId}`,{
+    const res = await fetch(`/user/wishlist/emptyWishlist/${userId}`, {
         method:"POST",
-        headers:{"Content-Type":"application/json"}
-        })
-
-
-        const data = await response.json();
-
+        headers:{ "Content-Type":"application/json" }
+    });
+    const data = await res.json();
     if (data.success) {
-      Swal.fire("Success", data.message, "success");
+        Swal.fire("Success", data.message, "success").then(() => location.reload());
     } else {
-      Swal.fire("Error", data.message, "error");
+        Swal.fire("Error", data.message, "error");
     }
-
-  } catch (error) {
-    Swal.fire("Error", "Server error", "error");
-  }
 }
-
-    
-
 </script>
 
 </body>
