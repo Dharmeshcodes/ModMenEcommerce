@@ -3,6 +3,7 @@ const Category = require('../../models/categorySchema');
 const subCategory = require('../../models/subcategorySchema');
 const User = require('../../models/userSchema');
 const Review = require('../../models/reviewSchema');
+const Coupon = require('../../models/couponSchema');
 
 const HTTP_STATUS = require("../../constans/httpStatus"); 
 const { apiLogger, errorLogger } = require("../../config/logger");
@@ -30,14 +31,19 @@ const productDetails = async (req, res) => {
       .lean();
 
     if (
-      !product ||
-      product.isDeleted ||
-      !product.isListed ||
-      !product.categoryId ||
-      !product.subCategoryId
-    ) {
-      return res.redirect('/user/sale');
-    }
+          !product ||
+          product.isDeleted ||
+          !product.isListed ||
+          !product.categoryId ||
+          !product.subCategoryId
+        ) {
+          req.flash(
+            'error_msg',
+            'Some products are unavailable right now. Please explore other items.'
+          );
+          return res.redirect('/user/sale');
+        }
+
 
     const variant =
       product.variants && product.variants.length > 0
@@ -56,6 +62,18 @@ const productDetails = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
+    const today = new Date();
+
+    const coupons = await Coupon.find({
+      status: true,
+      startDate: { $lte: today },
+      expiryDate: { $gte: today }
+    })
+      .select('code description')
+      .lean();
+
+    product.coupons = coupons;
+
     return res.render('user/product-detail', {
       product,
       alsoLikeProducts,
@@ -65,8 +83,8 @@ const productDetails = async (req, res) => {
     });
 
   } catch (error) {
-    errorLogger.error("Product Details Page Error", error); 
-    return res.redirect("/user/Page-404"); 
+    errorLogger.error("Product Details Page Error", error);
+    return res.redirect("/user/Page-404");
   }
 };
 

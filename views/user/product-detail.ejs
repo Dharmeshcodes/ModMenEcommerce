@@ -411,15 +411,26 @@
 
     <h1 class="mb-1" style="font-family: 'Poppins', serif; font-size:2.1rem;font-weight:700;"><%= product.name %></h1>
     <div class="mb-2 d-flex align-items-center gap-2" style="margin-bottom:10px;">
-      <span>
-        <% for(let i=1; i<=5; i++){ %>
-          <i class="<%= i <= Math.floor(product.averageRating||4.5) ? 'fas fa-star' : (i-0.5 == product.averageRating ? 'fas fa-star-half-alt' : 'far fa-star') %>" style="color:#FFBB36;font-size:1.34em;margin-right:1px;"></i>
+        <% if (product.ratings && product.ratings.average > 0) { %>
+          <span>
+            <% for (let i = 1; i <= 5; i++) { %>
+              <i class="<%= i <= Math.floor(product.ratings.average) ? 'fas fa-star' : 'far fa-star' %>"
+                style="color:#FFBB36;font-size:1.34em;margin-right:1px;"></i>
+            <% } %>
+          </span>
+          <span style="font-size:1.08em;font-weight:500;color:#454545">
+            <%= product.ratings.average.toFixed(1) %>/5
+          </span>
+        <% } else { %>
+          <span>
+            <% for (let i = 1; i <= 5; i++) { %>
+              <i class="far fa-star" style="color:#dcdcdc;font-size:1.34em;margin-right:1px;"></i>
+            <% } %>
+          </span>
         <% } %>
-      </span>
-      <span style="font-size:1.08em;font-weight:500;color:#454545">
-        <%= (product.averageRating !== undefined && product.averageRating !== null) ? product.averageRating.toFixed(1) : '4.5' %>/5
-      </span>
-    </div>
+      </div>
+
+
       <div class="product-price mb-1 d-flex align-items-center gap-3" 
      style="font-size:2.2rem;font-weight:700;color:#222;">
 
@@ -452,19 +463,19 @@
       
     <!-- Coupons -->
     <div class="coupons-block mb-3 ps-3" style="color:#666;font-size:1.01rem;">
-      <% (product.coupons || [
-        {price:"1,189", discount:"10", minPurchase:"-", code:"APP10"},
-        {price:"1,119", discount:"20", minPurchase:"4599", code:"FLAT20"},
-        {price:"1,189", discount:"15", minPurchase:"2999", code:"FLAT15"},
-        {price:"1,259", discount:"10", minPurchase:"1999", code:"FLAT10"}
-      ]).forEach(function(cpn) { %>
-        <div class="coupon-box d-flex align-items-center mb-2">
-          <span class="coupon-ico"><i class="fa-regular fa-circle-check"></i></span>
-          <span>Get this for <span class="coupon-bold" style="font-weight:600;color:#18191a;">INR <%= cpn.price %></span>
-          Flat <%= cpn.discount %>% Off<% if (cpn.minPurchase!=="-") { %> on minimum purchase of <%= cpn.minPurchase %>/<% } %>
-          <span class="coupon-code" style="background:#efe5cd;font-family:monospace;padding:2px 12px;color:#ae8b0c;border-radius:6px;margin-left:6px;"><%= cpn.code %></span></span>
-        </div>
-      <% }) %>
+      <% (product.coupons || []).forEach(function(cpn) { %>
+  <div class="coupon-box d-flex align-items-center mb-2">
+    <span class="coupon-ico">
+      <i class="fa-regular fa-circle-check"></i>
+    </span>
+
+    <span>
+      <%= cpn.description %>
+      <span class="coupon-code"><%= cpn.code %></span>
+    </span>
+  </div>
+<% }) %>
+
     </div>
 
 
@@ -655,7 +666,10 @@
          <div class="like-title">
           <a href="/user/product/<%= item._id %>" class="text-decoration-none text-dark"><%= item.name %></a>
          </div>
-         <div class="like-price">₹ <%= Math.round(variant.salePrice) %>.00</div>
+         <div class="like-price">
+  ₹ <%= item.variants && item.variants[0] ? item.variants[0].salePrice.toFixed(2) : '' %>
+</div>
+
          <div class="like-stars">
            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
            <i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>

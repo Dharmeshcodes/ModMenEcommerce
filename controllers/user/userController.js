@@ -9,7 +9,7 @@ const subCategory = require('../../models/subcategorySchema');
 const passport = require('../../config/passport');
 const { apiLogger, errorLogger } = require('../../config/logger');
 const Wallet = require('../../models/walletSchema');
-
+const Review = require('../../models/reviewSchema')
 
 
 const loadHomepage = async (req, res) => {
@@ -74,7 +74,6 @@ const salePage = async (req, res) => {
 
     const {
       category,
-      subCategory,
       size,
       sleeveType,
       fitType,
@@ -86,87 +85,156 @@ const salePage = async (req, res) => {
     const pageSize = 12;
     const skip = (page - 1) * pageSize;
 
-    const categories = await Category.find({ isListed: true, isDeleted: false }).lean();
+    const categories = await Category.find({
+      isListed: true,
+      isDeleted: false
+    }).lean();
 
-    let query = { isDeleted: false, isListed: true };
+    // ✅ FETCH ALLOWED CATEGORY & SUBCATEGORY IDS
+    const allowedCategories = await Category.find({
+      isListed: true,
+      isDeleted: false
+    }).select('_id').lean();
 
-    if (category)
-      query.categoryId = { $in: Array.isArray(category) ? category : [category] };
+    const allowedSubCategories = await subCategory.find({
+      isListed: true,
+      isDeleted: false
+    }).select('_id').lean();
 
-    if (subCategory)
-      query.subCategoryId = { $in: Array.isArray(subCategory) ? subCategory : [subCategory] };
+    const allowedCategoryIds = allowedCategories.map(c => c._id);
+    const allowedSubCategoryIds = allowedSubCategories.map(sc => sc._id);
 
-    if (size)
-      query["variants.size"] = { $in: Array.isArray(size) ? size : [size] };
+    // ✅ BASE QUERY (FIXED)
+    let query = {
+      isDeleted: false,
+      isListed: true,
+      displayOffer: { $gt: 0 },
+      categoryId: { $in: allowedCategoryIds },
+      subCategoryId: { $in: allowedSubCategoryIds }
+    };
 
-    if (sleeveType)
-      query.sleeveType = { $in: Array.isArray(sleeveType) ? sleeveType : [sleeveType] };
+    if (category) {
+      query.categoryId = {
+        $in: Array.isArray(category) ? category : [category]
+      };
+    }
 
-    if (fitType)
-      query.fitType = { $in: Array.isArray(fitType) ? fitType : [fitType] };
+    if (size) {
+      query["variants.size"] = {
+        $in: Array.isArray(size) ? size : [size]
+      };
+    }
 
-    if (search.trim())
-      query.name = { $regex: search.trim(), $options: "i" };
+    if (sleeveType) {
+      query.sleeveType = {
+        $in: Array.isArray(sleeveType) ? sleeveType : [sleeveType]
+      };
+    }
+
+    if (fitType) {
+      query.fitType = {
+        $in: Array.isArray(fitType) ? fitType : [fitType]
+      };
+    }
+
+    if (search.trim()) {
+      query.name = {
+        $regex: search.trim(),
+        $options: "i"
+      };
+    }
+
+    let sortObj = {};
+    switch (sortBy) {
+      case "pricelowhigh":
+        sortObj = { "variants.0.salePrice": 1 };
+        break;
+      case "pricehighlow":
+        sortObj = { "variants.0.salePrice": -1 };
+        break;
+      case "newest":
+        sortObj = { createdAt: -1 };
+        break;
+      default:
+        sortObj = { createdAt: -1 };
+    }
 
     const totalCount = await Product.countDocuments(query);
     const totalPages = Math.ceil(totalCount / pageSize);
 
     let saleProducts = await Product.find(query)
-      .populate({ path: "categoryId", match: { isListed: true, isDeleted: false } })
-      .populate({ path: "subCategoryId", match: { isListed: true, isDeleted: false } })
+      .populate({
+        path: "categoryId",
+        select: "name"
+      })
+      .populate({
+        path: "subCategoryId",
+        select: "name"
+      })
+      .sort(sortObj)
       .skip(skip)
       .limit(pageSize)
-      .lean()
-      .sort({createdAt:-1});
+      .lean();
 
-    saleProducts = saleProducts.filter(p => p.categoryId && p.subCategoryId);
+    // ⭐ RATINGS (UNCHANGED)
+    const productIds = saleProducts.map(p => p._id);
 
-    if (sortBy === "pricelowhigh") {
-      saleProducts.sort((a, b) => a.variants[0].salePrice - b.variants[0].salePrice);
-    } else if (sortBy === "pricehighlow") {
-      saleProducts.sort((a, b) => b.variants[0].salePrice - a.variants[0].salePrice);
-    } else if (sortBy === "newest") {
-      saleProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    } else {
-      saleProducts.sort((a, b) => b._id - a._id);
-    }
+    const reviews = await Review.aggregate([
+      { $match: { productId: { $in: productIds } } },
+      {
+        $group: {
+          _id: "$productId",
+          avgRating: { $avg: "$rating" },
+          totalReviews: { $sum: 1 }
+        }
+      }
+    ]);
 
-    const params = [];
+    const ratingMap = {};
+    reviews.forEach(r => {
+      ratingMap[r._id.toString()] = {
+        avgRating: Math.round((r.avgRating || 0) * 10) / 10,
+        totalReviews: r.totalReviews || 0
+      };
+    });
 
-    if (category)
-      (Array.isArray(category) ? category : [category]).forEach(c => params.push(`category=${c}`));
-
-    if (subCategory)
-      (Array.isArray(subCategory) ? subCategory : [subCategory]).forEach(s => params.push(`subCategory=${s}`));
-
-    if (size)
-      (Array.isArray(size) ? size : [size]).forEach(sz => params.push(`size=${sz}`));
-
-    if (sleeveType)
-      (Array.isArray(sleeveType) ? sleeveType : [sleeveType]).forEach(s => params.push(`sleeveType=${s}`));
-
-    if (fitType)
-      (Array.isArray(fitType) ? fitType : [fitType]).forEach(f => params.push(`fitType=${f}`));
-
-    if (sortBy) params.push(`sortBy=${sortBy}`);
-    if (search) params.push(`search=${encodeURIComponent(search)}`);
-
-    const paginationQuery = params.length ? `&${params.join("&")}` : "";
+    saleProducts = saleProducts.map(product => {
+      const ratingData = ratingMap[product._id.toString()];
+      return {
+        ...product,
+        avgRating: ratingData?.avgRating || 0,
+        totalReviews: ratingData?.totalReviews || 0
+      };
+    });
 
     res.render("user/sale", {
       categories,
       saleProducts,
-      selectedCategories: Array.isArray(category) ? category : [category].filter(Boolean),
-      selectedSubCategories: Array.isArray(subCategory) ? subCategory : [subCategory].filter(Boolean),
-      selectedSizes: Array.isArray(size) ? size : [size].filter(Boolean),
-      selectedSleeves: Array.isArray(sleeveType) ? sleeveType : [sleeveType].filter(Boolean),
-      selectedFits: Array.isArray(fitType) ? fitType : [fitType].filter(Boolean),
-      sortBy,
+      selectedCategories: Array.isArray(category)
+        ? category
+        : category
+        ? [category]
+        : [],
+      selectedSizes: Array.isArray(size)
+        ? size
+        : size
+        ? [size]
+        : [],
+      selectedSleeves: Array.isArray(sleeveType)
+        ? sleeveType
+        : sleeveType
+        ? [sleeveType]
+        : [],
+      selectedFits: Array.isArray(fitType)
+        ? fitType
+        : fitType
+        ? [fitType]
+        : [],
+      sortBy: sortBy || "",
       currentPage: Number(page),
       totalPages,
-      paginationQuery,
       user,
-      search
+      search: search || ""
     });
 
   } catch (err) {

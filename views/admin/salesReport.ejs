@@ -23,6 +23,12 @@
       height:40px; border-radius:10px; font-size:0.85rem;
     }
 
+    .error-text {
+      font-size:0.8rem;
+      color:#dc3545;
+      margin-top:4px;
+    }
+
     .card-box {
       background:#fff; padding:16px;
       border-radius:12px; border:1px solid #eee;
@@ -45,9 +51,7 @@
 
     .pagination-box { margin-top:20px; }
 
-    .export-buttons a {
-      min-width:160px;
-    }
+    .export-buttons a { min-width:160px; }
   </style>
 </head>
 
@@ -75,9 +79,10 @@
       </div>
 
       <!-- FILTER FORM -->
-      <form class="filter-row d-flex flex-wrap gap-3 mb-3" method="get">
-        <select name="type" class="form-select" style="width:160px;">
-          <option value="">Sort by date</option>
+      <form id="filterForm" class="filter-row d-flex flex-wrap gap-3 mb-3" method="get">
+
+        <select name="type" id="typeSelect" class="form-select" style="width:160px;">
+          <option value="">Select filter</option>
           <option value="day"   <%= type==="day" ? "selected" : "" %>>Today</option>
           <option value="week"  <%= type==="week" ? "selected" : "" %>>This Week</option>
           <option value="month" <%= type==="month" ? "selected" : "" %>>This Month</option>
@@ -85,11 +90,26 @@
           <option value="custom" <%= type==="custom" ? "selected" : "" %>>Custom</option>
         </select>
 
-        <input type="date" name="from" value="<%= from || '' %>" class="form-control" style="width:160px;">
-        <input type="date" name="to" value="<%= to || '' %>" class="form-control" style="width:160px;">
+        <div>
+          <input type="date" name="from" id="fromDate"
+                 value="<%= from || '' %>"
+                 class="form-control"
+                 style="width:160px; display:none;">
+          <div class="error-text" id="fromError"></div>
+        </div>
 
-        <input type="text" name="search" placeholder="Search buyer name..."
-               value="<%= search || '' %>" class="form-control" style="width:200px;">
+        <div>
+          <input type="date" name="to" id="toDate"
+                 value="<%= to || '' %>"
+                 class="form-control"
+                 style="width:160px; display:none;">
+          <div class="error-text" id="toError"></div>
+        </div>
+
+        <input type="text" name="search"
+               placeholder="Search product name..."
+               value="<%= search || '' %>"
+               class="form-control" style="width:200px;">
 
         <button class="btn btn-dark">Apply</button>
         <a href="/admin/sales-report" class="btn btn-secondary">Reset</a>
@@ -97,25 +117,10 @@
 
       <!-- SUMMARY CARDS -->
       <div class="d-flex gap-3 flex-wrap mb-3">
-        <div class="summary-card">
-          <strong>Total Sales:</strong><br>
-          <%= totalSales %>
-        </div>
-
-        <div class="summary-card">
-          <strong>Total Revenue:</strong><br>
-          ₹ <%= totalRevenue %>
-        </div>
-
-        <div class="summary-card">
-          <strong>Product Discount:</strong><br>
-          ₹ <%= totalProductDiscount %>
-        </div>
-
-        <div class="summary-card">
-          <strong>Coupon Discount:</strong><br>
-          ₹ <%= totalCouponDiscount %>
-        </div>
+        <div class="summary-card"><strong>Total Sales:</strong><br><%= totalSales %></div>
+        <div class="summary-card"><strong>Total Revenue:</strong><br>₹ <%= totalRevenue %></div>
+        <div class="summary-card"><strong>Product Discount:</strong><br>₹ <%= totalProductDiscount %></div>
+        <div class="summary-card"><strong>Coupon Discount:</strong><br>₹ <%= totalCouponDiscount %></div>
       </div>
 
       <!-- SALES TABLE -->
@@ -125,7 +130,7 @@
             <tr>
               <th>Buyer</th>
               <th>Product</th>
-              <th>orderDate</th>
+              <th>Order Date</th>
               <th>Product ID</th>
               <th>Qty</th>
               <th>Price</th>
@@ -134,11 +139,10 @@
               <th>Total</th>
             </tr>
           </thead>
-
           <tbody>
           <% if (!salesData || salesData.length === 0) { %>
             <tr>
-              <td colspan="8" class="text-center text-muted py-4">
+              <td colspan="9" class="text-center text-muted py-4">
                 No sales found for selected filters.
               </td>
             </tr>
@@ -148,7 +152,6 @@
                 <td><%= row.buyer %></td>
                 <td><%= row.productName %></td>
                 <td><%= row.orderDate %></td>
-
                 <td>#<%= row.productId %></td>
                 <td><%= row.quantity %></td>
                 <td>₹ <%= row.price %></td>
@@ -177,18 +180,66 @@
 
       <!-- EXPORT BUTTONS -->
       <div class="export-buttons d-flex justify-content-end mt-3 gap-2">
-        <a href="/admin/sales-report/export/pdf?<%= filterQuery %>" class="btn btn-dark">
-          Download PDF
-        </a>
-
-        <a href="/admin/sales-report/export/excel?<%= filterQuery %>" class="btn btn-dark">
-          Get Excel Sheet
-        </a>
+        <a href="/admin/sales-report/export/pdf?<%= filterQuery %>" class="btn btn-dark">Download PDF</a>
+        <a href="/admin/sales-report/export/excel?<%= filterQuery %>" class="btn btn-dark">Get Excel Sheet</a>
       </div>
 
     </main>
   </div>
 </div>
+
+<script>
+  const typeSelect = document.getElementById("typeSelect");
+  const fromDate = document.getElementById("fromDate");
+  const toDate = document.getElementById("toDate");
+  const fromError = document.getElementById("fromError");
+  const toError = document.getElementById("toError");
+  const form = document.getElementById("filterForm");
+
+  function toggleDateInputs() {
+    if (typeSelect.value === "custom") {
+      fromDate.style.display = "block";
+      toDate.style.display = "block";
+    } else {
+      fromDate.style.display = "none";
+      toDate.style.display = "none";
+      fromError.innerText = "";
+      toError.innerText = "";
+    }
+  }
+
+  toggleDateInputs();
+  typeSelect.addEventListener("change", toggleDateInputs);
+
+  form.addEventListener("submit", function (e) {
+    fromError.innerText = "";
+    toError.innerText = "";
+
+    if (typeSelect.value !== "custom") return;
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const from = fromDate.value ? new Date(fromDate.value) : null;
+    const to = toDate.value ? new Date(toDate.value) : null;
+
+    let hasError = false;
+
+    if (from && from > today) {
+      fromError.innerText = "Future dates are not allowed";
+      hasError = true;
+    }
+
+    if (to && to > today) {
+      toError.innerText = "Future dates are not allowed";
+      hasError = true;
+    }
+
+    if (hasError) {
+      e.preventDefault();
+    }
+  });
+</script>
 
 </body>
 </html>

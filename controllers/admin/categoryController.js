@@ -68,11 +68,13 @@ const { apiLogger, errorLogger } = require("../../config/logger");
       }
     };
 
+
   const addCategory = async (req, res) => {
   try {
     const { name, description, offer = {}, isListed } = req.body;
 
-  
+          const normalizedName = name.toLowerCase().replace(/\s+/g, ' ').trim();
+
     const formData = {
       ...req.body,
       offer: {
@@ -91,7 +93,11 @@ const { apiLogger, errorLogger } = require("../../config/logger");
       });
     }
 
-    const existingCategory = await Category.findOne({ name: name.trim() });
+    const existingCategory = await Category.findOne({
+  name: { $regex: `^${normalizedName}$`, $options: 'i' }
+});
+
+
     if (existingCategory) {
       return res.render('admin/addCategory', {
         messages: { error_msg: 'Category already exists' },
@@ -128,8 +134,8 @@ const { apiLogger, errorLogger } = require("../../config/logger");
 };
 
 
-    const viewCategory = async (req, res) => {
-      try {
+  const viewCategory = async (req, res) => {
+    try {
         const categoryId = req.params.id;
         const category = await Category.findOne({ _id: categoryId, isDeleted: false })
           .populate('subcategories')
@@ -181,9 +187,15 @@ const updateCategory = async (req, res) => {
       offer = {},
       isListed,
     } = req.body;
+     const normalizedName = name.toLowerCase().replace(/\s+/g, ' ').trim();
     const image = req.file ? req.file.path : null;
     
-    const existingCategory = await Category.findOne({ name: name.trim(), _id: { $ne: categoryId } });
+    const existingCategory = await Category.findOne({
+            name: { $regex: `^${normalizedName}$`, $options: 'i' },
+            _id: { $ne: categoryId }
+          });
+
+
     if (existingCategory) {
       const category = await Category.findById(categoryId).populate('subcategories').lean();
       req.flash('error_msg', 'Category already exists');

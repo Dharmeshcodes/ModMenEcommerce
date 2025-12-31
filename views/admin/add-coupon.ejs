@@ -18,137 +18,224 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     .form-label { font-weight: 600; }
+    .error-text {
+      color: #dc3545;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Header -->
-  <%- include('../partials/admin/header') %>
+<%- include('../partials/admin/header') %>
 
-  <div class="container-fluid">
-    <div class="row">
+<div class="container-fluid">
+  <div class="row">
 
-      <!-- Sidebar -->
-      <div class="col-lg-2 col-md-3 p-0">
-        <%- include('../partials/admin/sidebar') %>
-      </div>
+    <div class="col-lg-2 col-md-3 p-0">
+      <%- include('../partials/admin/sidebar') %>
+    </div>
 
-      <!-- Main Content -->
-      <div class="col-lg-10 col-md-9 py-4 px-3">
+    <div class="col-lg-10 col-md-9 py-4 px-3">
 
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="/admin/coupon-list">Coupon</a></li>
-            <li class="breadcrumb-item active">Add Coupon</li>
-          </ol>
-        </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="/admin/coupon-list">Coupon</a></li>
+          <li class="breadcrumb-item active">Add Coupon</li>
+        </ol>
+      </nav>
 
-        <h3 class="fw-bold mb-3">Add Coupon</h3>
+      <h3 class="fw-bold mb-3">Add Coupon</h3>
 
-        <div class="coupon-box">
-          <form id="couponForm">
+      <div class="coupon-box">
+        <form id="couponForm">
 
-            <div class="row g-3">
+          <div class="row g-3">
 
-              <div class="col-md-6">
-                <label class="form-label">Coupon Name</label>
-                <input type="text" class="form-control" name="name" required />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Coupon Code</label>
-                <input type="text" class="form-control" name="code" required />
-              </div>
-              <div class="col-md-12">
-  <label class="form-label">Description</label>
-  <textarea class="form-control" name="description" rows="3"></textarea>
-</div>
-
-
-              <div class="col-md-6">
-                <label class="form-label">Type</label>
-                <select class="form-select" name="type" required>
-                  <option value="fixed">Fixed Amount</option>
-                  <option value="percentage">Percentage</option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Discount Value</label>
-                <input type="number" class="form-control" name="discountValue" required />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Max Discount Amount</label>
-                <input type="number" class="form-control" name="maxDiscountAmount" />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Minimum Order Amount</label>
-                <input type="number" class="form-control" name="minimumOrderAmount" required />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Start Date</label>
-                <input type="date" class="form-control" name="startDate" required />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Expiry Date</label>
-                <input type="date" class="form-control" name="expiryDate" required />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Usage Per User</label>
-                <input type="number" class="form-control" name="usagePerUser" required />
-              </div>
-
+            <div class="col-md-6">
+              <label class="form-label">Coupon Name</label>
+              <input type="text" class="form-control" id="name" name="name">
+              <div class="error-text" id="nameError"></div>
             </div>
 
-            <div class="mt-4 text-end">
-              <button type="submit" class="btn btn-dark px-4">Add Coupon</button>
+            <div class="col-md-6">
+              <label class="form-label">Coupon Code</label>
+              <input type="text" class="form-control" id="code" name="code">
+              <div class="error-text" id="codeError"></div>
             </div>
 
-          </form>
-        </div>
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Type</label>
+              <select class="form-select" id="type" name="type">
+                <option value="">Select</option>
+                <option value="fixed">Fixed Amount</option>
+                <option value="percentage">Percentage</option>
+              </select>
+              <div class="error-text" id="typeError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Discount Value</label>
+              <input type="number" class="form-control" id="discountValue" name="discountValue">
+              <div class="error-text" id="discountValueError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Max Discount Amount</label>
+              <input type="number" class="form-control" name="maxDiscountAmount">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Minimum Order Amount</label>
+              <input type="number" class="form-control" id="minimumOrderAmount" name="minimumOrderAmount">
+              <div class="error-text" id="minimumOrderAmountError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="startDate" name="startDate">
+              <div class="error-text" id="startDateError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date</label>
+              <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+              <div class="error-text" id="expiryDateError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Usage Per User</label>
+              <input type="number" class="form-control" id="usagePerUser" name="usagePerUser">
+              <div class="error-text" id="usagePerUserError"></div>
+            </div>
+
+          </div>
+
+          <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-dark px-4">Add Coupon</button>
+          </div>
+
+        </form>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Fetch Submit -->
-  <script>
-    document.getElementById("couponForm").addEventListener("submit", async function(e) {
+<script>
+  const form = document.getElementById("couponForm");
+
+  if (form) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
+      e.stopPropagation();
 
-      const form = new FormData(this);
-      const data = Object.fromEntries(form.entries());
+      const fields = [
+        "name","code","type","discountValue",
+        "minimumOrderAmount","startDate",
+        "expiryDate","usagePerUser"
+      ];
+
+      fields.forEach(f => {
+        const el = document.getElementById(f + "Error");
+        if (el) el.innerText = "";
+      });
+
+      let isValid = true;
+
+      const name = document.getElementById("name").value.trim();
+      const code = document.getElementById("code").value.trim();
+      const type = document.getElementById("type").value;
+      const discountValue = Number(document.getElementById("discountValue").value);
+      const minimumOrderAmount = Number(document.getElementById("minimumOrderAmount").value);
+      const startDateVal = document.getElementById("startDate").value;
+      const expiryDateVal = document.getElementById("expiryDate").value;
+      const usagePerUser = Number(document.getElementById("usagePerUser").value);
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const startDate = startDateVal ? new Date(startDateVal) : null;
+      const expiryDate = expiryDateVal ? new Date(expiryDateVal) : null;
+
+      if (name.length < 3) {
+        document.getElementById("nameError").innerText = "Enter valid coupon name";
+        isValid = false;
+      }
+
+      if (!code) {
+        document.getElementById("codeError").innerText = "Coupon code is required";
+        isValid = false;
+      }
+
+      if (!type) {
+        document.getElementById("typeError").innerText = "Select coupon type";
+        isValid = false;
+      }
+
+      if (!discountValue || discountValue <= 0) {
+        document.getElementById("discountValueError").innerText = "Enter valid discount value";
+        isValid = false;
+      }
+
+      if (type === "percentage" && discountValue > 100) {
+        document.getElementById("discountValueError").innerText = "Percentage cannot exceed 100";
+        isValid = false;
+      }
+
+      if (!minimumOrderAmount || minimumOrderAmount <= 0) {
+        document.getElementById("minimumOrderAmountError").innerText = "Enter minimum order amount";
+        isValid = false;
+      }
+
+      if (!startDate) {
+        document.getElementById("startDateError").innerText = "Start date required";
+        isValid = false;
+      } else if (startDate < today) {
+        document.getElementById("startDateError").innerText = "Start date must be today or future";
+        isValid = false;
+      }
+
+      if (!expiryDate) {
+        document.getElementById("expiryDateError").innerText = "Expiry date required";
+        isValid = false;
+      } else if (expiryDate <= today) {
+        document.getElementById("expiryDateError").innerText = "Expiry date must be after today";
+        isValid = false;
+      }
+
+      if (!usagePerUser || usagePerUser <= 0) {
+        document.getElementById("usagePerUserError").innerText = "Usage per user must be greater than 0";
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const data = Object.fromEntries(new FormData(form).entries());
 
       const res = await fetch("/admin/add-coupon", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
 
       const json = await res.json();
 
       if (json.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Coupon Added Successfully!"
-        }).then(() => {
-          window.location.href = "/admin/coupon-list";
-        });
+        Swal.fire("Success", "Coupon Added Successfully!", "success")
+          .then(() => window.location.href = "/admin/coupon-list");
       } else {
-        Swal.fire({
-          icon: "error",
-          title: json.message || "Failed to add coupon"
-        });
+        Swal.fire("Error", json.message || "Failed to add coupon", "error");
       }
     });
-  </script>
+  }
+</script>
 
 </body>
 </html>

@@ -136,6 +136,12 @@
           </div>
 
           <!-- Products -->
+           <%
+              const activeItemsCount = items.filter(
+                i => !["cancelled", "returned"].includes(i.status)
+              ).length;
+            %>
+
           <% items.forEach((item, idx) => { %>
             <div class="product-card" data-item-index="<%= idx %>">
 
@@ -150,18 +156,30 @@
               </div>
 
               <div class="product-actions">
-                <% const disableItemCancel = ["shipped","out_for_delivery","delivered","returned","return_requested","failed"].includes(item.status); %>
-          <button 
-    class="btn btn-danger cancelBtn"
-    data-order-id="<%= order.orderId %>"
-    data-item-id="<%= item.itemId %>">
-    Cancel
-</button>
+                <% 
+                  const disableItemCancel =
+                    ["shipped","out_for_delivery","delivered","returned","return_requested","failed"]
+                      .includes(item.status);
+                %>
 
-
-                <% if(item.status === 'delivered'){ %>
-                  <button class="btn btn-sm btn-return return-item-btn" data-order="<%= order.orderId %>" data-item="<%= item.itemId %>">Return Item</button>
+                <% if (activeItemsCount > 1 && !disableItemCancel) { %>
+                  <button 
+                    class="btn btn-danger cancelBtn"
+                    data-order-id="<%= order.orderId %>"
+                    data-item-id="<%= item.itemId %>">
+                    Cancel
+                  </button>
                 <% } %>
+
+                <% if (item.status === 'delivered' && activeItemsCount > 1) { %>
+                    <button 
+                      class="btn btn-sm btn-return return-item-btn"
+                      data-order="<%= order.orderId %>"
+                      data-item="<%= item.itemId %>">
+                      Return Item
+                    </button>
+                  <% } %>
+
 
                 <button class="btn btn-sm btn-track track-item-btn" data-item-index="<%= idx %>">Track Item</button>
               </div>

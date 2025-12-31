@@ -397,6 +397,7 @@ const changePassword = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
 const uploadProfileImage=async (req,res)=>{
   try{
     const user=req.session.user

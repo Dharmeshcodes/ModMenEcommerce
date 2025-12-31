@@ -161,18 +161,30 @@
       border-radius: 100px;
       font-weight: 600;
     }
-    .apply-btn {
+    .apply-btn, .clear-btn {
       border-radius: 24px;
       padding: 0.4em 1.2em;
-      background: #101010;
-      color: #fff;
       font-weight: 500;
       border: none;
       margin-top: 12px;
     }
+    .apply-btn {
+      background: #101010;
+      color: #fff;
+      margin-right: 0.5rem;
+    }
     .apply-btn:hover {
       background: #333;
       color: #fff;
+    }
+    .clear-btn {
+      background: #f8f9fa;
+      color: #666;
+      border: 1px solid #ddd;
+    }
+    .clear-btn:hover {
+      background: #e9ecef;
+      color: #333;
     }
     .sortbar-btns {
       display: flex;
@@ -201,19 +213,27 @@
       font-weight: 600;
     }
     .wishlist-heart {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 22px;
-  color: #ccc;
-  cursor: pointer;
-  z-index: 10;
-  transition: color .2s ease;
+     position: absolute;
+     top: 12px;
+     right: 12px;
+     font-size: 22px;
+     color: #ccc;
+     cursor: pointer;
+     z-index: 10;
+     transition: color .2s ease;
+    }
+
+    .wishlist-heart.active {
+      color: red;
+    }
+    .star-rating .filled {
+  color: #ffbb36; /* gold */
 }
 
-.wishlist-heart.active {
-  color: red;
+.star-rating .empty {
+  color: #dcdcdc; /* light grey */
 }
+
 
     @media (max-width: 991.98px) {
       .product-image-wrapper {
@@ -240,6 +260,9 @@
       .sortbar-btns {
         gap: 0.15rem;
       }
+      .apply-btn, .clear-btn {
+        margin-top: 0.25rem;
+      }
     }
   </style>
 </head>
@@ -253,13 +276,13 @@
     <div id="saleHeroCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner rounded-bottom-4">
         <div class="carousel-item active">
-          <img src="/user/images/carousel/1.png" class="d-block w-100 hero-img-sale" alt="Sale Image 1">
+         <img src="/user/images/carousel/1.png" class="d-block w-100 hero-img-sale" alt="Sale Image 1">
         </div>
         <div class="carousel-item">
-          <img src="/user/images/carousel/2.png" class="d-block w-100 hero-img-sale" alt="Sale Image 2">
+         <img src="/user/images/carousel/2.png" class="d-block w-100 hero-img-sale" alt="Sale Image 2">
         </div>
         <div class="carousel-item">
-          <img src="/user/images/carousel/3.png" class="d-block w-100 hero-img-sale" alt="Sale Image 3">
+         <img src="/user/images/carousel/3.png" class="d-block w-100 hero-img-sale" alt="Sale Image 3">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#saleHeroCarousel" data-bs-slide="prev">
@@ -288,12 +311,14 @@
       <div class="filter-title">Category</div>
       <% categories.forEach(category => { %>
         <div class="form-check form-check-sm">
-          <input class="form-check-input"
-                 type="checkbox"
-                 name="category"
-                 value="<%= category._id %>"
-                 <%= selectedCategories?.includes(category._id.toString()) ? 'checked' : '' %>>
-          <label class="form-check-label"><%= category.name %></label>
+         <input class="form-check-input"
+                type="checkbox"
+                name="category"
+                value="<%= category._id %>"
+                <% console.log(category.name); %>
+
+                <%= selectedCategories?.includes(category._id.toString()) ? 'checked' : '' %>>
+         <label class="form-check-label"><%= category.name %></label>
         </div>
       <% }) %>
     </div>
@@ -303,12 +328,12 @@
       <div class="filter-title">Size</div>
       <% ['S','M','L','XL','XXL'].forEach(size => { %>
         <div class="form-check form-check-sm">
-          <input class="form-check-input"
-                 type="checkbox"
-                 name="size"
-                 value="<%= size %>"
-                 <%= selectedSizes?.includes(size) ? 'checked' : '' %>>
-          <label class="form-check-label"><%= size %></label>
+         <input class="form-check-input"
+                type="checkbox"
+                name="size"
+                value="<%= size %>"
+                <%= selectedSizes?.includes(size) ? 'checked' : '' %>>
+         <label class="form-check-label"><%= size %></label>
         </div>
       <% }) %>
     </div>
@@ -318,12 +343,12 @@
       <div class="filter-title">Sleeve</div>
       <% ['Full Sleeve', 'Half Sleeve', 'Sleeveless'].forEach(sleeve => { %>
         <div class="form-check form-check-sm">
-          <input class="form-check-input"
-                 type="checkbox"
-                 name="sleeveType"
-                 value="<%= sleeve %>"
-                 <%= selectedSleeves?.includes(sleeve) ? 'checked' : '' %>>
-          <label class="form-check-label"><%= sleeve %></label>
+         <input class="form-check-input"
+                type="checkbox"
+                name="sleeveType"
+                value="<%= sleeve %>"
+                <%= selectedSleeves?.includes(sleeve) ? 'checked' : '' %>>
+         <label class="form-check-label"><%= sleeve %></label>
         </div>
       <% }) %>
     </div>
@@ -333,20 +358,22 @@
       <div class="filter-title">Fit</div>
       <% ['Regular Fit', 'Slim Fit', 'Relaxed Fit'].forEach(fit => { %>
         <div class="form-check form-check-sm">
-          <input class="form-check-input"
-                 type="checkbox"
-                 name="fitType"
-                 value="<%= fit %>"
-                 <%= selectedFits?.includes(fit) ? 'checked' : '' %>>
-          <label class="form-check-label"><%= fit %></label>
+         <input class="form-check-input"
+                type="checkbox"
+                name="fitType"
+                value="<%= fit %>"
+                <%= selectedFits?.includes(fit) ? 'checked' : '' %>>
+         <label class="form-check-label"><%= fit %></label>
         </div>
       <% }) %>
     </div>
 
-    <button type="button" class="apply-btn w-100 mt-3" id="applyFilters">Apply</button>
+    <div class="d-flex">
+      <button type="button" class="apply-btn flex-grow-1 me-1" id="applyFilters">Apply</button>
+      <button type="button" class="clear-btn flex-grow-1" id="clearFilters">Clear</button>
+    </div>
   </div>
 </div>
-
 
 <!-- Right Section -->
 <div class="col-lg-9">
@@ -373,13 +400,12 @@
 
     <!-- Sort Buttons -->
     <div class="sortbar-btns">
-      <button class="sort-btn <%= sortBy === 'popularity' ? 'active' : '' %>" onclick="applySort('popularity')">Popularity</button>
+      <!-- <button class="sort-btn <%= sortBy === 'popularity' ? 'active' : '' %>" onclick="applySort('popularity')">Popularity</button> -->
       <button class="sort-btn <%= sortBy === 'newest' ? 'active' : '' %>" onclick="applySort('newest')">Newest</button>
       <button class="sort-btn <%= sortBy === 'pricelowhigh' ? 'active' : '' %>" onclick="applySort('pricelowhigh')">Low to High</button>
       <button class="sort-btn <%= sortBy === 'pricehighlow' ? 'active' : '' %>" onclick="applySort('pricehighlow')">High to Low</button>
     </div>
   </div>
-
 
   <!-- Product Grid -->
   <div class="row g-4">
@@ -389,11 +415,8 @@
           <div class="product-image-wrapper">
 
             <i class="fas fa-heart wishlist-heart <%= (user && Array.isArray(user.wishlist) && user.wishlist.some(id => id.toString() === product._id.toString())) ? 'active' : '' %>"
-   data-id="<%= product._id %>"
-   onclick="toggleWishlist(this)"></i>
-
-
-
+       data-id="<%= product._id %>"
+       onclick="toggleWishlist(this)"></i>
 
             <img src="<%= product.images?.[0]?.url || '/user/images/no-image.png' %>">
 
@@ -417,17 +440,24 @@
               <% } %>
             </div>
 
+            <!-- Dynamic Star Rating from DB -->
             <div class="star-rating mb-1">
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
-              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <% if (product.avgRating && product.avgRating > 0) { %>
+                <% for (let i = 1; i <= 5; i++) { %>
+                  <i class="fas fa-star <%= i <= Math.floor(product.avgRating) ? 'filled' : 'empty' %>"></i>
+                <% } %>
+                <small class="text-muted ms-1">(<%= product.avgRating %>)</small>
+              <% } else { %>
+                <% for (let i = 1; i <= 5; i++) { %>
+                  <i class="far fa-star empty"></i>
+                <% } %>
+              <% } %>
             </div>
           </div>
-
         </div>
       </div>
     <% }) %>
   </div>
-
 
   <!-- Pagination -->
   <nav class="mt-4">
@@ -439,9 +469,7 @@
       <% } %>
     </ul>
   </nav>
-
 </div>
-
   </section>
   <!-- Footer Include -->
   <%- include('../partials/user/footer.ejs') %>
@@ -449,17 +477,28 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+/* DEBUG */
+console.log('search:', "<%= search || '' %>");
+console.log('sortBy:', "<%= sortBy || '' %>");
+console.log('currentPage:', <%= currentPage || 1 %>);
+
 /* SEARCH INPUTS */
 const searchInput = document.getElementById("saleSearchInput");
 const closeIcon = document.getElementById("searchClear");
 const searchIcon = document.querySelector(".search-icon");
 const applyFiltersBtn = document.getElementById("applyFilters");
+const clearFiltersBtn = document.getElementById("clearFilters");
 
 function buildSaleUrl(extraParams = {}) {
   const params = new URLSearchParams();
+  
+  // Add search if exists
   const searchVal = searchInput.value.trim();
-  if (searchVal) params.append("search", searchVal);
+  if (searchVal) {
+    params.append("search", searchVal);
+  }
 
+ 
   document.querySelectorAll("input[name='category']:checked")
     .forEach(cb => params.append("category", cb.value));
 
@@ -472,11 +511,17 @@ function buildSaleUrl(extraParams = {}) {
   document.querySelectorAll("input[name='fitType']:checked")
     .forEach(cb => params.append("fitType", cb.value));
 
+
   Object.keys(extraParams).forEach(key => {
     params.set(key, extraParams[key]);
   });
 
   return "/user/sale?" + params.toString();
+}
+
+
+if (searchInput.value.trim()) {
+  closeIcon.style.display = "block";
 }
 
 searchInput.addEventListener("input", () => {
@@ -507,14 +552,25 @@ if (applyFiltersBtn) {
   });
 }
 
+/* CLEAR FILTERS */
+if (clearFiltersBtn) {
+  clearFiltersBtn.addEventListener("click", () => {
+    // Uncheck all filters
+    document.querySelectorAll("input[type='checkbox']").forEach(cb => cb.checked = false);
+    window.location.href = "/user/sale";
+  });
+}
+
 /* SORT */
 function applySort(option) {
-  window.location.href = buildSaleUrl({ sortBy: option });
+  window.location.href = buildSaleUrl({ sortBy: option, page: 1 });
 }
 
 /* PAGINATION */
 function goToPage(page) {
-  window.location.href = buildSaleUrl({ page });
+  const currentParams = new URLSearchParams(window.location.search);
+  currentParams.set('page', page);
+  window.location.href = "/user/sale?" + currentParams.toString();
 }
 
 /* WISHLIST */

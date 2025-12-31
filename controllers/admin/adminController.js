@@ -126,7 +126,7 @@ const getSalesReport = async (req, res) => {
     if (search) {
       query.$or = [
         { "orderedItems.productName": { $regex: search, $options: "i" } },
-        { "userId.fullName": { $regex: search, $options: "i" } }
+        { "order.userId.fullName": { $regex: search, $options: "i" } }
       ];
     }
 

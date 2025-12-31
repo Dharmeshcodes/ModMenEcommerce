@@ -211,6 +211,30 @@ document.querySelector("form").addEventListener("submit", function(e) {
     isValid = false;
   }
 
+  const offerPercentInput = document.getElementById("offer[offerPercentage]");
+  const maxRedeemInput = document.getElementById("offer[maxRedeem]");
+
+  const offerPercent = offerPercentInput.value.trim();
+  const maxRedeem = maxRedeemInput.value.trim();
+
+  if (offerPercent !== "") {
+    const percentValue = Number(offerPercent);
+    if (isNaN(percentValue) || percentValue < 1 || percentValue > 100) {
+      document.getElementById("offerPercentError").innerText =
+        "Offer percentage must be between 1 and 100";
+      isValid = false;
+    }
+  }
+
+  if (maxRedeem !== "") {
+    const maxRedeemValue = Number(maxRedeem);
+    if (isNaN(maxRedeemValue) || maxRedeemValue <= 0) {
+      document.getElementById("maxRedeemError").innerText =
+        "Max redeem must be greater than 0";
+      isValid = false;
+    }
+  }
+
   const today = new Date();
   const tzOffset = today.getTimezoneOffset() * 60000;
   const minDate = new Date(Date.now() - tzOffset).toISOString().split("T")[0];

@@ -18,131 +18,213 @@
       box-shadow:0 4px 12px rgba(0,0,0,0.05);
     }
     .form-label { font-weight:600; }
+    .error-text {
+      color:#dc3545;
+      font-size:0.85rem;
+      margin-top:4px;
+    }
   </style>
 </head>
 
 <body>
 
-  <%- include('../partials/admin/header') %>
+<%- include('../partials/admin/header') %>
 
-  <div class="container-fluid">
-    <div class="row">
+<div class="container-fluid">
+  <div class="row">
 
-      <div class="col-lg-2 col-md-3 p-0">
-        <%- include('../partials/admin/sidebar') %>
-      </div>
+    <div class="col-lg-2 col-md-3 p-0">
+      <%- include('../partials/admin/sidebar') %>
+    </div>
 
-      <div class="col-lg-10 col-md-9">
+    <div class="col-lg-10 col-md-9 py-4 px-3">
 
-        <div class="py-4 px-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="/admin/coupon-list">Coupons</a></li>
+          <li class="breadcrumb-item active">Edit Coupon</li>
+        </ol>
+      </nav>
 
-          <!-- Breadcrumb -->
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-              <li class="breadcrumb-item"><a href="/admin/coupon-list">Coupons</a></li>
-              <li class="breadcrumb-item active">Edit Coupon</li>
-            </ol>
-          </nav>
+      <h3 class="fw-bold mb-3">Edit Coupon</h3>
 
-          <h3 class="fw-bold mb-3">Edit Coupon</h3>
+      <div class="coupon-box">
+        <form id="editCouponForm">
 
-          <div class="coupon-box">
+          <div class="row g-3">
 
-            <form id="editCouponForm">
+            <div class="col-md-6">
+              <label class="form-label">Coupon Name</label>
+              <input type="text" class="form-control" id="name" name="name" value="<%= coupon.name %>">
+              <div class="error-text" id="nameError"></div>
+            </div>
 
-              <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Coupon Code</label>
+              <input type="text" class="form-control" id="code" name="code" value="<%= coupon.code %>">
+              <div class="error-text" id="codeError"></div>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Coupon Name</label>
-                  <input type="text" class="form-control" name="name" value="<%= coupon.name %>">
-                </div>
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="3"><%= coupon.description %></textarea>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Coupon Code</label>
-                  <input type="text" class="form-control" name="code" value="<%= coupon.code %>">
-                </div>
-                <div class="col-md-12">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-control" name="description" rows="3"><%= coupon.description %></textarea>
+            <div class="col-md-6">
+              <label class="form-label">Type</label>
+              <select class="form-select" id="type" name="type">
+                <option value="fixed" <%= coupon.type === "fixed" ? "selected" : "" %>>Fixed Amount</option>
+                <option value="percentage" <%= coupon.type === "percentage" ? "selected" : "" %>>Percentage</option>
+              </select>
+              <div class="error-text" id="typeError"></div>
+            </div>
 
-                    </div>
+            <div class="col-md-6">
+              <label class="form-label">Discount Value</label>
+              <input type="number" class="form-control" id="discountValue" name="discountValue" value="<%= coupon.discountValue %>">
+              <div class="error-text" id="discountValueError"></div>
+            </div>
 
+            <div class="col-md-6">
+              <label class="form-label">Maximum Discount Amount</label>
+              <input type="number" class="form-control" name="maxDiscountAmount" value="<%= coupon.maxDiscountAmount %>">
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Type</label>
-                  <select class="form-select" name="type">
-                    <option value="fixed" <%= coupon.type === "fixed" ? "selected" : "" %>>Fixed Amount</option>
-                    <option value="percentage" <%= coupon.type === "percentage" ? "selected" : "" %>>Percentage</option>
-                  </select>
-                </div>
+            <div class="col-md-6">
+              <label class="form-label">Minimum Order Amount</label>
+              <input type="number" class="form-control" id="minimumOrderAmount" name="minimumOrderAmount" value="<%= coupon.minimumOrderAmount %>">
+              <div class="error-text" id="minimumOrderAmountError"></div>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Discount Value</label>
-                  <input type="number" class="form-control" name="discountValue" value="<%= coupon.discountValue %>">
-                </div>
+            <div class="col-md-6">
+              <label class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="startDate" name="startDate"
+                value="<%= coupon.startDate.toISOString().split('T')[0] %>">
+              <div class="error-text" id="startDateError"></div>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Maximum Discount Amount</label>
-                  <input type="number" class="form-control" name="maxDiscountAmount" value="<%= coupon.maxDiscountAmount %>">
-                </div>
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date</label>
+              <input type="date" class="form-control" id="expiryDate" name="expiryDate"
+                value="<%= coupon.expiryDate.toISOString().split('T')[0] %>">
+              <div class="error-text" id="expiryDateError"></div>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Minimum Order Amount</label>
-                  <input type="number" class="form-control" name="minimumOrderAmount" value="<%= coupon.minimumOrderAmount %>">
-                </div>
+            <div class="col-md-6">
+              <label class="form-label">Usage Per User</label>
+              <input type="number" class="form-control" id="usagePerUser" name="usagePerUser" value="<%= coupon.usagePerUser %>">
+              <div class="error-text" id="usagePerUserError"></div>
+            </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Start Date</label>
-                  <input type="date" class="form-control" name="startDate" value="<%= coupon.startDate.toISOString().split('T')[0] %>">
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Expiry Date</label>
-                  <input type="date" class="form-control" name="expiryDate" value="<%= coupon.expiryDate.toISOString().split('T')[0] %>">
-                </div>
-
-                <!-- <div class="col-md-6">
-                  <label class="form-label">Usage Limit (Total)</label>
-                  <input type="number" class="form-control" name="usageLimit" value="<%= coupon.usageLimit %>">
-                </div> -->
-
-                <div class="col-md-6">
-                  <label class="form-label">Usage Per User</label>
-                  <input type="number" class="form-control" name="usagePerUser" value="<%= coupon.usagePerUser %>">
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">Status</label>
-                  <select class="form-select" name="status">
-                    <option value="true" <%= coupon.status ? "selected" : "" %>>Active</option>
-                    <option value="false" <%= !coupon.status ? "selected" : "" %>>Inactive</option>
-                  </select>
-                </div>
-
-              </div>
-
-              <div class="mt-4 text-end">
-                <button type="submit" class="btn btn-dark px-4">Update Coupon</button>
-              </div>
-
-            </form>
+            <div class="col-md-6">
+              <label class="form-label">Status</label>
+              <select class="form-select" name="status">
+                <option value="true" <%= coupon.status ? "selected" : "" %>>Active</option>
+                <option value="false" <%= !coupon.status ? "selected" : "" %>>Inactive</option>
+              </select>
+            </div>
 
           </div>
-        </div>
 
+          <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-dark px-4">Update Coupon</button>
+          </div>
+
+        </form>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    const form = document.getElementById("editCouponForm");
+<script>
+  const form = document.getElementById("editCouponForm");
 
-    form.addEventListener("submit", async (e) => {
+  if (form) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
+      e.stopPropagation();
 
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+      const fields = [
+        "name","code","type","discountValue",
+        "minimumOrderAmount","startDate",
+        "expiryDate","usagePerUser"
+      ];
+
+      fields.forEach(f => {
+        const el = document.getElementById(f + "Error");
+        if (el) el.innerText = "";
+      });
+
+      let isValid = true;
+
+      const name = document.getElementById("name").value.trim();
+      const code = document.getElementById("code").value.trim();
+      const type = document.getElementById("type").value;
+      const discountValue = Number(document.getElementById("discountValue").value);
+      const minimumOrderAmount = Number(document.getElementById("minimumOrderAmount").value);
+      const startDateVal = document.getElementById("startDate").value;
+      const expiryDateVal = document.getElementById("expiryDate").value;
+      const usagePerUser = Number(document.getElementById("usagePerUser").value);
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const startDate = startDateVal ? new Date(startDateVal) : null;
+      const expiryDate = expiryDateVal ? new Date(expiryDateVal) : null;
+
+      if (name.length < 3) {
+        document.getElementById("nameError").innerText = "Enter valid coupon name";
+        isValid = false;
+      }
+
+      if (!code) {
+        document.getElementById("codeError").innerText = "Coupon code is required";
+        isValid = false;
+      }
+
+      if (!type) {
+        document.getElementById("typeError").innerText = "Select coupon type";
+        isValid = false;
+      }
+
+      if (!discountValue || discountValue <= 0) {
+        document.getElementById("discountValueError").innerText = "Enter valid discount value";
+        isValid = false;
+      }
+
+      if (type === "percentage" && discountValue > 100) {
+        document.getElementById("discountValueError").innerText = "Percentage cannot exceed 100";
+        isValid = false;
+      }
+
+      if (!minimumOrderAmount || minimumOrderAmount <= 0) {
+        document.getElementById("minimumOrderAmountError").innerText = "Enter minimum order amount";
+        isValid = false;
+      }
+      if (!startDate) {
+  document.getElementById("startDateError").innerText = "Start date required";
+  isValid = false;
+}
+
+if (!expiryDate) {
+  document.getElementById("expiryDateError").innerText = "Expiry date required";
+  isValid = false;
+} else if (startDate && expiryDate <= startDate) {
+  document.getElementById("expiryDateError").innerText =
+    "Expiry date must be greater than start date";
+  isValid = false;
+}
+
+
+      if (!usagePerUser || usagePerUser <= 0) {
+        document.getElementById("usagePerUserError").innerText = "Usage per user must be greater than 0";
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const data = Object.fromEntries(new FormData(form).entries());
 
       const res = await fetch(`/admin/edit-coupon/<%= coupon._id %>`, {
         method: "PATCH",
@@ -153,20 +235,14 @@
       const json = await res.json();
 
       if (json.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Coupon Updated"
-        }).then(() => {
-          window.location.href = "/admin/coupon-list";
-        });
+        Swal.fire("Success", "Coupon Updated Successfully", "success")
+          .then(() => window.location.href = "/admin/coupon-list");
       } else {
-        Swal.fire({
-          icon: "error",
-          title: json.message || "Update failed"
-        });
+        Swal.fire("Error", json.message || "Update failed", "error");
       }
     });
-  </script>
+  }
+</script>
 
 </body>
 </html>

@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 
 const HTTP_STATUS = require("../../constans/httpStatus"); 
 const { apiLogger, errorLogger } = require("../../config/logger"); 
-
 const addReview = async (req, res) => {
   try {
     const userId = req.session.user?._id;
@@ -49,20 +48,35 @@ const addReview = async (req, res) => {
 
     const stats = await Review.aggregate([
       { $match: { productId: productObjectId } },
-      { $group: { _id: null, avg: { $avg: "$rating" } } }
+      {
+        $group: {
+          _id: "$productId",
+          average: { $avg: "$rating" },
+          count: { $sum: 1 }
+        }
+      }
     ]);
 
-    const avgRating = stats[0]?.avg || 0;
-    await Product.findByIdAndUpdate(productObjectId, { averageRating: avgRating });
+    const ratingData = stats.length
+      ? {
+          average: Number(stats[0].average.toFixed(1)),
+          count: stats[0].count
+        }
+      : { average: 0, count: 0 };
+
+    await Product.findByIdAndUpdate(productObjectId, {
+      "ratings.average": ratingData.average,
+      "ratings.count": ratingData.count
+    });
 
     apiLogger.info("Review added successfully for product %s", productId);
 
     return res.json({ success: true, message: "Review added" });
 
   } catch (err) {
-    errorLogger.error("addReview error: %o", err); 
+    errorLogger.error("addReview error: %o", err);
     return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR) 
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .json({ success: false, message: "Something went wrong" });
   }
 };
@@ -91,22 +105,38 @@ const deleteReview = async (req, res) => {
 
     const stats = await Review.aggregate([
       { $match: { productId } },
-      { $group: { _id: null, avg: { $avg: "$rating" } } }
+      {
+        $group: {
+          _id: "$productId",
+          average: { $avg: "$rating" },
+          count: { $sum: 1 }
+        }
+      }
     ]);
 
-    const avgRating = stats[0]?.avg || 0;
-    await Product.findByIdAndUpdate(productId, { averageRating: avgRating });
+    const ratingData = stats.length
+      ? {
+          average: Number(stats[0].average.toFixed(1)),
+          count: stats[0].count
+        }
+      : { average: 0, count: 0 };
+
+    await Product.findByIdAndUpdate(productId, {
+      "ratings.average": ratingData.average,
+      "ratings.count": ratingData.count
+    });
 
     apiLogger.info("Review deleted successfully: %s", reviewId);
 
     return res.json({ success: true, message: "Review deleted" });
 
   } catch (err) {
-    errorLogger.error("deleteReview error: %o", err); 
+    errorLogger.error("deleteReview error: %o", err);
     return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR) 
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
       .json({ success: false, message: "Something went wrong" });
   }
 };
+
 
 module.exports = { addReview, deleteReview };

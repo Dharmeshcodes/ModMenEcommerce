@@ -5,19 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Category Management</title>
 
-  <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-
-  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    /* Your existing styles here */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Arial', sans-serif;
@@ -27,34 +19,12 @@
       min-height: 100vh;
     }
 
-    .layout-container {
-      display: flex;
-      width: 100%;
-      min-height: 100vh;
-    }
+    .layout-container { display: flex; width: 100%; min-height: 100vh; }
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+    .content-wrapper { flex: 1; padding: 20px; overflow-y: auto; }
 
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .content-wrapper {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .breadcrumb {
-      color: #fff;
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
-
-    .breadcrumb a {
-      color: #fff;
-      text-decoration: none;
-    }
+    .breadcrumb { color: #fff; margin-bottom: 10px; font-size: 15px; }
+    .breadcrumb a { color: #fff; text-decoration: none; }
 
     .top-bar {
       display: flex;
@@ -88,7 +58,6 @@
       border-radius: 5px;
       font-weight: bold;
       border: none;
-      text-decoration: none;
       cursor: pointer;
       font-size: 14px;
     }
@@ -122,10 +91,18 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
+    /* 🔴 ONLY GRID UPDATED (Sales & Stock removed, width preserved) */
     .table-header,
     .category-row {
       display: grid;
-      grid-template-columns: 0.4fr 1.5fr 2fr 1fr 1fr 1fr 1.2fr 1fr 1fr;
+      grid-template-columns:
+        0.4fr   /* SNO */
+        1.6fr   /* Category */
+        2.2fr   /* Subcategory */
+        1.2fr   /* Added */
+        1.2fr   /* List/Unlist */
+        1fr     /* Action */
+        1.4fr;  /* Offer */
       gap: 10px;
       padding: 15px;
       align-items: center;
@@ -144,13 +121,9 @@
       background: #f9f9f9;
     }
 
-    .category-row:nth-child(even) {
-      background: #f1f1f1;
-    }
+    .category-row:nth-child(even) { background: #f1f1f1; }
 
-    .list-btn,
-    .unlist-btn,
-    .offer-btn {
+    .list-btn, .unlist-btn, .offer-btn {
       padding: 5px 12px;
       border-radius: 20px;
       font-size: 12px;
@@ -159,20 +132,9 @@
       cursor: pointer;
     }
 
-    .list-btn {
-      background-color: #28a745;
-      color: #fff;
-    }
-
-    .unlist-btn {
-      background-color: #dc3545;
-      color: #fff;
-    }
-
-    .offer-btn {
-      background-color: #007bff;
-      color: white;
-    }
+    .list-btn { background-color: #28a745; color: #fff; }
+    .unlist-btn { background-color: #dc3545; color: #fff; }
+    .offer-btn { background-color: #007bff; color: #fff; }
 
     .offer-container {
       display: flex;
@@ -187,20 +149,14 @@
       border-radius: 5px;
       font-size: 12px;
       font-weight: bold;
-      text-align: center;
       color: #1864ab;
       border: 1px solid #74c0fc;
       min-width: 120px;
-      word-wrap: break-word;
     }
 
-    .offer-actions {
-      display: flex;
-      gap: 5px;
-    }
+    .offer-actions { display: flex; gap: 5px; }
 
-    .edit-offer-btn,
-    .delete-offer-btn {
+    .edit-offer-btn, .delete-offer-btn {
       padding: 3px 8px;
       border-radius: 15px;
       font-size: 10px;
@@ -209,21 +165,10 @@
       cursor: pointer;
     }
 
-    .edit-offer-btn {
-      background-color: #ffc107;
-      color: #000;
-    }
+    .edit-offer-btn { background-color: #ffc107; }
+    .delete-offer-btn { background-color: #dc3545; color: #fff; }
 
-    .delete-offer-btn {
-      background-color: #dc3545;
-      color: #fff;
-    }
-
-    .icon-btn {
-      color: blue;
-      font-size: 16px;
-      margin: 0 5px;
-    }
+    .icon-btn { color: blue; font-size: 16px; margin: 0 5px; }
 
     .pagination {
       padding: 10px;
@@ -247,201 +192,109 @@
       border-color: #007bff;
     }
 
-    @media (max-width: 900px) {
-      .layout-container {
-        flex-direction: column;
-      }
-    }
-
     @media (max-width: 768px) {
-      .content-wrapper {
-        padding: 10px;
-      }
-
       .table-header,
       .category-row {
         grid-template-columns: repeat(5, 1fr);
         font-size: 12px;
-        word-break: break-word;
-      }
-
-      .search-sort,
-      .top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .add-btn-top {
-        margin-top: 10px;
-      }
-
-      .offer-container {
-        gap: 3px;
-      }
-
-      .offer-display {
-        padding: 5px;
-        font-size: 10px;
-        min-width: 100px;
-      }
-
-      .edit-offer-btn,
-      .delete-offer-btn {
-        padding: 2px 6px;
-        font-size: 9px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .layout-container {
-        flex-direction: column;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="layout-container">
-    <!-- Sidebar -->
-    <%- include('../partials/admin/sidebar') %>
+<div class="layout-container">
+  <%- include('../partials/admin/sidebar') %>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <!-- Header -->
-      <%- include('../partials/admin/header') %>
+  <div class="main-content">
+    <%- include('../partials/admin/header') %>
 
-      <!-- Content Wrapper -->
-      <div class="content-wrapper">
-        <div class="breadcrumb">
-          <a href="/admin/dashboard">Dashboard</a> &gt; <span>Categories</span>
+    <div class="content-wrapper">
+      <div class="breadcrumb">
+        <a href="/admin/dashboard">Dashboard</a> &gt; <span>Categories</span>
+      </div>
+
+      <div class="top-bar">
+        <h2>
+          Category
+          <button class="subcategory-btn" onclick="location.href='/admin/subcategory'">View Subcategories</button>
+        </h2>
+        <a href="/admin/addCategory" class="add-btn-top">+ Add Category</a>
+      </div>
+
+      <div class="category-table-container">
+
+        <div class="table-header">
+          <div>SNO</div>
+          <div>Category Name</div>
+          <div>Subcategory</div>
+          <div>Added</div>
+          <div>List / Unlist</div>
+          <div>Action</div>
+          <div>Offer</div>
         </div>
 
-        <!-- Flash Messages -->
-        <div class="container mt-2">
-          <% if (messages && messages.error_msg) { %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <%= messages.error_msg %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          <% } %>
-          <% if (messages && messages.success_msg) { %>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-              <%= messages.success_msg %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          <% } %>
-        </div>
-
-        <div class="top-bar">
-          <h2>
-            Category
-            <button class="subcategory-btn" onclick="location.href='/admin/subcategory'">View Subcategories</button>
-          </h2>
-          <a href="/admin/addCategory" class="add-btn-top">+ Add Category</a>
-        </div>
-
-        <div class="search-sort">
-          <div class="search-box">
-            <form method="GET" action="">
-              <input type="text" name="search" placeholder="Search Category..." value="<%= search || '' %>" />
-            </form>
-          </div>
-          <div class="sort-box">
-            <form method="GET" action="">
-              <select name="sort" onchange="this.form.submit()">
-                <option value="">Sort By</option>
-                <option value="price-low" <%= sort === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
-                <option value="price-high" <%= sort === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
-                <option value="latest" <%= sort === 'latest' ? 'selected' : '' %>>Newest</option>
-              </select>
-            </form>
-          </div>
-        </div>
-
-        <div class="category-table-container">
-          <div class="table-header">
-            <div>SNO</div>
-            <div>Category Name</div>
-            <div>Subcategory</div>
-            <div>Sales</div>
-            <div>Stock</div>
-            <div>Added</div>
-            <div>List / Unlist</div>
-            <div>Action</div>
-            <div>Offer</div>
-          </div>
-
-          <% if (categoryData && categoryData.length > 0) { %>
-            <% categoryData.forEach((category, index) => { %>
-              <div class="category-row">
-                <div><%= index + 1 + ((currentPage - 1) * 4) %></div>
-                <div><%= category.name || 'N/A' %></div>
-                <div>
-                  <% if (category.subcategories && category.subcategories.length > 0) { %>
-                    <%= category.subcategories.map(sc => sc.name || sc).join(', ') %>
-                  <% } else { %>
-                    <span style="color: #999;">No Subcategories</span>
-                  <% } %>
-                </div>
-                <div><%= category.sales || 0 %></div>
-                <div><%= category.stock || 0 %></div>
-                <div><%= category.addedDate ? new Date(category.addedDate).toDateString() : 'N/A' %></div>
-
-                <div>
-                  <% if (category.isListed) { %>
-                    <button class="unlist-btn" onclick="toggleListStatus('<%= category._id %>', false)">UNLIST</button>
-                  <% } else { %>
-                    <button class="list-btn" onclick="toggleListStatus('<%= category._id %>', true)">LIST</button>
-                  <% } %>
-                </div>
-
-                <div>
-                  <a href="/admin/viewCategory/<%= category._id %>" class="icon-btn" title="View Category">
-                    <i class="fas fa-eye"></i>
-                  </a>
-                  <a href="/admin/editCategory/<%= category._id %>" class="icon-btn" title="Edit Category">
-                    <i class="fas fa-edit"></i>
-                  </a>
-                </div>
-
-                <div>
-                  <% if (category.offer && category.offer.offerPercentage) { %>
-                    <div class="offer-container">
-                      <div class="offer-display">
-                        <%= category.offer.offerPercentage %>% OFF
-                      </div>
-                      <div class="offer-actions">
-                        <button class="edit-offer-btn" onclick="openOfferModal('<%= category._id %>', <%= category.offer.offerPercentage %>, <%= category.offer.maxRedeem || 0 %>, '<%= category.offer.startDate ? category.offer.startDate.toISOString().slice(0,10) : '' %>', '<%= category.offer.validUntil ? category.offer.validUntil.toISOString().slice(0,10) : '' %>')">Edit</button>
-                        <button class="delete-offer-btn" onclick="deleteOffer('<%= category._id %>')">Delete</button>
-                      </div>
-                    </div>
-                  <% } else { %>
-                    <button class="offer-btn" onclick="openOfferModal('<%= category._id %>')">Add Offer</button>
-                  <% } %>
-                </div>
+        <% if (categoryData && categoryData.length > 0) { %>
+          <% categoryData.forEach((category, index) => { %>
+            <div class="category-row">
+              <div><%= index + 1 + ((currentPage - 1) * 4) %></div>
+              <div><%= category.name || 'N/A' %></div>
+              <div>
+                <% if (category.subcategories && category.subcategories.length > 0) { %>
+                  <%= category.subcategories.map(sc => sc.name || sc).join(', ') %>
+                <% } else { %>
+                  <span style="color:#999;">No Subcategories</span>
+                <% } %>
               </div>
-            <% }) %>
-          <% } else { %>
-            <div style="padding: 40px; text-align: center; color: #666;">
-              <i class="fas fa-tags" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
-              <p>No categories found</p>
-            </div>
-          <% } %>
 
-          <div class="pagination">
-            <% if (currentPage > 1) { %>
-              <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + search : '' %><%= sort ? '&sort=' + sort : '' %>" class="pagination-btn">&laquo;</a>
-            <% } %>
-            <% for (let i = 1; i <= totalPages; i++) { %>
-              <a href="?page=<%= i %><%= search ? '&search=' + search : '' %><%= sort ? '&sort=' + sort : '' %>" class="pagination-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
-            <% } %>
-            <% if (currentPage < totalPages) { %>
-              <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + search : '' %><%= sort ? '&sort=' + sort : '' %>" class="pagination-btn">&raquo;</a>
-            <% } %>
-          </div>
-        </div> 
-      </div> 
-    </div> 
+              <div><%= category.addedDate ? new Date(category.addedDate).toDateString() : 'N/A' %></div>
+
+              <div>
+                <% if (category.isListed) { %>
+                  <button class="unlist-btn" onclick="toggleListStatus('<%= category._id %>', false)">UNLIST</button>
+                <% } else { %>
+                  <button class="list-btn" onclick="toggleListStatus('<%= category._id %>', true)">LIST</button>
+                <% } %>
+              </div>
+
+              <div>
+                <a href="/admin/viewCategory/<%= category._id %>" class="icon-btn"><i class="fas fa-eye"></i></a>
+                <a href="/admin/editCategory/<%= category._id %>" class="icon-btn"><i class="fas fa-edit"></i></a>
+              </div>
+
+              <div>
+                <% if (category.offer && category.offer.offerPercentage) { %>
+                  <div class="offer-container">
+                    <div class="offer-display"><%= category.offer.offerPercentage %>% OFF</div>
+                    <div class="offer-actions">
+                      <button class="edit-offer-btn" onclick="openOfferModal('<%= category._id %>')">Edit</button>
+                      <button class="delete-offer-btn" onclick="deleteOffer('<%= category._id %>')">Delete</button>
+                    </div>
+                  </div>
+                <% } else { %>
+                  <button class="offer-btn" onclick="openOfferModal('<%= category._id %>')">Add Offer</button>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+
+        <div class="pagination">
+          <% if (currentPage > 1) { %>
+            <a href="?page=<%= currentPage - 1 %>" class="pagination-btn">&laquo;</a>
+          <% } %>
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="?page=<%= i %>" class="pagination-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+          <% } %>
+          <% if (currentPage < totalPages) { %>
+            <a href="?page=<%= currentPage + 1 %>" class="pagination-btn">&raquo;</a>
+          <% } %>
+        </div>
+
+      </div>
+    </div>
   </div>
+</div>
 
 <script>
   function toggleListStatus(categoryId, isListed) {

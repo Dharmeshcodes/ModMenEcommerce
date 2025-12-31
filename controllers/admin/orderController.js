@@ -6,6 +6,7 @@ const { addMoneyToWallet, deductMoneyFromWallet } = require("../../utils/walletU
 const HTTP_STATUS = require("../../constans/httpStatus");
 const MESSAGES = require("../../constans/messages");
 const { apiLogger, errorLogger } = require("../../config/logger");
+const Coupon=require("../../models/couponSchema")
 
 const getAdminOrderlist = async (req, res) => {
   try {
