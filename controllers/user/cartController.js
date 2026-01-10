@@ -6,13 +6,15 @@ const Cart = require("../../models/cartSchema");
 
 const addToCart = async (req, res) => {
   try {
-
-    
+      if (!req.session.user) {
+        console.log("if condition hit")
+        return res.status(401).json({
+      success: false,
+      redirect: "/user/login"
+    });
+  }
 
     const userId = req.session.user._id;
-    if(!userId){
-      res.render("user/login").json({success:false,message:"please login"})
-    }
 
     const { productId, size, color, quantity = 1 } = req.body;
 

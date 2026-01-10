@@ -20,7 +20,7 @@ const reviewController=require("../controllers/user/reviewController")
 const { uploadUserImages}=require('../middlewares/cloudinaryUploads')
 
 router.get('/home', checkBlockedUser,userController.loadHomepage);
-router.get('/sale', userAuth, checkBlockedUser, userController.salePage);
+router.get('/sale',checkBlockedUser, userController.salePage);
 router.get('/product/:id',checkBlockedUser, productController.productDetails);
 
 // Route: /signup
@@ -30,8 +30,6 @@ router.post('/verify-otp', userController.verifyOtp);
 router.post('/resend-otp', userController.resendOtp);
 router.get("/referral-code", userAuth, userController.getReferralCodePage);
 router.post("/generate-referral",userAuth,userController.createReferralCode);
-
-
 
 router.get('/auth/google', userController.googleAuth);
 router.get('/auth/google/callback', ...userController.googleAuthCallback);
@@ -58,27 +56,26 @@ router.get('/resend-email-otp',userAuth,profileController.resendEmailOtp);
 router.get('/change-password',userAuth,profileController.getchangePassword);
 router.post('/change-password', userAuth,profileController.changePassword)
 router.post('/profile-image',userAuth,uploadUserImages.single('profileImage'),profileController.uploadProfileImage);
-router.get("/contact",userAuth,profileController.loadContactPage)
-router.get("/about", userAuth,profileController.loadAboutPage)
+router.get("/contact",checkBlockedUser,profileController.loadContactPage)
+router.get("/about",checkBlockedUser,profileController.loadAboutPage)
 
-router.get('/address',userAuth,addressController.getAddress);
-router.get('/addAddress',userAuth,addressController.getAddAddress);
-router.post('/addAddress',userAuth,addressController.postAddAddress);
-router.get('/updateAddress/:addressId',userAuth,addressController.getUpdateAddress);
-router.patch('/updateAddress/:addressId', userAuth,addressController.updateAddress);
-router.delete('/deleteAddress/:addressId', userAuth,addressController.deleteAddress);
+router.get('/address',userAuth,checkBlockedUser,addressController.getAddress);
+router.get('/addAddress',userAuth,checkBlockedUser,addressController.getAddAddress);
+router.post('/addAddress',userAuth,checkBlockedUser,addressController.postAddAddress);
+router.get('/updateAddress/:addressId',userAuth,checkBlockedUser,addressController.getUpdateAddress);
+router.patch('/updateAddress/:addressId', userAuth,checkBlockedUser,addressController.updateAddress);
+router.delete('/deleteAddress/:addressId', userAuth,checkBlockedUser,addressController.deleteAddress);
 
-router.post("/addToCart",userAuth,cartController.addToCart)
-router.get("/cart",userAuth,cartController.getCartPage)
-router.post("/incresecartqty",userAuth,cartController.increseQuantity)
-router.post("/decreasecartqty", userAuth, cartController.decreaseQuantity);
-router.post("/removecartitem", userAuth, cartController.removeCartItem);
-router.post("/emptycart", userAuth, cartController.emptyCart);
+router.post("/addToCart",userAuth,checkBlockedUser,cartController.addToCart)
+router.get("/cart",userAuth,checkBlockedUser,cartController.getCartPage)
+router.post("/incresecartqty",userAuth,checkBlockedUser,cartController.increseQuantity)
+router.post("/decreasecartqty", userAuth,checkBlockedUser,cartController.decreaseQuantity);
+router.post("/removecartitem", userAuth,checkBlockedUser, cartController.removeCartItem);
+router.post("/emptycart", userAuth,checkBlockedUser, cartController.emptyCart);
 
 router.get("/checkout-address",userAuth,validateCartMiddleware,checkoutControllers.getCheckoutPage)
 router.get("/checkoutPayment", userAuth, validateCartMiddleware,checkoutControllers.loadPaymentPage);
 router.get("/order-review", userAuth,validateCartMiddleware, checkoutControllers.loadOrderReviewPage);
-
 
 router.post("/confirmOrder", userAuth,validateCartMiddleware,orderController.confirmOrder);
 router.get("/orderSuccess/:orderId", userAuth, orderController.loadOrderSuccess);
@@ -95,46 +92,23 @@ router.post("/verify-payment",userAuth,razorpayController.verifyRazorpayPayment)
 router.get("/orderFailed/:orderId",userAuth, razorpayController.getOrderFailedPage);
 router.get("/retry-payment/:orderId",userAuth, razorpayController.retryPayment);
 
+router.post("/wishlist/toggle",userAuth,checkBlockedUser,wishlistController.toggleWishlist);
 
-
-
-router.post("/wishlist/toggle",userAuth,wishlistController.toggleWishlist);
-
-router.get("/wishlist",userAuth, wishlistController.getWishlist)
-router.get('/wishlist/remove',userAuth, wishlistController.removeFromWishlist)
+router.get("/wishlist",userAuth, checkBlockedUser,wishlistController.getWishlist)
+router.get('/wishlist/remove',userAuth,checkBlockedUser, wishlistController.removeFromWishlist)
 router.post("/wishlist/emptyWishlist/:userId", userAuth, wishlistController.emptyWishlist);
 
-router.get("/wallet",userAuth,walletController.getWalletPage)
-router.post("/wallet/create-order",walletController.createWalletOrder);
+router.get("/wallet",userAuth,checkBlockedUser,walletController.getWalletPage)
+router.post("/wallet/create-order",checkBlockedUser,walletController.createWalletOrder);
 router.post("/wallet/verify-payment",walletController.verifyWalletPayment)
 
-router.get("/coupon", userAuth, couponController.loadUserCoupons);
-router.post("/apply-coupon", userAuth, couponController.applyCoupon);
-router.post("/cancel-coupon", userAuth, couponController.cancelCoupon);
+router.get("/coupon", userAuth, checkBlockedUser,couponController.loadUserCoupons);
+router.post("/apply-coupon", userAuth,checkBlockedUser, couponController.applyCoupon);
+router.post("/cancel-coupon", userAuth,checkBlockedUser, couponController.cancelCoupon);
 router.get("/available-coupons", userAuth, couponController.availableCoupons);
 
 router.post("/review/add",userAuth,reviewController.addReview);
 router.delete("/review/:reviewId",reviewController.deleteReview);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

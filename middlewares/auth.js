@@ -1,23 +1,52 @@
 const User=require(('../models/userSchema'));
 
+
+
 const userAuth = (req, res, next) => {
-  if (req.session.user) {
-    User.findById(req.session.user._id)  
-      .then(data => {
-        if (data && !data.isBlocked) {
-          next();
-        } else {
-          res.redirect('/user/login');
-        }
-      })
-      .catch(error => {
-        console.log('Error in user middleware', error);
-        res.status(500).send('Internal server error');
+  console.log("user auth middleware hit");
+
+  const isAjax =
+    req.xhr || req.headers.accept?.includes('json');
+
+  if (!req.session.user) {
+    if (isAjax) {
+      return res.status(401).json({
+        success: false,
+        redirect: '/user/login'
       });
-  } else {
-    res.redirect('/user/login');
+    }
+    return res.redirect('/user/login');
   }
+
+  User.findById(req.session.user._id)
+    .then(user => {
+      if (user && !user.isBlocked) {
+        return next();
+      }
+
+      if (isAjax) {
+        return res.status(401).json({
+          success: false,
+          redirect: '/user/login'
+        });
+      }
+
+      return res.redirect('/user/login');
+    })
+    .catch(error => {
+      console.log('Error in user middleware', error);
+
+      if (isAjax) {
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error'
+        });
+      }
+
+      return res.status(500).send('Internal server error');
+    });
 };
+
 
 const adminAuth = (req, res, next) => {
     if (req.session.admin) {
